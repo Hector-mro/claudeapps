@@ -11,7 +11,7 @@
                 '🐝', '🦉', '🐺', '🐯', '🐰', '🦋', '🐳', '🦩', '🐢', '🦔',
                 '🐷', '🐮', '🦝', '🦥', '🐴', '🦕', '🐬', '🦜'];
 
-  var ROLE_LABEL = { civil: '👥 Civil', undercover: '🕵️ Undercover', white: '👻 Mr White' };
+  var ROLE_LABEL = { civil: 'Civil', undercover: 'Undercover', white: 'Mr White' };
   var ROLE_CLASS = { civil: 'role-civil', undercover: 'role-undercover', white: 'role-white' };
 
   var game = new UC.Game();
@@ -118,10 +118,10 @@
 
   /* -------------------------------------------------------------- réglages */
   function applyTheme() {
-    var light = store.settings.theme === 'light';
-    document.documentElement.setAttribute('data-theme', light ? 'light' : 'dark');
+    var dark = store.settings.theme === 'dark';
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', light ? '#f3f1fb' : '#0d0b1e');
+    if (meta) meta.setAttribute('content', dark ? '#141416' : '#efebe1');
   }
 
   function renderSettings() {
@@ -136,7 +136,7 @@
       var v = $('.val', elm);
       if (v) v.textContent = s[key];
     });
-    $('#theme-switch input').checked = s.theme === 'light';
+    $('#theme-switch input').checked = s.theme === 'dark';
     $$('#diff-chips .chip').forEach(function (c) {
       var d = parseInt(c.getAttribute('data-diff'), 10);
       c.classList.toggle('on', s.difficulties.indexOf(d) !== -1);
@@ -189,7 +189,7 @@
     });
 
     $('#theme-switch input').addEventListener('change', function () {
-      store.settings.theme = this.checked ? 'light' : 'dark';
+      store.settings.theme = this.checked ? 'dark' : 'light';
       store.save();
       applyTheme();
     });
@@ -240,7 +240,7 @@
       var n = countPairs(c.id);
       var on = !sel || sel.indexOf(c.id) !== -1;
       return '<button class="chip ' + (on ? 'on' : '') + '" data-cat="' + c.id + '">' +
-             c.emoji + ' ' + esc(c.name) + ' (' + n + ')</button>';
+             esc(c.name) + ' · ' + n + '</button>';
     }).join('') + '</div>';
 
     modal('Catégories', html, [
@@ -393,7 +393,7 @@
     var byCat = {};
     UC.PAIRS.forEach(function (p) { (byCat[p.cat] = byCat[p.cat] || []).push(p); });
     $('#builtin-list').innerHTML = UC.CATEGORIES.filter(function (c) { return byCat[c.id]; }).map(function (c) {
-      return '<div class="row"><div class="label">' + c.emoji + ' ' + esc(c.name) +
+      return '<div class="row"><div class="label">' + esc(c.name) +
              '<small>' + byCat[c.id].slice(0, 3).map(function (p) { return esc(p.a) + ' / ' + esc(p.b); }).join(' · ') + '…</small></div>' +
              '<span class="note">' + byCat[c.id].length + '</span></div>';
     }).join('');
@@ -481,9 +481,9 @@
       '<h3>Global</h3>' +
       '<div class="row"><div class="label">Parties jouées</div><b>' + st.games + '</b></div>' +
       '<div class="row"><div class="label">Manches jouées</div><b>' + st.rounds + '</b></div>' +
-      '<div class="row"><div class="label">👥 Victoires civils</div><b>' + st.civilWins + ' <span class="note">' + pct(st.civilWins) + '</span></b></div>' +
-      '<div class="row"><div class="label">🕵️ Victoires undercover</div><b>' + st.undercoverWins + ' <span class="note">' + pct(st.undercoverWins) + '</span></b></div>' +
-      '<div class="row"><div class="label">👻 Victoires Mr White</div><b>' + st.whiteWins + ' <span class="note">' + pct(st.whiteWins) + '</span></b></div>';
+      '<div class="row"><div class="label">Victoires civils</div><b>' + st.civilWins + ' <span class="note">' + pct(st.civilWins) + '</span></b></div>' +
+      '<div class="row"><div class="label">Victoires undercover</div><b>' + st.undercoverWins + ' <span class="note">' + pct(st.undercoverWins) + '</span></b></div>' +
+      '<div class="row"><div class="label">Victoires Mr White</div><b>' + st.whiteWins + ' <span class="note">' + pct(st.whiteWins) + '</span></b></div>';
 
     var names = Object.keys(st.byPlayer);
     names.sort(function (a, b) { return st.byPlayer[b].wins - st.byPlayer[a].wins; });
@@ -491,7 +491,7 @@
       var p = st.byPlayer[n];
       var ratio = p.rounds ? Math.round(p.wins * 100 / p.rounds) + '%' : '—';
       return '<div class="row"><div class="label">' + esc(n) +
-        '<small>' + p.rounds + ' manches · 🕵️ ' + p.asUndercover + ' · 👻 ' + p.asWhite + '</small></div>' +
+        '<small>' + p.rounds + ' manches · undercover ' + p.asUndercover + ' · mr white ' + p.asWhite + '</small></div>' +
         '<b>' + ratio + '</b></div>';
     }).join('') : '<p class="note">Aucune partie enregistrée.</p>';
   }
@@ -584,17 +584,17 @@
 
     if (!S.revealShown) {
       card.innerHTML =
-        '<div style="font-size:2.6rem">' + m.emoji + '</div>' +
+        '<div class="emo" style="font-size:2rem">' + m.emoji + '</div>' +
         '<div class="who">' + esc(m.name) + '</div>' +
-        '<div class="hint">📱 Prends le téléphone, puis ' +
-        (s.holdToReveal ? 'maintiens appuyé' : 'appuie') + ' pour découvrir ton mot.</div>';
+        '<div class="hint">Prends le téléphone, puis ' +
+        (s.holdToReveal ? 'maintiens appuyé' : 'appuie') + ' pour découvrir ton mot</div>';
     } else {
       var showRole = m.role === ROLE.WHITE || (m.role === ROLE.UNDERCOVER && s.undercoverKnows);
       card.innerHTML =
-        (showRole ? '<div class="role-tag ' + ROLE_CLASS[m.role] + '">' + ROLE_LABEL[m.role] + '</div>' : '') +
+        (showRole ? '<div class="stamp ' + ROLE_CLASS[m.role] + '">' + ROLE_LABEL[m.role] + '</div>' : '') +
         (m.word
           ? '<div class="big-word">' + esc(m.word) + '</div>'
-          : '<div class="big-word">Aucun mot</div><div class="hint">Tu es Mr White : écoute et bluffe !</div>') +
+          : '<div class="big-word">Aucun mot</div><div class="hint">Tu es Mr White : écoute, puis bluffe</div>') +
         (s.showCategory && m.word ? '<div class="hint">Catégorie : ' + UC.categoryById(r.pair.cat).name + '</div>' : '') +
         '<div class="hint">' + esc(m.name) + '</div>';
     }
@@ -632,12 +632,12 @@
     var order = game.speakingOrder();
     $('#order-round').textContent = 'Manche ' + r.index + ' · tour ' + r.turn;
     $('#order-hint').textContent = store.settings.showCategory
-      ? 'Catégorie : ' + UC.categoryById(r.pair.cat).name + ' — décrivez votre mot sans le dire.'
-      : 'Décrivez votre mot en une phrase, sans jamais le dire.';
+      ? 'Catégorie : ' + UC.categoryById(r.pair.cat).name + ' — décrivez votre mot sans le dire'
+      : 'Décrivez votre mot en une phrase, sans jamais le dire';
     $('#order-list').innerHTML = order.map(function (m, i) {
       return '<div class="speaker ' + (i === 0 ? 'first' : '') + '"><span class="num">' + (i + 1) + '</span>' +
-             '<span style="font-size:1.3rem">' + m.emoji + '</span><b>' + esc(m.name) + '</b>' +
-             (i === 0 ? '<span class="spacer"></span><span class="badge role-civil">commence</span>' : '') + '</div>';
+             '<span class="emo">' + m.emoji + '</span><b>' + esc(m.name) + '</b>' +
+             (i === 0 ? '<span class="spacer"></span><span class="badge">commence</span>' : '') + '</div>';
     }).join('');
     go('order');
     beep(520, 0.12);
@@ -659,15 +659,15 @@
 
     $('#discussion-list').innerHTML = order.map(function (m, i) {
       return '<div class="speaker ' + (i === S.speakIdx && S.phase === 'speak' ? 'first' : '') + '">' +
-             '<span class="num">' + (i + 1) + '</span><span style="font-size:1.2rem">' + m.emoji + '</span>' +
+             '<span class="num">' + (i + 1) + '</span><span class="emo">' + m.emoji + '</span>' +
              '<b>' + esc(m.name) + '</b></div>';
     }).join('');
 
     var timerEl = $('#turn-timer');
     if (S.phase === 'debate') {
       $('#discussion-title').textContent = 'Débat';
-      $('#turn-box').querySelector('h3').textContent = 'Discussion libre';
-      $('#turn-avatar').textContent = '💬';
+      $('#turn-box').querySelector('.turn-label').textContent = 'Discussion libre';
+      $('#turn-avatar').textContent = '';
       $('#turn-name').textContent = 'Qui est suspect ?';
       $('#btn-next-speaker').textContent = 'Passer au vote';
       if (s.discussionTimer > 0) startTimer(s.discussionTimer, timerEl, goVote);
@@ -677,7 +677,7 @@
 
     var m = order[S.speakIdx];
     $('#discussion-title').textContent = 'Description';
-    $('#turn-box').querySelector('h3').textContent = 'Au tour de';
+    $('#turn-box').querySelector('.turn-label').textContent = 'Au tour de';
     $('#turn-avatar').textContent = m.emoji;
     $('#turn-name').textContent = m.name;
     $('#btn-next-speaker').textContent = (S.speakIdx === order.length - 1)
@@ -704,7 +704,7 @@
 
   function openPeek() {
     var alive = game.alive();
-    var html = '<p class="note">Choisis ton nom, puis maintiens appuyé sur la carte.</p><div class="grid">' +
+    var html = '<p class="note mb">Choisis ton nom, puis maintiens appuyé sur la carte</p><div class="grid">' +
       alive.map(function (m) {
         return '<button class="pcard" data-peek="' + m.id + '"><span class="ava">' + m.emoji + '</span>' +
                '<span class="nm">' + esc(m.name) + '</span></button>';
@@ -756,7 +756,7 @@
     if (S.tallyShown) {
       var t = game.tally();
       $('#vote-title').textContent = 'Résultat du vote';
-      $('#vote-hint').textContent = t.tie ? 'Égalité !' : 'Les votes sont tombés.';
+      $('#vote-hint').textContent = t.tie ? 'Égalité' : 'Les votes sont tombés';
       $('#vote-progress').textContent = '';
       grid.innerHTML = game.alive().map(function (m) {
         var n = t.counts[m.id] || 0;
@@ -778,13 +778,13 @@
       var voter = voters[S.voterIdx];
       $('#vote-title').textContent = 'Vote secret';
       $('#vote-progress').textContent = (S.voterIdx + 1) + '/' + voters.length;
-      $('#vote-hint').textContent = '📱 Téléphone à ' + voter.name + ' — qui soupçonnes-tu ?';
+      $('#vote-hint').textContent = 'Téléphone à ' + voter.name + ' — qui soupçonnes-tu ?';
       grid.innerHTML = candidates.filter(function (m) { return m.id !== voter.id; }).map(cardHtml).join('');
     } else {
       $('#vote-title').textContent = S.revoteAmong ? 'Second vote' : 'Vote';
       $('#vote-progress').textContent = 'Tour ' + game.round.turn;
       $('#vote-hint').textContent = S.revoteAmong
-        ? 'Égalité : départagez les joueurs à égalité.'
+        ? 'Égalité : départagez les joueurs concernés'
         : 'À main levée : qui la majorité veut-elle éliminer ?';
       grid.innerHTML = candidates.map(cardHtml).join('');
     }
@@ -872,14 +872,15 @@
     beep(220, 0.35, 'sawtooth'); buzz([40, 30, 80]);
     var reveal = store.settings.revealEliminatedRole;
     $('#elim-hero').innerHTML =
-      '<div class="emo">' + m.emoji + '</div>' +
+      '<div class="kicker">Verdict du vote</div>' +
+      '<div class="emo" style="font-size:2.2rem">' + m.emoji + '</div>' +
       '<h2>' + esc(m.name) + ' est éliminé</h2>' +
       (note ? '<p>' + esc(note) + '</p>' : '');
     $('#elim-detail').innerHTML = reveal
-      ? '<div class="center"><span class="role-tag ' + ROLE_CLASS[m.role] + '" style="display:inline-block;padding:8px 16px;border-radius:999px">' +
+      ? '<div class="center" style="padding:22px 0"><span class="stamp big ' + ROLE_CLASS[m.role] + '">' +
         ROLE_LABEL[m.role] + '</span>' +
-        (m.word ? '<p class="note mt">Son mot : <b>' + esc(m.word) + '</b></p>' : '<p class="note mt">Il n’avait aucun mot.</p>') + '</div>'
-      : '<p class="note center">Son rôle reste secret jusqu’à la fin de la manche.</p>';
+        (m.word ? '<p class="note mt">Son mot : ' + esc(m.word) + '</p>' : '<p class="note mt">Il n’avait aucun mot</p>') + '</div>'
+      : '<p class="note center" style="padding:22px 0">Son rôle reste secret jusqu’à la fin de la manche</p>';
     go('elimination');
   }
 
@@ -951,12 +952,13 @@
     store.save();
 
     var hero = {
-      civils: { emo: '👥', title: 'Les civils gagnent !', sub: 'Tous les imposteurs ont été démasqués.' },
-      imposteurs: { emo: '🕵️', title: 'Les imposteurs gagnent !', sub: 'Ils sont désormais trop nombreux.' },
-      white: { emo: '👻', title: 'Mr White gagne !', sub: 'Il a deviné le mot des civils.' }
+      civils: { title: 'Les civils gagnent', sub: 'Tous les imposteurs ont été démasqués' },
+      imposteurs: { title: 'Les imposteurs gagnent', sub: 'Ils sont désormais trop nombreux' },
+      white: { title: 'Mr White gagne', sub: 'Il a deviné le mot des civils' }
     }[winner];
 
-    $('#end-hero').innerHTML = '<div class="emo">' + hero.emo + '</div><h2>' + hero.title + '</h2><p>' + hero.sub + '</p>';
+    $('#end-hero').innerHTML = '<div class="kicker">Manche ' + r.index + ' · verdict</div>' +
+      '<h2>' + hero.title + '</h2><p>' + hero.sub + '</p>';
     $('#end-words').innerHTML =
       '<div><small>Mot des civils</small><b>' + esc(r.civilWord) + '</b></div>' +
       '<div><small>Mot undercover</small><b>' + esc(r.undercoverWord) + '</b></div>';
@@ -964,7 +966,7 @@
     var rank = { undercover: 0, white: 1, civil: 2 };
     var ordered = r.members.slice().sort(function (a, b) { return rank[a.role] - rank[b.role]; });
     $('#end-roles').innerHTML = ordered.map(function (m) {
-      return '<div class="row"><span style="font-size:1.2rem">' + m.emoji + '</span>' +
+      return '<div class="row"><span class="emo">' + m.emoji + '</span>' +
         '<div class="label">' + esc(m.name) + '<small>' + (m.alive ? 'a survécu' : 'éliminé au tour ' + m.eliminatedTurn) + '</small></div>' +
         '<span class="badge ' + ROLE_CLASS[m.role] + '">' + ROLE_LABEL[m.role] + '</span></div>';
     }).join('');
@@ -975,7 +977,7 @@
       $('#end-scores').innerHTML = game.leaderboard().map(function (p, i) {
         var d = awarded[p.id] || 0;
         return '<div class="score-row"><span class="rank">' + (i + 1) + '</span>' +
-          '<span style="font-size:1.2rem">' + p.emoji + '</span>' +
+          '<span class="emo">' + p.emoji + '</span>' +
           '<span class="label">' + esc(p.name) + '</span>' +
           (d ? '<span class="delta">+' + d + '</span>' : '') +
           '<span class="pts">' + p.score + '</span></div>';
@@ -983,7 +985,7 @@
     }
 
     var reached = game.targetReached();
-    $('#btn-next-round').textContent = reached ? '🏁 Voir le vainqueur' : 'Manche suivante';
+    $('#btn-next-round').textContent = reached ? 'Voir le vainqueur' : 'Manche suivante';
     $('#btn-next-round').setAttribute('data-final', reached ? '1' : '');
     beep(winner === 'civils' ? 880 : 520, 0.25);
     go('roundend');
@@ -992,11 +994,11 @@
   function showChampion() {
     var lb = game.leaderboard();
     var html = lb.map(function (p, i) {
-      return '<div class="score-row"><span class="rank">' + (['🥇', '🥈', '🥉'][i] || (i + 1)) + '</span>' +
-        '<span style="font-size:1.2rem">' + p.emoji + '</span><span class="label">' + esc(p.name) + '</span>' +
+      return '<div class="score-row"><span class="rank">' + (i + 1) + '</span>' +
+        '<span class="emo">' + p.emoji + '</span><span class="label">' + esc(p.name) + '</span>' +
         '<span class="pts">' + p.score + '</span></div>';
     }).join('');
-    modal('🏆 ' + lb[0].name + ' remporte la partie !', html, [
+    modal(lb[0].name + ' remporte la partie', html, [
       { label: 'Rejouer', cls: 'primary', onClick: function () { S.inGame = false; go('setup'); } },
       { label: 'Accueil', onClick: function () { quitGame(true); } }
     ]);

@@ -42,7 +42,7 @@
     // Confort
     sound: true,
     vibration: true,
-    theme: 'dark',
+    theme: 'light',   // 'light' = papier, 'dark' = encre de nuit
     keepAwake: true
   };
 

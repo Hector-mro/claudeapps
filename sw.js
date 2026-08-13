@@ -1,5 +1,5 @@
 /* Undercover — service worker : le jeu fonctionne hors ligne une fois chargé */
-var CACHE = 'undercover-v1';
+var CACHE = 'undercover-v2';
 var ASSETS = [
   './',
   './index.html',
@@ -11,7 +11,8 @@ var ASSETS = [
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './icons/icon-512-maskable.png'
 ];
 
 self.addEventListener('install', function (e) {

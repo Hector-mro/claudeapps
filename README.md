@@ -63,14 +63,23 @@ npx http-server -p 8080 .    # puis http://localhost:8080 sur le téléphone
   par camp, taux de réussite par joueur).
 
 **Confort**
-- Thème sombre et thème clair, sons, vibrations, écran maintenu allumé.
+- Sons, vibrations, écran maintenu allumé.
+- Deux ambiances : **papier** (par défaut) et **encre de nuit**.
 - **PWA installable et 100 % hors ligne**, sauvegarde locale de tous les réglages.
+
+## 🎨 Direction artistique
+
+Une esthétique de **dossier d'enquête** : papier journal grainé, encre noire,
+aplats gris, titres en romain classique et libellés en machine à écrire. Une seule
+couleur — le rouge tampon — réservée à ce qui compte : l'undercover démasqué et les
+actions destructrices. Les avatars sont désaturés pour ressembler à des gravures
+de presse.
 
 ## 📁 Structure
 
 ```
 index.html               écrans de l'application
-assets/styles.css        thème sombre / clair, composants mobiles
+assets/styles.css        direction artistique papier/encre, composants mobiles
 assets/words.js          banque de 173 paires + catégories
 assets/store.js          réglages, joueurs, mots perso, stats (localStorage)
 assets/game.js           moteur de jeu (rôles, tours, votes, scores)
