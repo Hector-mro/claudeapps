@@ -1,0 +1,19 @@
+{
+  "name": "Undercover — jeu de bluff",
+  "short_name": "Undercover",
+  "description": "Le jeu de bluff et de déduction à jouer sur un seul téléphone, entre amis.",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0b1e",
+  "theme_color": "#0d0b1e",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
