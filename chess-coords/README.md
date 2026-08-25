@@ -23,7 +23,7 @@ application (plein écran, hors ligne), servez le dossier en HTTP puis utilisez
 « Ajouter à l'écran d'accueil » :
 
 ```bash
-npx http-server -p 8080 .    # puis http://localhost:8080/chess-coords/ sur le téléphone
+npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le téléphone
 ```
 
 ## ✨ Fonctionnalités

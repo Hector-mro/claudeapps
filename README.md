@@ -1,102 +1,45 @@
-# 🕵️ Undercover
+# Applications
 
-Une version web **mobile-first** du jeu de bluff *Undercover*, pensée pour être jouée
-à plusieurs autour d'**un seul téléphone**. Aucune installation, aucun compte, aucun
-réseau : tout tourne dans le navigateur et fonctionne hors ligne.
+Un dépôt, plusieurs petites applications web autonomes : **ni serveur, ni
+dépendance, ni build**. Du HTML, du CSS et du JavaScript, servis tels quels par
+GitHub Pages. Chacune s'installe sur l'écran d'accueil et fonctionne ensuite
+hors ligne, toutes ses données restant sur l'appareil.
 
-## 🎯 Le principe
+| Application | Ce que c'est | Dossier |
+| --- | --- | --- |
+| 🕵️ **Undercover** | Le jeu de bluff et de déduction, à plusieurs autour d'un seul téléphone. | [`undercover/`](undercover/) |
+| ♜ **Coordonnées** | Entraînement aux coordonnées de l'échiquier, avec statistiques par case. | [`chess-coords/`](chess-coords/) |
 
-Tous les civils reçoivent le **même mot**. Les undercover en reçoivent un **très
-proche** (`Fraise` / `Framboise`). Mr White ne reçoit **rien** et doit bluffer.
-Chacun décrit son mot sans jamais le prononcer, puis tout le monde vote pour
-éliminer un suspect.
+## 🌐 Publication
 
-- **Civils** — éliminer tous les imposteurs.
-- **Undercover** — survivre jusqu'à être aussi nombreux que les civils.
-- **Mr White** — gagner comme les undercover, ou deviner le mot des civils au moment d'être démasqué.
-
-## 🚀 Lancer le jeu
-
-Ouvrez simplement `index.html` dans un navigateur. Pour l'installer comme une vraie
-application (plein écran, hors ligne), servez le dossier en HTTP puis utilisez
-« Ajouter à l'écran d'accueil » :
-
-```bash
-npx http-server -p 8080 .    # puis http://localhost:8080 sur le téléphone
-```
-
-## ✨ Fonctionnalités
-
-**Contenu**
-- **173 paires de mots** en français, réparties en 14 catégories (nourriture, animaux,
-  objets, lieux, sports, métiers, nature, transports, corps, culture, vêtements,
-  technologie, idées, fêtes).
-- Chaque paire est **symétrique** : n'importe lequel des deux mots peut être celui
-  des civils ou celui de l'undercover, tiré au sort à chaque manche.
-- 3 niveaux de difficulté (`Facile` / `Moyen` / `Corsé`) selon la proximité des deux mots.
-- Sélection des catégories, mémoire des paires déjà jouées pour éviter les répétitions.
-- **Mots personnalisés** : créez vos propres paires, avec import / export en un copier-coller.
-
-**Rôles & mise en place**
-- 3 à 20 joueurs, noms et avatars personnalisables.
-- Nombre d'**undercover** et de **Mr White** libre, ou **répartition automatique** conseillée.
-- Option « prévenir l'undercover » (il sait qu'il a le mot différent) ou mode aveugle.
-
-**Déroulé d'une manche**
-- Distribution en se passant le téléphone, avec option **« maintenir appuyé pour voir »**
-  et ordre de distribution aléatoire.
-- Ordre de parole tiré au sort, option **Mr White jamais premier orateur**.
-- **Chrono par joueur** (10 à 45 s) et **chrono de débat** (30 s à 3 min).
-- Option « revoir mon mot » discrète en cours de manche.
-
-**Vote**
-- Deux modes : **rapide** (à main levée) ou **secret** (chacun vote à son tour, téléphone en main).
-- Gestion des égalités au choix : nouveau vote, tirage au sort, ou personne d'éliminé.
-- Révélation du rôle éliminé activable/désactivable (mode suspense).
-- Écran de dernière chance pour Mr White, avec réponse tolérante aux accents et à la casse.
-
-**Score & suivi**
-- Points par camp entièrement paramétrables, bonus « mot deviné » pour Mr White,
-  objectif de points pour clore la partie.
-- Côté imposteurs, seuls les **survivants** marquent : se faire démasquer coûte cher.
-- Classement en direct et **statistiques persistantes** (parties, manches, victoires
-  par camp, taux de réussite par joueur).
-
-**Confort**
-- Mise en page adaptative de l'iPhone SE au Pro Max : aucun défilement parasite,
-  listes longues qui défilent sur place et barres d'action toujours atteignables.
-- Sons, vibrations, écran maintenu allumé.
-- Deux ambiances : **papier** (par défaut) et **encre de nuit**.
-- **PWA installable et 100 % hors ligne**, sauvegarde locale de tous les réglages.
-
-## 🎨 Direction artistique
-
-Une esthétique de **dossier d'enquête** : papier journal grainé, encre noire,
-aplats gris, titres en romain classique et libellés en machine à écrire. Une seule
-couleur — le rouge tampon — réservée à ce qui compte : l'undercover démasqué et les
-actions destructrices. Les avatars sont désaturés pour ressembler à des gravures
-de presse.
-
-## 📁 Structure
+Le site est servi par **GitHub Pages** depuis la racine de la branche par
+défaut. La page d'accueil (`index.html`) liste les applications, chaque
+sous-dossier est servi à son propre chemin :
 
 ```
-index.html               écrans de l'application
-assets/styles.css        direction artistique papier/encre, composants mobiles
-assets/words.js          banque de 173 paires + catégories
-assets/store.js          réglages, joueurs, mots perso, stats (localStorage)
-assets/game.js           moteur de jeu (rôles, tours, votes, scores)
-assets/app.js            interface et enchaînement des écrans
-manifest.webmanifest     installation PWA
-sw.js                    cache hors ligne
-icons/                   icônes de l'application
+https://hector-mro.github.io/claudeapps/                 le portail
+https://hector-mro.github.io/claudeapps/undercover/
+https://hector-mro.github.io/claudeapps/chess-coords/
 ```
 
-Aucune dépendance, aucun build : du HTML, du CSS et du JavaScript.
+Pour activer la publication : **Settings → Pages → Source : Deploy from a
+branch**, puis choisir la branche par défaut et le dossier `/ (root)`.
 
----
+## 🧱 Règles du dossier
 
-## 📚 Autres applications de ce dépôt
+- **Une application = un sous-dossier**, avec son `index.html`, son
+  `manifest.webmanifest`, son `sw.js`, ses `assets/` et ses `icons/`.
+- **Uniquement des chemins relatifs** (`./assets/…`) : une application doit
+  fonctionner à n'importe quel chemin, ouverte depuis un fichier local comme
+  depuis GitHub Pages.
+- **Pas de service worker à la racine.** Sa portée couvrirait tout le site et
+  il intercepterait les requêtes des autres applications ; chaque service
+  worker reste dans le dossier de son application, où sa portée est limitée.
+- Le fichier `.nojekyll` désactive le traitement Jekyll : les fichiers sont
+  publiés tels quels.
 
-- [`chess-coords/`](chess-coords/) — **Coordonnées** : entraînement aux
-  coordonnées de l'échiquier (trouver la case, nommer la case, statistiques
-  par case et mode « cases faibles »).
+## ➕ Ajouter une application
+
+1. Créer le sous-dossier et y placer l'application complète.
+2. Ajouter sa carte dans `index.html` et sa ligne dans le tableau ci-dessus.
+3. Pousser sur la branche par défaut : Pages redéploie tout seul.
