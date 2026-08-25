@@ -1,0 +1,19 @@
+{
+  "name": "Coordonnées — entraînement échecs",
+  "short_name": "Coordonnées",
+  "description": "Trouver la case, nommer la case : l'entraînement aux coordonnées de l'échiquier, avec statistiques par case et mode « cases faibles ».",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#efebe1",
+  "theme_color": "#efebe1",
+  "categories": ["games", "education"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

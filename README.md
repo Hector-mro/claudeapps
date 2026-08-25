@@ -92,3 +92,11 @@ icons/                   icônes de l'application
 ```
 
 Aucune dépendance, aucun build : du HTML, du CSS et du JavaScript.
+
+---
+
+## 📚 Autres applications de ce dépôt
+
+- [`chess-coords/`](chess-coords/) — **Coordonnées** : entraînement aux
+  coordonnées de l'échiquier (trouver la case, nommer la case, statistiques
+  par case et mode « cases faibles »).
