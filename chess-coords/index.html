@@ -39,6 +39,11 @@
         <span class="mode-name">Nommer la case</span>
         <span class="mode-desc">Une case est surlignée, on tape sa coordonnée. L'exercice inverse.</span>
       </button>
+      <button class="mode-card" id="play-color">
+        <span class="mode-kicker mono">Exercice 3</span>
+        <span class="mode-name">Couleur de la case</span>
+        <span class="mode-desc">Une coordonnée s'affiche, blanche ou noire ? Le plus vite possible, et sans échiquier sous les yeux.</span>
+      </button>
     </div>
 
     <div class="panel mt">
@@ -81,6 +86,11 @@
     <div class="board-wrap">
       <div class="board" id="board" role="group" aria-label="Échiquier"></div>
       <div class="flip-flag" id="flip-flag">l'échiquier a tourné</div>
+    </div>
+
+    <div class="colorpad" id="colorpad" hidden>
+      <button class="cbtn light" id="ans-light" type="button"><b>Blanche</b><i class="mono">touche B</i></button>
+      <button class="cbtn dark" id="ans-dark" type="button"><b>Noire</b><i class="mono">touche N</i></button>
     </div>
 
     <div class="keypad" id="keypad" hidden>
@@ -199,7 +209,8 @@
         <input type="checkbox" id="set-pieces">
         <span><b>Pièces en position de départ</b><em>Décochez pour un échiquier nu.</em></span>
       </label>
-      <p class="note">Les lettres et les chiffres ne sont jamais affichés sur l'échiquier.</p>
+      <p class="note">Les lettres et les chiffres ne sont jamais affichés sur l'échiquier.
+        L'exercice « couleur de la case » se joue sans échiquier : ces trois réglages ne le concernent pas.</p>
     </div>
 
     <div class="panel mt">

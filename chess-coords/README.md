@@ -4,7 +4,7 @@ Entraînement aux **coordonnées de l'échiquier**, mobile-first et hors ligne.
 Deux exercices symétriques, un chrono, des pénalités, et des statistiques
 case par case qui savent exactement où ça coince.
 
-## 🎯 Les deux exercices
+## 🎯 Les trois exercices
 
 **1 — Trouver la case.** Une coordonnée s'affiche (`e4`), il faut toucher la
 case correspondante. Le plus de cases possible dans le temps imparti.
@@ -12,9 +12,15 @@ case correspondante. Le plus de cases possible dans le temps imparti.
 **2 — Nommer la case.** Une case est surlignée, il faut taper sa coordonnée
 au pavé tactile (ou au clavier physique). L'exercice inverse.
 
-Dans les deux cas l'échiquier est en **position de départ**, présenté du côté
-des blancs ou des noirs **au hasard**, et **jamais** bordé des lettres et des
-chiffres : c'est bien la mémoire des coordonnées qui travaille.
+**3 — Couleur de la case.** Une coordonnée s'affiche, il faut répondre
+**blanche ou noire** le plus vite possible. Ici **aucun échiquier n'est
+affiché** — le damier donnerait la réponse — et le temps de réaction s'affiche
+après chaque bonne réponse. Deux grands boutons sous le pouce, touches `B` et
+`N` au clavier.
+
+Dans les deux premiers, l'échiquier est en **position de départ**, présenté du
+côté des blancs ou des noirs **au hasard**, et **jamais** bordé des lettres et
+des chiffres : c'est bien la mémoire des coordonnées qui travaille.
 
 ## 🚀 Lancer
 
@@ -34,7 +40,8 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
   option « l'erreur coûte aussi un point ».
 - Après une faute, la case demandée **reste affichée** : on cherche jusqu'à
   la trouver, l'erreur ne se contourne pas.
-- Score, série en cours, cadence par minute et record par exercice.
+- Score, série en cours, temps de la dernière réponse, cadence par minute et
+  record par exercice.
 
 **Échiquier**
 - Côté blancs, côté noirs, ou **tiré au sort** à chaque série.
@@ -43,6 +50,9 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
   rendu au joueur.
 - Pièces en position de départ (désactivables pour un échiquier nu).
 - Aucune coordonnée affichée, y compris pour les lecteurs d'écran.
+- Ces trois réglages ne concernent pas l'exercice « couleur de la case », qui
+  se joue sans échiquier ; tous les autres (durée, pénalité, cases faibles,
+  sons, thème) s'appliquent aux trois exercices.
 
 **Statistiques**
 - **Maîtrise case par case**, notée sur la précision (60 %) et la rapidité
@@ -50,7 +60,9 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
   fois n'est pas encore « maîtrisée ».
 - Damier de chaleur des 64 cases, détail au toucher : réussites, erreurs,
   temps moyen, meilleur temps.
-- Classements « à travailler » et « maîtrisées », filtrables par exercice.
+- Classements « à travailler » et « maîtrisées », filtrables par exercice
+  (tout, trouver, nommer, couleur) : une case peut être sûre à la désignation
+  et hésitante à la couleur.
 - Historique des dernières séries.
 
 **Mode « cases faibles »**
@@ -79,7 +91,7 @@ index.html               les cinq écrans
 assets/styles.css        direction artistique et mise en page mobile
 assets/store.js          réglages, statistiques par case, historique (localStorage)
 assets/board.js          cases, orientation, pièces, maîtrise, tirage des cibles
-assets/app.js            interface, moteur des exercices, statistiques
+assets/app.js            interface, moteur des trois exercices, statistiques
 manifest.webmanifest     installation PWA
 sw.js                    cache hors ligne
 icons/                   icônes de l'application

@@ -20,6 +20,13 @@
   --sq-light: #e7ddc6;
   --sq-dark:  #a1977f;
 
+  /* boutons « blanche / noire » : les deux teintes du damier, assombries
+     juste assez pour que le libellé reste lisible */
+  --btn-light:     #e7ddc6;
+  --btn-light-ink: #191815;
+  --btn-dark:      #6f6653;
+  --btn-dark-ink:  #f7f3e8;
+
   --serif: Georgia, 'Iowan Old Style', 'Times New Roman', 'Noto Serif', serif;
   --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Roboto Mono', monospace;
   --chess: 'Segoe UI Symbol', 'Apple Symbols', 'Noto Sans Symbols 2', 'DejaVu Sans', serif;
@@ -43,6 +50,11 @@
 
   --sq-light: #6f6c63;
   --sq-dark:  #45423b;
+
+  --btn-light:     #8d8a80;
+  --btn-light-ink: #14130f;
+  --btn-dark:      #2b2924;
+  --btn-dark-ink:  #ece7dd;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -383,6 +395,39 @@ body::after {
   100% { opacity: 0; }
 }
 
+/* ------------------------------------------------- réponse « blanche / noire » */
+.colorpad {
+  flex: 0 0 auto;
+  height: min(300px, 42dvh);
+  margin-top: auto;      /* toujours collé au bas de l'écran, sous le pouce */
+  padding-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.cbtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  font-family: var(--serif);
+  cursor: pointer;
+}
+.cbtn b { font-weight: 400; font-size: 1.5rem; }
+.cbtn i { font-style: normal; font-size: .58rem; opacity: .55; display: none; }
+@media (hover: hover) and (pointer: fine) { .cbtn i { display: block; } }
+.cbtn.light { background: var(--btn-light); color: var(--btn-light-ink); }
+.cbtn.dark { background: var(--btn-dark); color: var(--btn-dark-ink); }
+.cbtn:active { transform: translateY(1px); }
+.cbtn.good { box-shadow: inset 0 0 0 6px var(--good); }
+.cbtn.bad { box-shadow: inset 0 0 0 6px var(--stamp); animation: shake .3s ease; }
+
+/* sans échiquier, la coordonnée occupe toute la place */
+.drill-color .prompt-target { font-size: 4.4rem; }
+
 /* ------------------------------------------------------------------- pavé */
 .keypad { margin-top: 12px; flex: none; }
 .keypad-echo {
@@ -580,6 +625,8 @@ body::after {
 /* --------------------------------------------------- écrans très compacts */
 @media (max-height: 700px) {
   .prompt-target { font-size: 2.3rem; }
+  .drill-color .prompt-target { font-size: 3.4rem; }
+  .colorpad { height: min(240px, 40dvh); }
   /* écran court : la consigne se contente de sa hauteur, l'échiquier prend le reste */
   .prompt { padding-bottom: 6px; flex: 0 1 auto; min-height: 0; }
   .key { min-height: 40px; }

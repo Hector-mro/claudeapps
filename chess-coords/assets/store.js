@@ -32,9 +32,9 @@
       solved: 0,
       errors: 0,
       playedMs: 0,
-      bestScore: { find: 0, name: 0 },
+      bestScore: { find: 0, name: 0, color: 0 },
       bestStreak: 0,
-      squares: { find: {}, name: {} }
+      squares: { find: {}, name: {}, color: {} }
     },
     history: []   // [{t, mode, score, errors, duration, weak, avgMs}] — 24 dernières
   };

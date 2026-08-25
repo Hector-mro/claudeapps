@@ -5,7 +5,9 @@
   var store = global.CC.store;
   var B = global.CC.board;
 
-  var MODE_LABEL = { find: 'Trouver la case', name: 'Nommer la case' };
+  var MODE_LABEL = { find: 'Trouver la case', name: 'Nommer la case', color: 'Couleur de la case' };
+  var MODES = ['find', 'name', 'color'];
+  var MODE_SHORT = { find: 'Trouver', name: 'Nommer', color: 'Couleur' };
   var DURATIONS = [30, 60, 90, 120];
   var PENALTIES = [0, 1, 2, 3, 5];
 
@@ -115,7 +117,7 @@
 
     $('#home-weak').checked = st.weakMode;
 
-    var seen = countSeen(['find', 'name']);
+    var seen = countSeen(MODES);
     $('#weak-hint').textContent = seen < 8
       ? 'Encore peu de données : jouez quelques séries pour que le ciblage soit pertinent.'
       : 'Tire en priorité les cases les moins maîtrisées.';
@@ -139,7 +141,7 @@
   }
 
   /* ================================================================= EXERCICE */
-  var boardEl, boardMap;
+  var boardEl, boardMap, fitBoard = function () {};
 
   function initBoard() {
     boardEl = $('#board');
@@ -158,6 +160,7 @@
       boardEl.style.height = size + 'px';
       boardEl.style.setProperty('--cell', (size / 8) + 'px');
     }
+    fitBoard = fit;
     if (global.ResizeObserver) new ResizeObserver(fit).observe(wrap);
     global.addEventListener('resize', fit);
     global.addEventListener('orientationchange', function () { setTimeout(fit, 250); });
@@ -177,17 +180,26 @@
       input: '', running: false, endsAt: 0, tick: null, locked: true
     };
 
-    B.setPieces(boardEl, st.pieces);
-    B.clearMarks(boardEl);
-    B.layout(boardEl, D.orientation);
+    // « couleur de la case » se joue de tête : pas d'échiquier à l'écran
+    var noBoard = mode === 'color';
+    $('.board-wrap').hidden = noBoard;
+    $('#s-drill').classList.toggle('drill-color', noBoard);
+    if (!noBoard) {
+      B.setPieces(boardEl, st.pieces);
+      B.clearMarks(boardEl);
+      B.layout(boardEl, D.orientation);
+      requestAnimationFrame(fitBoard);
+    }
     boardEl.classList.toggle('naming', mode === 'name');
 
+    $('#colorpad').hidden = !noBoard;
     $('#keypad').hidden = !(mode === 'name' && st.keypad);
     $('#hud-score').textContent = '0';
     $('#hud-streak').textContent = 'série 0';
     $('#prompt-target').textContent = '—';
     $('#prompt-target').className = 'prompt-target';
-    $('#prompt-sub').textContent = mode === 'find' ? 'touchez la case' : 'quelle est cette case ?';
+    $('#prompt-sub').textContent = mode === 'find' ? 'touchez la case'
+      : (mode === 'name' ? 'quelle est cette case ?' : 'blanche ou noire ?');
     setClock(D.duration * 1000);
     show('drill');
     requestWake();
@@ -254,6 +266,7 @@
 
   function shouldFlip() {
     var f = store.settings.flip;
+    if (D.mode === 'color') return false;            // pas d'échiquier à retourner
     if (f === 'off' || !D.target) return false;      // jamais avant la 1re case
     if (f === 'random') return Math.random() < 0.28;
     return D.sinceFlip >= parseInt(f, 10);
@@ -284,7 +297,7 @@
     D.input = '';
     B.clearMarks(boardEl);
 
-    if (D.mode === 'find') {
+    if (D.mode === 'find' || D.mode === 'color') {
       $('#prompt-target').textContent = sq;
       $('#prompt-target').classList.add('pop');
       setTimeout(function () { $('#prompt-target').classList.remove('pop'); }, 200);
@@ -309,6 +322,20 @@
     }
   }
 
+  function answerColor(light) {
+    if (!D || !D.running || D.locked || D.mode !== 'color') return;
+    var btn = $(light ? '#ans-light' : '#ans-dark');
+    if (light === B.isLight(D.target)) {
+      btn.classList.add('good');
+      setTimeout(function () { btn.classList.remove('good'); }, 260);
+      success();
+    } else {
+      btn.classList.add('bad');
+      setTimeout(function () { btn.classList.remove('bad'); }, 320);
+      fail();
+    }
+  }
+
   function success() {
     var ms = performance.now() - D.tStart;
     var rec = store.square(D.mode, D.target);
@@ -323,7 +350,7 @@
     if (D.streak > D.bestStreak) D.bestStreak = D.streak;
 
     $('#hud-score').textContent = D.score;
-    $('#hud-streak').textContent = 'série ' + D.streak;
+    $('#hud-streak').textContent = 'série ' + D.streak + ' · ' + fr(ms / 1000, 1) + ' s';
     beep(660 + Math.min(D.streak, 8) * 40, 0.09, 'triangle');
     buzz(12);
 
@@ -430,7 +457,14 @@
   document.addEventListener('keydown', function (e) {
     if (S.screen !== 'drill') return;
     if (e.key === 'Escape') { quitDrill(); return; }
-    if (!D || D.mode !== 'name') return;
+    if (!D) return;
+    if (D.mode === 'color') {
+      var k2 = e.key.toLowerCase();
+      if (k2 === 'b' || e.key === 'ArrowLeft') answerColor(true);
+      else if (k2 === 'n' || e.key === 'ArrowRight') answerColor(false);
+      return;
+    }
+    if (D.mode !== 'name') return;
     if (e.key === 'Backspace') { e.preventDefault(); typeChar('back'); return; }
     var k = e.key.toLowerCase();
     if (k.length === 1) typeChar(k);
@@ -498,7 +532,7 @@
       tile('Cadence', fr(perMin, 1) + ' /min'),
       tile('Meilleure série', D.bestStreak),
       tile('Erreurs', D.err),
-      tile('Record ' + (D.mode === 'find' ? '« trouver »' : '« nommer »'), best)
+      tile('Record « ' + MODE_SHORT[D.mode].toLowerCase() + ' »', best)
     ].join('');
 
     var missed = Object.keys(D.missed).sort(function (a, b) { return D.missed[b] - D.missed[a]; });
@@ -514,7 +548,7 @@
 
   /* ============================================================= STATISTIQUES */
   function filterModes() {
-    return S.statsFilter === 'all' ? ['find', 'name'] : [S.statsFilter];
+    return S.statsFilter === 'all' ? MODES.slice() : [S.statsFilter];
   }
 
   function level(m) {
@@ -531,7 +565,8 @@
     var sq = store.stats.squares;
 
     chips($('#stats-filter'), [
-      { v: 'all', l: 'Tout' }, { v: 'find', l: 'Trouver' }, { v: 'name', l: 'Nommer' }
+      { v: 'all', l: 'Tout' }, { v: 'find', l: 'Trouver' },
+      { v: 'name', l: 'Nommer' }, { v: 'color', l: 'Couleur' }
     ], S.statsFilter, function (v) { S.statsFilter = v; renderStats(); });
 
     var rows = B.ALL.map(function (s) {
@@ -588,7 +623,7 @@
       return '<div class="hist">' +
         '<span class="mono">' + d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) +
         ' ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) + '</span>' +
-        '<span>' + (h.mode === 'find' ? 'Trouver' : 'Nommer') + (h.weak ? ' · faibles' : '') + '</span>' +
+        '<span>' + MODE_SHORT[h.mode] + (h.weak ? ' · faibles' : '') + '</span>' +
         '<b>' + h.score + '</b>' +
         '<span class="mono">' + h.errors + ' err.</span>' +
         '</div>';
@@ -664,6 +699,9 @@
   function bind() {
     $('#play-find').onclick = function () { startDrill('find'); };
     $('#play-name').onclick = function () { startDrill('name'); };
+    $('#play-color').onclick = function () { startDrill('color'); };
+    $('#ans-light').onclick = function () { answerColor(true); };
+    $('#ans-dark').onclick = function () { answerColor(false); };
     $('#go-stats').onclick = function () { renderStats(); show('stats'); };
     $('#go-settings').onclick = function () { renderSettings(); show('settings'); };
     $('#home-weak').onchange = function () {
@@ -678,7 +716,10 @@
 
     $('#drill-quit').onclick = quitDrill;
     $('#result-again').onclick = function () { startDrill(D ? D.mode : 'find'); };
-    $('#result-other').onclick = function () { startDrill(D && D.mode === 'find' ? 'name' : 'find'); };
+    $('#result-other').onclick = function () {
+      var i = D ? MODES.indexOf(D.mode) : -1;
+      startDrill(MODES[(i + 1) % MODES.length]);
+    };
     $('#result-stats').onclick = function () { renderStats(); show('stats'); };
 
     $('#stats-reset').onclick = function () {

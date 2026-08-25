@@ -8,7 +8,7 @@ hors ligne, toutes ses données restant sur l'appareil.
 | Application | Ce que c'est | Dossier |
 | --- | --- | --- |
 | 🕵️ **Undercover** | Le jeu de bluff et de déduction, à plusieurs autour d'un seul téléphone. | [`undercover/`](undercover/) |
-| ♜ **Coordonnées** | Entraînement aux coordonnées de l'échiquier, avec statistiques par case. | [`chess-coords/`](chess-coords/) |
+| ♜ **Coordonnées** | Entraînement aux coordonnées de l'échiquier : trouver, nommer, couleur — avec statistiques par case. | [`chess-coords/`](chess-coords/) |
 
 ## 🌐 Publication
 
