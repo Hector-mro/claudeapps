@@ -731,10 +731,8 @@
 
     $('#drill-quit').onclick = quitDrill;
     $('#result-again').onclick = function () { startDrill(D ? D.mode : 'find'); };
-    $('#result-other').onclick = function () {
-      var i = D ? MODES.indexOf(D.mode) : -1;
-      startDrill(MODES[(i + 1) % MODES.length]);
-    };
+    // trois exercices : on renvoie au choix plutôt que d'en imposer un
+    $('#result-other').onclick = function () { renderHome(); show('home'); };
     $('#result-stats').onclick = function () { renderStats(); show('stats'); };
 
     $('#stats-reset').onclick = function () {
