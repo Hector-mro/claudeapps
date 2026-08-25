@@ -876,10 +876,10 @@
       '<div class="emo" style="font-size:2.2rem">' + m.emoji + '</div>' +
       '<h2>' + esc(m.name) + ' est éliminé</h2>' +
       (note ? '<p>' + esc(note) + '</p>' : '');
+    // Le mot n'est jamais montré ici : il renseignerait toute la table.
     $('#elim-detail').innerHTML = reveal
       ? '<div class="center" style="padding:22px 0"><span class="stamp big ' + ROLE_CLASS[m.role] + '">' +
-        ROLE_LABEL[m.role] + '</span>' +
-        (m.word ? '<p class="note mt">Son mot : ' + esc(m.word) + '</p>' : '<p class="note mt">Il n’avait aucun mot</p>') + '</div>'
+        ROLE_LABEL[m.role] + '</span></div>'
       : '<p class="note center" style="padding:22px 0">Son rôle reste secret jusqu’à la fin de la manche</p>';
     go('elimination');
   }
