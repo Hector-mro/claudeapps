@@ -36,9 +36,24 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 [hidden] { display: none !important; }
 
-html, body { margin: 0; padding: 0; height: 100%; overscroll-behavior: none; }
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  /* clip, et non hidden : hidden ferait de <body> un conteneur de défilement
+     et casserait les barres d'action en position sticky */
+  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-y: none;   /* pas d'effet élastique en haut/bas */
+}
 
 body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-y: none;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--serif);
@@ -60,10 +75,16 @@ body::after {
 }
 
 #app {
-  min-height: 100%;
+  /* 100dvh suit la barre d'adresse mobile ; 100vh sert de repli */
+  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 540px;
   margin: 0 auto;
-  padding: calc(env(safe-area-inset-top) + 14px) 18px calc(env(safe-area-inset-bottom) + 22px);
+  padding:
+    calc(env(safe-area-inset-top) + 14px)
+    calc(env(safe-area-inset-right) + 18px)
+    calc(env(safe-area-inset-bottom) + 18px)
+    calc(env(safe-area-inset-left) + 18px);
   display: flex;
   flex-direction: column;
 }
@@ -137,9 +158,10 @@ body::after {
   padding: 5px 2px;
 }
 .masthead h1 {
-  font-size: 3.1rem;
+  font-size: clamp(1.9rem, 11.5vw, 3.1rem);
   line-height: .95;
   margin: 18px 0 12px;
+  overflow-wrap: break-word;
   font-weight: 700;
   letter-spacing: -.03em;
   text-transform: uppercase;
@@ -397,7 +419,7 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--ink); outli
   max-width: 17em;
 }
 .reveal-card .big-word {
-  font-size: 2.3rem;
+  font-size: clamp(1.7rem, 8.5vw, 2.3rem);
   font-weight: 700;
   letter-spacing: -.02em;
   line-height: 1.1;
@@ -443,6 +465,9 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--ink); outli
 
 /* --------------------------------------------------------- tour de parole */
 .speaker-list { display: flex; flex-direction: column; padding: 4px 0; }
+/* Avec beaucoup de joueurs, la liste défile sur place : les boutons restent visibles */
+#order-list { max-height: 58vh; overflow-y: auto; }
+#discussion-list { max-height: 38vh; overflow-y: auto; }
 .speaker {
   display: flex; align-items: center; gap: 12px;
   padding: 11px 0;
@@ -457,7 +482,7 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--ink); outli
   flex: none;
 }
 .speaker b { font-weight: 600; font-size: 1rem; }
-.speaker.first { background: var(--paper-2); margin: 0 -14px; padding: 11px 14px; }
+.speaker.first { background: var(--paper-2); padding: 11px 8px; }
 .speaker.first .num { color: var(--ink); font-weight: 700; }
 
 .turn-box { text-align: center; padding: 22px 14px !important; }
@@ -506,13 +531,26 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--ink); outli
 .pcard.sel .votes { color: var(--ink); }
 .pcard:active { background: var(--paper-2); }
 
+/* Écrans qui peuvent s'allonger : leur barre d'action reste collée en bas */
+#screen-vote .btn-row,
+#screen-setup > .btn-row,
+#screen-roundend > .btn-row {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: var(--paper);
+  padding: 10px 0 2px;
+  margin-top: 0;
+}
+
 /* -------------------------------------------------------------- résultats */
 .result-hero { text-align: center; padding: 26px 0 20px; }
 .result-hero .emo { font-size: 2.6rem; }
 .result-hero h2 {
   margin: 12px 0 8px;
-  font-size: 1.9rem;
+  font-size: clamp(1.45rem, 6.6vw, 1.9rem);
   line-height: 1.15;
+  overflow-wrap: break-word;
   letter-spacing: -.02em;
   text-transform: uppercase;
 }
@@ -641,4 +679,30 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--ink); outli
 
 @media (min-height: 730px) {
   .reveal-card { min-height: 310px; }
+}
+
+/* Petits écrans (iPhone mini, SE…) : rythme vertical resserré */
+@media (max-height: 700px) {
+  .masthead { padding: 4px 0 0; }
+  .masthead h1 { margin: 12px 0 8px; }
+  .masthead .strapline { margin-bottom: 8px; line-height: 1.65; }
+  .rule-double { margin-bottom: 12px; }
+  .menu button { padding: 12px 2px; font-size: 1.06rem; }
+  .vignette { display: none; }
+
+  .turn-box { padding: 14px 12px !important; }
+  .turn-box .turn-avatar { font-size: 1.4rem; margin: 6px 0 0; }
+  .turn-box .turn-name { font-size: 1.3rem; }
+  .timer { font-size: 2.1rem; margin-top: 6px; }
+  .speaker { padding: 9px 0; }
+  .card { margin-bottom: 10px; }
+  .btn { min-height: 46px; }
+  .mt { margin-top: 12px; }
+  #discussion-list { max-height: 32vh; }
+}
+
+/* Très petits écrans (iPhone SE de 1re génération) */
+@media (max-height: 600px) {
+  #discussion-list { max-height: 22vh; }
+  #order-list { max-height: 50vh; }
 }

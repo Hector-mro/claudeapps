@@ -63,6 +63,8 @@ npx http-server -p 8080 .    # puis http://localhost:8080 sur le téléphone
   par camp, taux de réussite par joueur).
 
 **Confort**
+- Mise en page adaptative de l'iPhone SE au Pro Max : aucun défilement parasite,
+  listes longues qui défilent sur place et barres d'action toujours atteignables.
 - Sons, vibrations, écran maintenu allumé.
 - Deux ambiances : **papier** (par défaut) et **encre de nuit**.
 - **PWA installable et 100 % hors ligne**, sauvegarde locale de tous les réglages.
