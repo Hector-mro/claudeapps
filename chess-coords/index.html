@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coordonnées — entraînement</title>
+<meta name="description" content="Entraînement aux coordonnées de l'échiquier : trouver la case, nommer la case, statistiques par case et mode « cases faibles ».">
+<meta name="theme-color" content="#efebe1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icons/icon-180.png">
+<link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ================================================================ ACCUEIL -->
+  <section id="s-home" class="screen active">
+    <header class="topbar">
+      <h1 class="title">Coordonnées</h1>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="go-stats" title="Statistiques" aria-label="Statistiques">▚</button>
+      <button class="icon-btn" id="go-settings" title="Réglages" aria-label="Réglages">⚙</button>
+    </header>
+
+    <p class="note mb">Nommer les 64 cases sans réfléchir : la base de toute lecture de partie.</p>
+
+    <div class="stack gap">
+      <button class="mode-card" id="play-find">
+        <span class="mode-kicker mono">Exercice 1</span>
+        <span class="mode-name">Trouver la case</span>
+        <span class="mode-desc">Une coordonnée s'affiche, on clique la case. Le plus de cases possible dans le temps imparti.</span>
+      </button>
+      <button class="mode-card" id="play-name">
+        <span class="mode-kicker mono">Exercice 2</span>
+        <span class="mode-name">Nommer la case</span>
+        <span class="mode-desc">Une case est surlignée, on tape sa coordonnée. L'exercice inverse.</span>
+      </button>
+    </div>
+
+    <div class="panel mt">
+      <div class="field">
+        <label class="label-mono">Durée de la série</label>
+        <div class="chips" id="home-duration"></div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="home-weak">
+        <span>
+          <b>Cases faibles</b>
+          <em id="weak-hint">Tire en priorité les cases les moins maîtrisées.</em>
+        </span>
+      </label>
+      <div class="row-note" id="home-recap"></div>
+    </div>
+
+    <div class="spacer"></div>
+    <p class="note center">Hors ligne · aucune donnée ne quitte le téléphone</p>
+  </section>
+
+  <!-- =============================================================== EXERCICE -->
+  <section id="s-drill" class="screen">
+    <header class="hud">
+      <button class="icon-btn" id="drill-quit" title="Arrêter" aria-label="Arrêter">✕</button>
+      <div class="hud-clock" id="hud-clock">60,0</div>
+      <div class="hud-meta">
+        <span class="hud-score" id="hud-score">0</span>
+        <span class="mono" id="hud-streak">série 0</span>
+      </div>
+    </header>
+    <div class="timebar"><i id="timebar-fill"></i></div>
+
+    <div class="prompt" id="prompt">
+      <div class="prompt-target" id="prompt-target">e4</div>
+      <div class="prompt-sub mono" id="prompt-sub">touchez la case</div>
+      <div class="penalty" id="penalty"></div>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board" id="board" role="group" aria-label="Échiquier"></div>
+      <div class="flip-flag" id="flip-flag">l'échiquier a tourné</div>
+    </div>
+
+    <div class="keypad" id="keypad" hidden>
+      <div class="keypad-echo"><span id="echo-file">·</span><span id="echo-rank">·</span></div>
+      <div class="keys" id="keys-files"></div>
+      <div class="keys" id="keys-ranks"></div>
+    </div>
+
+    <div class="countdown" id="countdown" hidden><span id="countdown-n">3</span></div>
+  </section>
+
+  <!-- ================================================================ RÉSULTAT -->
+  <section id="s-result" class="screen">
+    <header class="topbar">
+      <button class="icon-btn" data-back="home" aria-label="Retour">‹</button>
+      <h1 class="title" id="result-title">Série terminée</h1>
+    </header>
+
+    <div class="score-slam" id="result-score">0</div>
+    <p class="note center mb" id="result-sub">cases validées</p>
+
+    <div class="tiles" id="result-tiles"></div>
+
+    <div class="panel mt" id="result-missed-box">
+      <div class="label-mono mb">Cases ratées</div>
+      <div class="sq-list" id="result-missed"></div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="actions">
+      <button class="btn primary" id="result-again">Rejouer</button>
+      <button class="btn ghost" id="result-other">Autre exercice</button>
+      <button class="btn ghost" id="result-stats">Statistiques</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ STATISTIQUES -->
+  <section id="s-stats" class="screen">
+    <header class="topbar">
+      <button class="icon-btn" data-back="home" aria-label="Retour">‹</button>
+      <h1 class="title">Statistiques</h1>
+    </header>
+
+    <div class="chips" id="stats-filter"></div>
+
+    <div class="tiles mt" id="stats-tiles"></div>
+
+    <div class="label-mono mt">Maîtrise par case</div>
+    <p class="note">Vu du côté des blancs. Touchez une case pour le détail.</p>
+    <div class="heat-wrap">
+      <div class="heat" id="heat"></div>
+    </div>
+    <div class="legend">
+      <span><i class="sw lv0"></i>fragile</span>
+      <span><i class="sw lv2"></i>en cours</span>
+      <span><i class="sw lv4"></i>solide</span>
+      <span><i class="sw lvx"></i>jamais vue</span>
+    </div>
+
+    <div class="two-col mt">
+      <div>
+        <div class="label-mono mb">À travailler</div>
+        <div class="sq-list" id="stats-weak"></div>
+      </div>
+      <div>
+        <div class="label-mono mb">Maîtrisées</div>
+        <div class="sq-list" id="stats-strong"></div>
+      </div>
+    </div>
+
+    <div class="panel mt" id="stats-history-box">
+      <div class="label-mono mb">Dernières séries</div>
+      <div id="stats-history"></div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="actions">
+      <button class="btn danger ghost" id="stats-reset">Effacer les statistiques</button>
+    </div>
+  </section>
+
+  <!-- ================================================================ RÉGLAGES -->
+  <section id="s-settings" class="screen">
+    <header class="topbar">
+      <button class="icon-btn" data-back="home" aria-label="Retour">‹</button>
+      <h1 class="title">Réglages</h1>
+    </header>
+
+    <div class="panel">
+      <div class="label-mono mb">Série</div>
+      <div class="field">
+        <label>Durée</label>
+        <div class="chips" id="set-duration"></div>
+      </div>
+      <div class="field">
+        <label>Pénalité par erreur</label>
+        <div class="chips" id="set-penalty"></div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="set-penalty-point">
+        <span><b>L'erreur coûte aussi un point</b><em>Le score peut descendre sous zéro.</em></span>
+      </label>
+    </div>
+
+    <div class="panel mt">
+      <div class="label-mono mb">Échiquier</div>
+      <div class="field">
+        <label>Côté au départ</label>
+        <div class="chips" id="set-orientation"></div>
+      </div>
+      <div class="field">
+        <label>Retournement pendant la série</label>
+        <div class="chips" id="set-flip"></div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="set-pieces">
+        <span><b>Pièces en position de départ</b><em>Décochez pour un échiquier nu.</em></span>
+      </label>
+      <p class="note">Les lettres et les chiffres ne sont jamais affichés sur l'échiquier.</p>
+    </div>
+
+    <div class="panel mt">
+      <div class="label-mono mb">Confort</div>
+      <label class="switch">
+        <input type="checkbox" id="set-keypad">
+        <span><b>Pavé tactile</b><em>Pour « nommer la case ». Le clavier physique fonctionne toujours.</em></span>
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="set-sound">
+        <span><b>Sons</b></span>
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="set-vibration">
+        <span><b>Vibrations</b></span>
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="set-dark">
+        <span><b>Encre de nuit</b><em>Thème sombre.</em></span>
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="set-awake">
+        <span><b>Garder l'écran allumé</b></span>
+      </label>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="actions">
+      <button class="btn danger ghost" id="set-reset">Tout réinitialiser</button>
+    </div>
+  </section>
+
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <h2 id="modal-title"></h2>
+    <div id="modal-body"></div>
+    <div id="modal-actions" class="actions"></div>
+  </div>
+</div>
+
+<script src="./assets/store.js"></script>
+<script src="./assets/board.js"></script>
+<script src="./assets/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js').catch(function () {});
+    });
+  }
+</script>
+</body>
+</html>

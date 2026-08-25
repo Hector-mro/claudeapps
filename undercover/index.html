@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#efebe1">
+<meta name="description" content="Undercover — le jeu de bluff et de déduction à jouer sur un seul téléphone, entre amis.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Undercover</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ================= ACCUEIL ================= -->
+  <section class="screen active" id="screen-home">
+    <header class="masthead">
+      <div class="dateline"><span>Enquête collective</span><span>3 à 20 joueurs</span></div>
+      <h1>Undercover</h1>
+      <p class="strapline">Un seul téléphone · un mot presque identique<br>un traître parmi vous</p>
+    </header>
+    <div class="rule-double"></div>
+
+    <button class="btn primary" data-go="setup">Ouvrir une enquête</button>
+
+    <nav class="menu mt">
+      <button id="btn-resume" hidden><span class="idx">↺</span>Reprendre la partie<span class="arrow">→</span></button>
+      <button data-go="options"><span class="idx">01</span>Options<span class="arrow">→</span></button>
+      <button data-go="words"><span class="idx">02</span>Banque de mots<span class="arrow">→</span></button>
+      <button data-go="rules"><span class="idx">03</span>Règles du jeu<span class="arrow">→</span></button>
+      <button data-go="stats"><span class="idx">04</span>Archives &amp; statistiques<span class="arrow">→</span></button>
+    </nav>
+
+    <div class="spacer"></div>
+    <div class="vignette" aria-hidden="true">
+      <svg viewBox="70 100 372 316" width="86" height="73">
+        <rect x="181" y="113" width="149" height="100" fill="currentColor"/>
+        <ellipse cx="256" cy="205" rx="174" ry="26" fill="currentColor"/>
+        <circle cx="256" cy="307" r="95" fill="currentColor"/>
+      </svg>
+    </div>
+    <p class="note center" id="home-note"></p>
+  </section>
+
+  <!-- ================= CONFIGURATION ================= -->
+  <section class="screen" id="screen-setup">
+    <div class="topbar">
+      <button class="icon-btn" data-go="home">←</button>
+      <h2>Les suspects</h2>
+      <button class="icon-btn" id="btn-shuffle-names" title="Mélanger">⇄</button>
+    </div>
+
+    <div class="card">
+      <h3>Joueurs <span id="player-count-label"></span></h3>
+      <div class="player-list" id="player-list"></div>
+      <div class="btn-row" style="padding:12px 0">
+        <button class="btn sm" id="btn-add-player">＋ Ajouter</button>
+        <button class="btn sm ghost" id="btn-clear-players">Vider</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Distribution des rôles</h3>
+      <div class="row">
+        <div class="label">Répartition automatique<small>Ajuste les rôles selon le nombre de joueurs</small></div>
+        <label class="switch"><input type="checkbox" data-setting="autoRoles"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Undercover<small>Reçoit un mot légèrement différent</small></div>
+        <div class="stepper" data-stepper="undercoverCount" data-min="0" data-max="8">
+          <button data-step="-1">−</button><span class="val"></span><button data-step="1">＋</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="label">Mr White<small>N'a aucun mot, il doit bluffer</small></div>
+        <div class="stepper" data-stepper="mrWhiteCount" data-min="0" data-max="4">
+          <button data-step="-1">−</button><span class="val"></span><button data-step="1">＋</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="label">Civils</div>
+        <div class="stepper"><span class="val" id="civil-count"></span></div>
+      </div>
+    </div>
+
+    <p class="note center" id="setup-warning"></p>
+    <div class="spacer"></div>
+    <div class="btn-row mt">
+      <button class="btn ghost" data-go="options">Options</button>
+      <button class="btn primary" id="btn-start">Commencer</button>
+    </div>
+  </section>
+
+  <!-- ================= OPTIONS ================= -->
+  <section class="screen" id="screen-options">
+    <div class="topbar">
+      <button class="icon-btn" data-back="1">←</button>
+      <h2>Options</h2>
+      <button class="icon-btn" id="btn-reset-options" title="Réinitialiser">↺</button>
+    </div>
+
+    <div class="card">
+      <h3>Mots</h3>
+      <div class="row" style="border-bottom:none;padding-bottom:0">
+        <div class="label">Difficulté des paires<small>Plus c'est corsé, plus les deux mots se ressemblent</small></div>
+      </div>
+      <div class="chips" id="diff-chips">
+        <button class="chip" data-diff="1">Facile</button>
+        <button class="chip" data-diff="2">Moyen</button>
+        <button class="chip" data-diff="3">Corsé</button>
+      </div>
+      <div class="row">
+        <div class="label">Catégories<small id="cat-summary"></small></div>
+        <button class="btn sm" id="btn-cats">Choisir</button>
+      </div>
+      <div class="row">
+        <div class="label">Éviter les répétitions<small>Ne retire pas deux fois la même paire</small></div>
+        <label class="switch"><input type="checkbox" data-setting="avoidRepeats"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Uniquement mes mots<small>N'utilise que les paires que vous avez créées</small></div>
+        <label class="switch"><input type="checkbox" data-setting="customOnly"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Afficher la catégorie<small>Indice affiché pendant la manche</small></div>
+        <label class="switch"><input type="checkbox" data-setting="showCategory"><span></span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Distribution</h3>
+      <div class="row">
+        <div class="label">Maintenir pour voir<small>Le mot disparaît dès que le doigt se lève</small></div>
+        <label class="switch"><input type="checkbox" data-setting="holdToReveal"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Ordre de distribution aléatoire</div>
+        <label class="switch"><input type="checkbox" data-setting="shuffleRevealOrder"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Prévenir l'undercover<small>Il sait qu'il a le mot différent</small></div>
+        <label class="switch"><input type="checkbox" data-setting="undercoverKnows"><span></span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Tour de parole</h3>
+      <div class="row">
+        <div class="label">Premier joueur au hasard</div>
+        <label class="switch"><input type="checkbox" data-setting="randomFirstSpeaker"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Mr White jamais en premier<small>Il aurait trop peu d'indices</small></div>
+        <label class="switch"><input type="checkbox" data-setting="whiteNeverFirst"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Chrono par joueur</div>
+        <select data-setting="turnTimer" data-type="number">
+          <option value="0">Off</option><option value="10">10 s</option><option value="15">15 s</option>
+          <option value="20">20 s</option><option value="30">30 s</option><option value="45">45 s</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="label">Chrono de débat</div>
+        <select data-setting="discussionTimer" data-type="number">
+          <option value="0">Off</option><option value="30">30 s</option><option value="60">1 min</option>
+          <option value="90">1 min 30</option><option value="120">2 min</option><option value="180">3 min</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="label">Revoir son mot<small>Bouton discret pendant la manche</small></div>
+        <label class="switch"><input type="checkbox" data-setting="allowPeek"><span></span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Vote</h3>
+      <div class="row">
+        <div class="label">Mode de vote</div>
+        <select data-setting="voteMode">
+          <option value="quick">À main levée</option>
+          <option value="sequential">Secret</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="label">En cas d'égalité</div>
+        <select data-setting="tieMode">
+          <option value="revote">Nouveau vote</option>
+          <option value="random">Tirage au sort</option>
+          <option value="nobody">Personne</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="label">Révéler le rôle éliminé<small>Sinon, suspense jusqu'à la fin</small></div>
+        <label class="switch"><input type="checkbox" data-setting="revealEliminatedRole"><span></span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Mr White</h3>
+      <div class="row">
+        <div class="label">Peut deviner le mot<small>S'il trouve le mot des civils, il gagne</small></div>
+        <label class="switch"><input type="checkbox" data-setting="whiteCanGuess"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Seulement s'il est le dernier<small>Sinon il devine dès son élimination</small></div>
+        <label class="switch"><input type="checkbox" data-setting="whiteGuessOnlyIfLast"><span></span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Score</h3>
+      <div class="row">
+        <div class="label">Compter les points</div>
+        <label class="switch"><input type="checkbox" data-setting="scoring"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Victoire civil</div>
+        <div class="stepper" data-stepper="pointsCivil" data-min="0" data-max="20"><button data-step="-1">−</button><span class="val"></span><button data-step="1">＋</button></div>
+      </div>
+      <div class="row">
+        <div class="label">Victoire undercover</div>
+        <div class="stepper" data-stepper="pointsUndercover" data-min="0" data-max="20"><button data-step="-1">−</button><span class="val"></span><button data-step="1">＋</button></div>
+      </div>
+      <div class="row">
+        <div class="label">Victoire Mr White</div>
+        <div class="stepper" data-stepper="pointsWhite" data-min="0" data-max="20"><button data-step="-1">−</button><span class="val"></span><button data-step="1">＋</button></div>
+      </div>
+      <div class="row">
+        <div class="label">Bonus mot deviné</div>
+        <div class="stepper" data-stepper="pointsWhiteGuess" data-min="0" data-max="20"><button data-step="-1">−</button><span class="val"></span><button data-step="1">＋</button></div>
+      </div>
+      <div class="row">
+        <div class="label">Objectif de points<small>La partie s'arrête quand quelqu'un l'atteint</small></div>
+        <select data-setting="targetScore" data-type="number">
+          <option value="0">Sans fin</option><option value="10">10</option><option value="15">15</option>
+          <option value="20">20</option><option value="30">30</option><option value="50">50</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Confort</h3>
+      <div class="row">
+        <div class="label">Sons</div>
+        <label class="switch"><input type="checkbox" data-setting="sound"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Vibrations</div>
+        <label class="switch"><input type="checkbox" data-setting="vibration"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Garder l'écran allumé</div>
+        <label class="switch"><input type="checkbox" data-setting="keepAwake"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="label">Encre de nuit<small>Papier sombre, encre claire</small></div>
+        <label class="switch" id="theme-switch"><input type="checkbox"><span></span></label>
+      </div>
+    </div>
+
+    <button class="btn ghost danger" id="btn-wipe">Effacer toutes les données</button>
+  </section>
+
+  <!-- ================= BANQUE DE MOTS ================= -->
+  <section class="screen" id="screen-words">
+    <div class="topbar">
+      <button class="icon-btn" data-back="1">←</button>
+      <h2>Banque de mots</h2>
+      <button class="icon-btn" id="btn-export" title="Exporter">↑</button>
+    </div>
+    <div class="card">
+      <h3>Ajouter une paire</h3>
+      <div class="stack" style="gap:10px;padding:14px 0">
+        <input type="text" id="new-a" placeholder="Mot 1 — ex. Fraise" autocomplete="off">
+        <input type="text" id="new-b" placeholder="Mot 2 — ex. Framboise" autocomplete="off">
+        <button class="btn primary" id="btn-add-pair">Ajouter à mes mots</button>
+        <p class="note">Les deux mots doivent être proches : n'importe lequel des deux peut devenir le mot des civils.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Mes mots (<span id="custom-count">0</span>)</h3>
+      <div id="custom-list"></div>
+      <div class="btn-row" style="padding:12px 0">
+        <button class="btn sm" id="btn-import">Importer</button>
+        <button class="btn sm ghost danger" id="btn-clear-custom">Tout supprimer</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Paires intégrées (<span id="builtin-count">0</span>)</h3>
+      <div id="builtin-list"></div>
+    </div>
+  </section>
+
+  <!-- ================= RÈGLES ================= -->
+  <section class="screen" id="screen-rules">
+    <div class="topbar">
+      <button class="icon-btn" data-back="1">←</button>
+      <h2>Règles du jeu</h2>
+    </div>
+    <div class="card rules">
+      <h4>Le principe</h4>
+      <p>Tous les civils reçoivent le <b>même mot</b>. Les undercover en reçoivent un <b>très proche</b> (fraise / framboise). Mr White, lui, ne reçoit <b>rien du tout</b>.</p>
+      <h4>Le tour de parole</h4>
+      <p>Chacun décrit son mot avec <b>un seul mot ou une courte phrase</b>, sans jamais le prononcer. Trop précis et l'undercover vous copie ; trop vague et vous devenez suspect.</p>
+      <h4>Le vote</h4>
+      <p>Après le tour de table, tout le monde vote. Le joueur le plus désigné est éliminé et son rôle est révélé.</p>
+      <h4>Victoire</h4>
+      <ul>
+        <li><b>Civils</b> : éliminer tous les undercover et Mr White.</li>
+        <li><b>Undercover</b> : survivre jusqu'à être aussi nombreux que les civils.</li>
+        <li><b>Mr White</b> : gagner comme les undercover, ou deviner le mot des civils au moment d'être éliminé.</li>
+      </ul>
+      <h4>Conseils</h4>
+      <ul>
+        <li>Le premier à parler a le rôle le plus difficile : restez vague.</li>
+        <li>Mr White doit écouter puis paraphraser sans jamais s'avancer.</li>
+        <li>Un undercover malin vote parfois contre un autre undercover.</li>
+      </ul>
+    </div>
+    <button class="btn ghost" data-back="1">Compris</button>
+  </section>
+
+  <!-- ================= ARCHIVES ================= -->
+  <section class="screen" id="screen-stats">
+    <div class="topbar">
+      <button class="icon-btn" data-back="1">←</button>
+      <h2>Archives</h2>
+      <button class="icon-btn" id="btn-reset-stats" title="Réinitialiser">↺</button>
+    </div>
+    <div class="card" id="stats-global"></div>
+    <div class="card"><h3>Par joueur</h3><div id="stats-players"></div></div>
+  </section>
+
+  <!-- ================= DISTRIBUTION ================= -->
+  <section class="screen" id="screen-reveal">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-quit-1">✕</button>
+      <h2>Distribution</h2>
+      <span class="note" id="reveal-progress"></span>
+    </div>
+    <div class="reveal-wrap">
+      <div class="progress-dots" id="reveal-dots"></div>
+      <div class="reveal-card" id="reveal-card"></div>
+      <button class="btn primary" id="btn-reveal-next" hidden>Suivant</button>
+    </div>
+  </section>
+
+  <!-- ================= ORDRE DE PAROLE ================= -->
+  <section class="screen" id="screen-order">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-quit-2">✕</button>
+      <h2>Tour de parole</h2>
+      <span class="note" id="order-round"></span>
+    </div>
+    <p class="note center" id="order-hint"></p>
+    <div class="card mt"><div class="speaker-list" id="order-list"></div></div>
+    <div class="spacer"></div>
+    <button class="btn primary" id="btn-start-discussion">C'est parti</button>
+  </section>
+
+  <!-- ================= DISCUSSION ================= -->
+  <section class="screen" id="screen-discussion">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-quit-3">✕</button>
+      <h2 id="discussion-title">Description</h2>
+      <span class="note" id="discussion-round"></span>
+    </div>
+    <div class="card gray turn-box" id="turn-box">
+      <div class="turn-label">Au tour de</div>
+      <div class="turn-avatar emo" id="turn-avatar"></div>
+      <div class="turn-name" id="turn-name"></div>
+      <div class="timer" id="turn-timer" hidden></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" id="btn-prev-speaker">← Précédent</button>
+      <button class="btn primary" id="btn-next-speaker">Suivant →</button>
+    </div>
+    <div class="card mt">
+      <h3>Ordre du tour</h3>
+      <div class="speaker-list" id="discussion-list"></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn ghost sm mt" id="btn-peek" hidden style="width:100%">Revoir mon mot</button>
+    <button class="btn primary mt" id="btn-go-vote">Passer au vote</button>
+  </section>
+
+  <!-- ================= VOTE ================= -->
+  <section class="screen" id="screen-vote">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-quit-4">✕</button>
+      <h2 id="vote-title">Vote</h2>
+      <span class="note" id="vote-progress"></span>
+    </div>
+    <p class="note center mb" id="vote-hint"></p>
+    <div class="grid" id="vote-grid"></div>
+    <div class="spacer"></div>
+    <div class="btn-row mt">
+      <button class="btn ghost" id="btn-skip-vote">Personne</button>
+      <button class="btn primary" id="btn-confirm-vote">Valider</button>
+    </div>
+  </section>
+
+  <!-- ================= ÉLIMINATION ================= -->
+  <section class="screen" id="screen-elimination">
+    <div class="topbar"><h2>Élimination</h2></div>
+    <div class="result-hero" id="elim-hero"></div>
+    <div class="card" id="elim-detail"></div>
+    <div class="spacer"></div>
+    <button class="btn primary" id="btn-elim-continue">Continuer</button>
+  </section>
+
+  <!-- ================= MR WHITE DEVINE ================= -->
+  <section class="screen" id="screen-white">
+    <div class="topbar"><h2>Dernière chance</h2></div>
+    <div class="result-hero">
+      <div class="kicker">Mr White démasqué</div>
+      <h2 id="white-name"></h2>
+      <p>S'il devine le mot des civils, il remporte la manche.</p>
+    </div>
+    <input type="text" id="white-guess" placeholder="Le mot des civils est…" autocomplete="off" autocapitalize="off">
+    <div class="btn-row mt">
+      <button class="btn ghost" id="btn-white-skip">Abandonner</button>
+      <button class="btn primary" id="btn-white-submit">Valider</button>
+    </div>
+  </section>
+
+  <!-- ================= FIN DE MANCHE ================= -->
+  <section class="screen" id="screen-roundend">
+    <div class="result-hero" id="end-hero"></div>
+    <div class="word-reveal" id="end-words"></div>
+    <div class="card"><h3>Rôles</h3><div id="end-roles"></div></div>
+    <div class="card" id="end-scores-card"><h3>Scores</h3><div id="end-scores"></div></div>
+    <div class="spacer"></div>
+    <div class="btn-row mt">
+      <button class="btn ghost" id="btn-end-quit">Terminer</button>
+      <button class="btn primary" id="btn-next-round">Manche suivante</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= MODALE ================= -->
+<div class="modal" id="modal">
+  <div class="sheet">
+    <h3 id="modal-title"></h3>
+    <div id="modal-body"></div>
+    <div class="btn-row mt" id="modal-actions"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/words.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/game.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
