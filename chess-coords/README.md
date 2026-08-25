@@ -40,6 +40,11 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
   option « l'erreur coûte aussi un point ».
 - Après une faute, la case demandée **reste affichée** : on cherche jusqu'à
   la trouver, l'erreur ne se contourne pas.
+- Une faute compte **contre les deux cases** : celle qui était demandée et
+  celle qui a été désignée à sa place. Confondre `e4` et `d4`, c'est mal
+  connaître les deux. Vaut au clic comme à la saisie ; l'exercice de couleur,
+  lui, n'a pas de seconde case à mettre en cause.
+- L'écran de fin nomme les confusions telles quelles : `e4 → d4`.
 - Score, série en cours, temps de la dernière réponse, cadence par minute et
   record par exercice.
 
@@ -58,8 +63,13 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
 - **Maîtrise case par case**, notée sur la précision (60 %) et la rapidité
   (40 %), tempérée tant que les essais sont peu nombreux — une case vue deux
   fois n'est pas encore « maîtrisée ».
-- Damier de chaleur des 64 cases, détail au toucher : réussites, erreurs,
-  temps moyen, meilleur temps.
+- Deux compteurs de faute distincts, qui pèsent l'un comme l'autre sur la
+  note : **ratée** (la case était demandée et n'a pas été trouvée) et
+  **cliquée à tort** (elle a été désignée à la place d'une autre). Une case
+  jamais demandée mais souvent cliquée par erreur descend donc, elle aussi,
+  dans les cases à travailler.
+- Damier de chaleur des 64 cases, détail au toucher : réussites, précision,
+  les deux compteurs de faute, temps moyen.
 - Classements « à travailler » et « maîtrisées », filtrables par exercice
   (tout, trouver, nommer, couleur) : une case peut être sûre à la désignation
   et hésitante à la couleur.

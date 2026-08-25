@@ -511,9 +511,11 @@ body::after {
   background: var(--card);
 }
 .sq-pill i { font-style: normal; font-size: .64rem; color: var(--ink-3); }
+.sq-pill em { font-style: normal; font-size: .62rem; color: var(--ink-3); letter-spacing: .04em; }
 .sq-pill.ghost { color: var(--ink-3); }
 .sq-pill.bad { border-color: var(--stamp); color: var(--stamp); }
 .sq-pill.bad i { color: var(--stamp); }
+.sq-pill.bad em { color: var(--ink-3); }
 
 /* ============================================================= STATISTIQUES */
 .heat-wrap { margin-top: 8px; }

@@ -134,8 +134,7 @@
   function countSeen(modes) {
     var sq = store.stats.squares, n = 0;
     B.ALL.forEach(function (s) {
-      var r = B.record(sq, modes, s);
-      if (r.ok + r.err > 0) n++;
+      if (B.attempts(B.record(sq, modes, s)) > 0) n++;
     });
     return n;
   }
@@ -318,7 +317,7 @@
       var el = boardMap[sq];
       el.classList.add('bad');
       setTimeout(function () { el.classList.remove('bad'); }, 320);
-      fail();
+      fail(sq);
     }
   }
 
@@ -362,12 +361,20 @@
     }, 130);
   }
 
-  function fail() {
+  /* `wrong` : la case effectivement désignée, quand il y en a une. Elle est
+     pénalisée elle aussi — confondre deux cases, c'est mal connaître les deux. */
+  function fail(wrong) {
     var st = store.settings;
     var rec = store.square(D.mode, D.target);
     rec.err++;
+    if (wrong && wrong !== D.target) {
+      var other = store.square(D.mode, wrong);
+      other.conf = (other.conf || 0) + 1;
+    }
     D.err++;
-    D.missed[D.target] = (D.missed[D.target] || 0) + 1;
+    var m = D.missed[D.target] || (D.missed[D.target] = { n: 0, others: {} });
+    m.n++;
+    if (wrong && wrong !== D.target) m.others[wrong] = (m.others[wrong] || 0) + 1;
     D.streak = 0;
     $('#hud-streak').textContent = 'série 0';
 
@@ -427,7 +434,7 @@
       var echo = $('#echo-file').parentNode;
       echo.classList.add('ko');
       setTimeout(function () { echo.classList.remove('ko'); }, 320);
-      fail();
+      fail(guess);   // la case nommée à tort est pénalisée comme un clic à côté
       D.input = '';
       renderEcho();
     }
@@ -535,10 +542,15 @@
       tile('Record « ' + MODE_SHORT[D.mode].toLowerCase() + ' »', best)
     ].join('');
 
-    var missed = Object.keys(D.missed).sort(function (a, b) { return D.missed[b] - D.missed[a]; });
+    var missed = Object.keys(D.missed).sort(function (a, b) { return D.missed[b].n - D.missed[a].n; });
     $('#result-missed-box').hidden = missed.length === 0;
     $('#result-missed').innerHTML = missed.map(function (sq) {
-      return '<span class="sq-pill bad">' + sq + '<i>×' + D.missed[sq] + '</i></span>';
+      var m = D.missed[sq];
+      var others = Object.keys(m.others).sort(function (a, b) { return m.others[b] - m.others[a]; });
+      return '<span class="sq-pill bad">' + sq +
+        (m.n > 1 ? '<i>×' + m.n + '</i>' : '') +
+        (others.length ? '<em>→ ' + others.slice(0, 3).join(' ') + '</em>' : '') +
+        '</span>';
     }).join('');
   }
 
@@ -571,7 +583,7 @@
 
     var rows = B.ALL.map(function (s) {
       var rec = B.record(sq, modes, s);
-      return { sq: s, rec: rec, m: B.mastery(rec), n: rec.ok + rec.err };
+      return { sq: s, rec: rec, m: B.mastery(rec), n: B.attempts(rec) };
     });
 
     var totOk = 0, totErr = 0, totMs = 0, unseen = 0;
@@ -639,7 +651,7 @@
     var modes = filterModes();
     var rec = B.record(store.stats.squares, modes, s);
     var m = B.mastery(rec);
-    var n = rec.ok + rec.err;
+    var n = B.attempts(rec);
     var html;
     if (!n) {
       html = '<p>Cette case n\'a encore jamais été proposée' +
@@ -648,11 +660,14 @@
       html = '<div class="tiles">' +
         tile('Maîtrise', Math.round(m * 100) + ' %') +
         tile('Réussites', rec.ok) +
-        tile('Erreurs', rec.err) +
-        tile('Temps moyen', rec.ok ? secs(B.avgMs(rec)) : '—') +
-        tile('Meilleur temps', rec.best ? secs(rec.best) : '—') +
         tile('Précision', Math.round(100 * rec.ok / n) + ' %') +
-        '</div>';
+        tile('Ratée', rec.err) +
+        tile('Cliquée à tort', rec.conf || 0) +
+        tile('Temps moyen', rec.ok ? secs(B.avgMs(rec)) : '—') +
+        '</div>' +
+        '<p class="note mt">« Ratée » : la case était demandée et n\'a pas été trouvée. ' +
+        '« Cliquée à tort » : elle a été désignée à la place d\'une autre. ' +
+        'Les deux pèsent sur la maîtrise.</p>';
     }
     modal('Case ' + s, html, [{ label: 'Fermer' }]);
   }

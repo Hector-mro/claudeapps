@@ -22,8 +22,10 @@
     keepAwake: true
   };
 
-  // squares : nom de case -> { ok, err, ms, best }
-  //   ok   = cases validées          err = erreurs commises sur cette case
+  // squares : nom de case -> { ok, err, conf, ms, best }
+  //   ok   = cases validées
+  //   err  = fautes commises alors que cette case était demandée
+  //   conf = fois où elle a été désignée à la place de la case demandée
   //   ms   = temps cumulé (ms) des résolutions   best = meilleur temps (ms)
   var DEFAULT_DATA = {
     settings: DEFAULT_SETTINGS,
@@ -84,7 +86,7 @@
   /* Fiche d'une case pour un exercice donné, créée à la volée. */
   function square(mode, sq) {
     var box = data.stats.squares[mode] || (data.stats.squares[mode] = {});
-    return box[sq] || (box[sq] = { ok: 0, err: 0, ms: 0, best: 0 });
+    return box[sq] || (box[sq] = { ok: 0, err: 0, conf: 0, ms: 0, best: 0 });
   }
 
   function pushHistory(entry) {

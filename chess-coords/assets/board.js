@@ -87,29 +87,35 @@
 
   function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
 
-  /* Additionne les fiches d'une case sur un ou plusieurs exercices. */
+  /* Additionne les fiches d'une case sur un ou plusieurs exercices.
+     err  = fautes commises alors que cette case était demandée
+     conf = fois où on l'a désignée à la place d'une autre */
   function record(squares, modes, sq) {
-    var out = { ok: 0, err: 0, ms: 0, best: 0 };
+    var out = { ok: 0, err: 0, conf: 0, ms: 0, best: 0 };
     modes.forEach(function (m) {
       var r = squares[m] && squares[m][sq];
       if (!r) return;
-      out.ok += r.ok; out.err += r.err; out.ms += r.ms;
+      out.ok += r.ok; out.err += r.err; out.conf += r.conf || 0; out.ms += r.ms;
       if (r.best && (!out.best || r.best < out.best)) out.best = r.best;
     });
     return out;
   }
 
+  /* Nombre d'occasions où la case a été mise en jeu : demandée, ou désignée
+     à tort à la place d'une autre. Les deux comptent contre elle. */
+  function attempts(rec) { return rec.ok + rec.err + (rec.conf || 0); }
+
   /* Note de 0 à 1, ramenée vers 0,5 tant que les essais sont peu nombreux.
      null = case jamais rencontrée. */
   function mastery(rec) {
-    var n = rec.ok + rec.err;
+    var n = attempts(rec);
     if (!n) return null;
     var acc = rec.ok / n;
     var avg = rec.ok ? rec.ms / rec.ok : SLOW;
     var speed = clamp((SLOW - avg) / (SLOW - FAST), 0, 1);
     var raw = 0.6 * acc + 0.4 * speed;
-    var conf = n / (n + 3);
-    return raw * conf + 0.5 * (1 - conf);
+    var trust = n / (n + 3);
+    return raw * trust + 0.5 * (1 - trust);
   }
 
   function avgMs(rec) { return rec.ok ? Math.round(rec.ms / rec.ok) : 0; }
@@ -142,6 +148,7 @@
     FILES: FILES, RANKS: RANKS, ALL: ALL, START: START,
     isLight: isLight, orderFor: orderFor,
     build: build, layout: layout, setPieces: setPieces, clearMarks: clearMarks,
-    record: record, mastery: mastery, avgMs: avgMs, weight: weight, pick: pick
+    record: record, mastery: mastery, attempts: attempts, avgMs: avgMs,
+    weight: weight, pick: pick
   };
 })(window);
