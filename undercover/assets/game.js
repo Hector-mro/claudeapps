@@ -43,13 +43,22 @@
     return null;
   }
 
-  /* Pool de paires filtré par catégories / difficulté / historique */
+  /* Une paire correspond-elle à la langue demandée ?
+     Les mots personnalisés n'ont pas de langue : ils sont toujours proposés. */
+  function matchesLang(pair, lang) {
+    if (!pair.lang || lang === 'both') return true;
+    return pair.lang === lang;
+  }
+
+  /* Pool de paires filtré par langue / catégories / difficulté / historique */
   function buildPool(settings, customPairs, usedPairs) {
     var all = (settings.customOnly ? [] : global.UC.PAIRS).concat(customPairs || []);
     var cats = settings.categories;
     var diffs = settings.difficulties && settings.difficulties.length ? settings.difficulties : [1, 2, 3];
+    var lang = settings.wordLang || 'fr';
 
     var pool = all.filter(function (p) {
+      if (!matchesLang(p, lang)) return false;
       if (cats && cats.length && cats.indexOf(p.cat) === -1) return false;
       if (p.cat !== 'custom' && diffs.indexOf(p.diff) === -1) return false;
       return true;
@@ -281,6 +290,7 @@
   global.UC.Game = Game;
   global.UC.util = {
     shuffle: shuffle, pick: pick, normalize: normalize,
-    suggestRoles: suggestRoles, validateSetup: validateSetup, buildPool: buildPool
+    suggestRoles: suggestRoles, validateSetup: validateSetup,
+    buildPool: buildPool, matchesLang: matchesLang
   };
 })(window);

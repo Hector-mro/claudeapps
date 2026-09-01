@@ -268,8 +268,16 @@
   }
 
   function countPairs(catId) {
+    var lang = store.settings.wordLang || 'fr';
     var all = UC.PAIRS.concat(store.data.customPairs);
-    return all.filter(function (p) { return p.cat === catId; }).length;
+    return all.filter(function (p) {
+      return p.cat === catId && util.matchesLang(p, lang);
+    }).length;
+  }
+
+  function langLabel() {
+    var lang = store.settings.wordLang || 'fr';
+    return { fr: 'mots français', en: 'mots anglais', both: 'français + anglais' }[lang] || lang;
   }
 
   /* --------------------------------------------------------------- joueurs */
@@ -389,9 +397,11 @@
         }).join('')
       : '<p class="note">Aucune paire personnalisée pour l’instant.</p>';
 
-    $('#builtin-count').textContent = UC.PAIRS.length;
+    var lang = store.settings.wordLang || 'fr';
+    var builtin = UC.PAIRS.filter(function (p) { return util.matchesLang(p, lang); });
+    $('#builtin-count').textContent = builtin.length;
     var byCat = {};
-    UC.PAIRS.forEach(function (p) { (byCat[p.cat] = byCat[p.cat] || []).push(p); });
+    builtin.forEach(function (p) { (byCat[p.cat] = byCat[p.cat] || []).push(p); });
     $('#builtin-list').innerHTML = UC.CATEGORIES.filter(function (c) { return byCat[c.id]; }).map(function (c) {
       return '<div class="row"><div class="label">' + esc(c.name) +
              '<small>' + byCat[c.id].slice(0, 3).map(function (p) { return esc(p.a) + ' / ' + esc(p.b); }).join(' · ') + '…</small></div>' +
@@ -1024,7 +1034,9 @@
   function refreshHome() {
     var info = poolInfo();
     var custom = store.data.customPairs.length;
+    var lang = store.settings.wordLang || 'fr';
     $('#home-note').textContent = info.pool.length + ' paires disponibles' +
+      (lang === 'fr' ? '' : ' · ' + langLabel()) +
       (custom ? ' · ' + custom + ' perso' : '') + ' · ' + store.data.players.length + ' joueurs';
     var btn = $('#btn-resume');
     btn.hidden = !(S.inGame && S.lastGameScreen);
@@ -1096,7 +1108,25 @@
     refreshHome();
 
     if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
+      // Une version déjà installée doit pouvoir être remplacée : on vérifie les
+      // mises à jour au lancement, puis une fois par heure si l'app reste ouverte.
+      var hadController = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.register('sw.js').then(function (reg) {
+        reg.update();
+        setInterval(function () { reg.update(); }, 3600000);
+      }).catch(function () {});
+
+      // Quand un nouveau service worker prend la main, on recharge une fois pour
+      // afficher la nouvelle version. Jamais à la première installation, où il
+      // n'y avait encore rien à remplacer.
+      if (hadController) {
+        var reloading = false;
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          if (reloading) return;
+          reloading = true;
+          location.reload();
+        });
+      }
     }
   }
 
