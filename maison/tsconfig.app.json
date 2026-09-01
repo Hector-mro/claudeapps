@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    // Cible alignée sur la tablette (§6) : ce que tsc accepte ici, esbuild
+    // et le plugin legacy doivent pouvoir le redescendre jusqu'à Safari 12.
+    "target": "ES2017",
+    "lib": ["ES2017", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src/mur", "src/app", "src/shared"]
+}
