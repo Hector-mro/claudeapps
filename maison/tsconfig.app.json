@@ -16,5 +16,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/mur", "src/app", "src/shared"]
+  "include": ["src/main.tsx", "src/vite-env.d.ts", "src/mur", "src/app", "src/shared"]
 }

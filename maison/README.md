@@ -22,10 +22,15 @@ classement — voir `SPEC.md` pour les principes qui tranchent les arbitrages.
 | Jalon | Contenu | Statut |
 | --- | --- | --- |
 | 1 | Schéma D1, migrations, seed, `GET /api/today` | ✅ |
-| 2 | Écran mural, compatible tablette ancienne | à venir |
-| 3 | Interface téléphone : cocher, repousser, ajouter | à venir |
+| 3 | Interface téléphone : cocher, repousser, ajouter | ✅ |
 | 4 | Revue hebdomadaire | à venir |
+| 2 | Écran mural, compatible tablette ancienne | à venir |
 | 5 | Déploiement Cloudflare | à venir |
+
+L'ordre a été inversé après le jalon 1 : l'application a de la valeur sur le
+seul téléphone, donc le mur n'est plus le point de risque qui doit passer en
+premier. Il reste au programme — et sert aussi à décider si un TRMNL vaudrait
+l'achat.
 
 ## Développement local
 
@@ -138,6 +143,11 @@ minuit l'été, le mur afficherait la liste de la veille.
 | --- | --- |
 | `GET /api/health` | vivant, sans jeton |
 | `GET /api/:token/today` | contexte du jour, tâches dues, tâches qui ont glissé |
+| `GET /api/:token/domains` | domaines actifs et leur propriétaire |
+| `POST /api/:token/tasks/:id/complete` | coche ; récurrente replanifiée, ponctuelle retirée |
+| `POST /api/:token/tasks/:id/skip` | repousse de 2 jours et écrit `skipped = 1` |
+| `POST /api/:token/tasks` | ajoute une tâche ponctuelle due aujourd'hui |
+| `DELETE /api/:token/completions/:id` | annule un « fait » ou un « repoussé » récent |
 
 Un jeton inconnu renvoie `404` et non `403` : inutile de confirmer à qui tombe
 dessus qu'il y a quelque chose derrière l'adresse.
@@ -151,6 +161,31 @@ Une tâche en retard de **plus de 7 jours** quitte `today` pour `slipped`
 (3 au maximum). Elle n'apparaît pas dans les deux : une dette de trois semaines
 n'est plus le plan du jour, et la laisser en tête des cinq lignes du mur
 remplirait l'écran de reproches.
+
+## Interface téléphone
+
+Trois décisions qui ne sont pas dans la spec et qu'il faut valider :
+
+- **Cocher, c'est toute la ligne ; ouvrir le détail, c'est la colonne « ⋯ ».**
+  La spec dit « un tap coche » et décrit par ailleurs l'ouverture d'une tâche :
+  il fallait deux zones. La zone de coche fait toute la largeur restante, celle
+  d'ouverture fait 48 px.
+- **Une annulation de sept secondes après chaque action.** Sans elle, un tap
+  parti tout seul dans un couloir repousse « Courses de la semaine » de sept
+  jours sans aucun moyen de revenir en arrière. La ligne `completions` mémorise
+  l'échéance d'avant (`previous_next_due_on`, migration `0003`) : annuler
+  restaure la date exacte au lieu de la recalculer. Le serveur refuse au-delà
+  de cinq minutes, pour que la revue hebdomadaire ne soit pas réécrivable.
+- **Une tâche ponctuelle ajoutée est marquée `effort = 'low'`.** Le formulaire
+  ne demande qu'un titre et un domaine ; il fallait bien choisir quelque chose,
+  et `low` la place tôt dans le tri.
+
+« Repoussé » décale de deux jours **à partir d'aujourd'hui**, pas à partir de
+l'échéance : une tâche déjà en retard ne doit pas rester en retard après avoir
+été repoussée. C'est la même logique que la récurrence.
+
+Une tâche ponctuelle cochée est désactivée (`active = 0`), pas supprimée : la
+revue hebdomadaire a besoin de son historique.
 
 ## Quotas Cloudflare
 
