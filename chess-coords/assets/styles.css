@@ -22,6 +22,13 @@
 
   /* boutons « blanche / noire » : les deux teintes du damier, assombries
      juste assez pour que le libellé reste lisible */
+  /* échelle de maîtrise, partagée par le damier de chaleur et l'échiquier */
+  --lv0: #b8503f; --lv0-ink: #ffffff;
+  --lv1: #c38443; --lv1-ink: #ffffff;
+  --lv2: #b9b09a; --lv2-ink: #1b1a15;
+  --lv3: #7f9a6a; --lv3-ink: #12180f;
+  --lv4: #3d7a4c; --lv4-ink: #f2f6ef;
+
   --btn-light:     #e7ddc6;
   --btn-light-ink: #191815;
   --btn-dark:      #6f6653;
@@ -50,6 +57,8 @@
 
   --sq-light: #6f6c63;
   --sq-dark:  #45423b;
+
+  --lv2: #6f695c; --lv2-ink: #f0ece2;
 
   --btn-light:     #8d8a80;
   --btn-light-ink: #14130f;
@@ -479,6 +488,71 @@ body::after {
 }
 .countdown span.pop { animation: pop .3s ease; }
 
+/* ================================================== ÉCHIQUIER DE RÉFÉRENCE */
+.view-wrap {
+  flex: 1 1 0;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ici — et seulement ici — les coordonnées sont écrites sur l'échiquier. */
+.view-board .sq::after,
+.view-board .sq::before {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: calc(var(--cell, 40px) * .2);
+  line-height: 1;
+  color: var(--ink-2);
+  pointer-events: none;
+}
+.view-board .sq::after { content: attr(data-cf); right: 3px; bottom: 3px; }
+.view-board .sq::before { content: attr(data-cr); left: 3px; top: 3px; }
+.view-board .sq.dark::after,
+.view-board .sq.dark::before { color: var(--sq-light); }
+
+.view-board .sq.guide {
+  /* le liseré tient aussi sur les teintes de maîtrise, où l'aplat se perdrait */
+  background-image: linear-gradient(rgba(43, 99, 131, .18), rgba(43, 99, 131, .18));
+  box-shadow: inset 0 0 0 2px rgba(43, 99, 131, .45);
+}
+.view-board .sq.sel {
+  box-shadow: inset 0 0 0 4px var(--hl), inset 0 0 0 7px rgba(255, 255, 255, .35);
+  z-index: 2;
+}
+.view-board.heat .sq.lv0 { background: var(--lv0); }
+.view-board.heat .sq.lv1 { background: var(--lv1); }
+.view-board.heat .sq.lv2 { background: var(--lv2); }
+.view-board.heat .sq.lv3 { background: var(--lv3); }
+.view-board.heat .sq.lv4 { background: var(--lv4); }
+.view-board.heat .sq.lvx { background: var(--paper-2); }
+.view-board.heat .sq.lvx.light { background: var(--card); }
+.view-board.heat .sq::after,
+.view-board.heat .sq::before,
+.view-board.heat .sq.dark::after,
+.view-board.heat .sq.dark::before {
+  color: #16150f;
+  text-shadow: 0 0 2px rgba(255, 255, 255, .65);
+}
+
+.view-info {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--rule);
+}
+.view-info b { font-weight: 400; font-size: 1.5rem; min-width: 1.8em; }
+.view-info span {
+  font-family: var(--mono);
+  font-size: .66rem;
+  letter-spacing: .04em;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
 /* ================================================================= RÉSULTAT */
 .score-slam {
   text-align: center;
@@ -542,22 +616,21 @@ body::after {
 }
 .hc b { font-weight: 400; font-size: .62rem; letter-spacing: .02em; }
 .hc i { font-style: normal; font-size: .54rem; opacity: .78; }
-.hc.lv0 { background: #b8503f; color: #fff; }
-.hc.lv1 { background: #c38443; color: #fff; }
-.hc.lv2 { background: #b9b09a; color: #1b1a15; }
-.hc.lv3 { background: #7f9a6a; color: #12180f; }
-.hc.lv4 { background: #3d7a4c; color: #f2f6ef; }
+.hc.lv0 { background: var(--lv0); color: var(--lv0-ink); }
+.hc.lv1 { background: var(--lv1); color: var(--lv1-ink); }
+.hc.lv2 { background: var(--lv2); color: var(--lv2-ink); }
+.hc.lv3 { background: var(--lv3); color: var(--lv3-ink); }
+.hc.lv4 { background: var(--lv4); color: var(--lv4-ink); }
 .hc.lvx { background: var(--card); color: var(--ink-3); box-shadow: inset 0 0 0 1px var(--rule-2); }
 .hc.lvx.dark { background: var(--paper-2); }
-[data-theme='dark'] .hc.lv2 { background: #6f695c; color: #f0ece2; }
 [data-theme='dark'] .hc.lvx { background: #232326; }
 
 .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 7px; font-family: var(--mono); font-size: .6rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .sw { width: 12px; height: 12px; display: inline-block; }
-.sw.lv0 { background: #b8503f; }
-.sw.lv2 { background: #b9b09a; }
-.sw.lv4 { background: #3d7a4c; }
+.sw.lv0 { background: var(--lv0); }
+.sw.lv2 { background: var(--lv2); }
+.sw.lv4 { background: var(--lv4); }
 .sw.lvx { background: var(--paper-2); border: 1px dashed var(--rule); }
 
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }

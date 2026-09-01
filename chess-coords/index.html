@@ -46,6 +46,8 @@
       </button>
     </div>
 
+    <button class="btn ghost mt" id="go-board">Échiquier de référence</button>
+
     <div class="panel mt">
       <div class="field">
         <label class="label-mono">Durée de la série</label>
@@ -125,6 +127,28 @@
       <button class="btn ghost" id="result-other">Choisir un exercice</button>
       <button class="btn ghost" id="result-stats">Statistiques</button>
     </div>
+  </section>
+
+  <!-- =============================================================== ÉCHIQUIER -->
+  <section id="s-board" class="screen">
+    <header class="topbar">
+      <button class="icon-btn" data-back="home" aria-label="Retour">‹</button>
+      <h1 class="title">Échiquier</h1>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="view-flip" title="Retourner l'échiquier" aria-label="Retourner l'échiquier">⇅</button>
+    </header>
+
+    <div class="view-wrap">
+      <div class="board view-board" id="view-board" role="group" aria-label="Échiquier de référence"></div>
+    </div>
+
+    <div class="view-info">
+      <b id="view-sq">—</b>
+      <span id="view-desc">Touchez une case pour la détailler.</span>
+    </div>
+
+    <div class="chips mt" id="view-opts"></div>
+    <p class="note mt" id="view-side"></p>
   </section>
 
   <!-- ============================================================ STATISTIQUES -->

@@ -14,6 +14,7 @@
   var S = {
     screen: 'home',
     statsFilter: 'all',
+    viewSel: null,
     wakeLock: null
   };
 
@@ -672,6 +673,122 @@
     modal('Case ' + s, html, [{ label: 'Fermer' }]);
   }
 
+  /* ================================================== ÉCHIQUIER DE RÉFÉRENCE */
+  var viewEl, viewMap, fitView = function () {};
+
+  function initView() {
+    viewEl = $('#view-board');
+    viewMap = B.build(viewEl);
+    viewEl.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.sq') : null;
+      if (!b) return;
+      S.viewSel = (S.viewSel === b.dataset.sq) ? null : b.dataset.sq;   // seconde touche = désélection
+      renderView();
+    });
+
+    var wrap = viewEl.parentNode;
+    function fit() {
+      var r = wrap.getBoundingClientRect();
+      var size = Math.max(180, Math.floor(Math.min(r.width, r.height)));
+      viewEl.style.width = size + 'px';
+      viewEl.style.height = size + 'px';
+      viewEl.style.setProperty('--cell', (size / 8) + 'px');
+    }
+    fitView = fit;
+    if (global.ResizeObserver) new ResizeObserver(fit).observe(wrap);
+    global.addEventListener('resize', fit);
+  }
+
+  var VIEW_OPTS = [
+    { k: 'coords', l: 'Coordonnées' },
+    { k: 'pieces', l: 'Pièces' },
+    { k: 'guides', l: 'Guides' },
+    { k: 'heat', l: 'Maîtrise' }
+  ];
+
+  function renderView() {
+    var V = store.settings.view;
+    B.layout(viewEl, V.orientation);
+    B.setPieces(viewEl, V.pieces);
+    viewEl.classList.toggle('heat', V.heat);
+
+    // les lettres bordent la rangée du bas, les chiffres la colonne de gauche,
+    // des deux côtés de l'échiquier
+    var bottom = V.orientation === 'white' ? '1' : '8';
+    var left = V.orientation === 'white' ? 'a' : 'h';
+    var sel = S.viewSel;
+
+    B.ALL.forEach(function (sq) {
+      var el = viewMap[sq];
+      el.dataset.cf = (V.coords && sq[1] === bottom) ? sq[0] : '';
+      el.dataset.cr = (V.coords && sq[0] === left) ? sq[1] : '';
+      var cls = 'sq ' + (B.isLight(sq) ? 'light' : 'dark');
+      if (V.heat) cls += ' ' + level(B.mastery(B.record(store.stats.squares, MODES, sq)));
+      if (sel === sq) cls += ' sel';
+      else if (sel && V.guides && (sq[0] === sel[0] || sq[1] === sel[1])) cls += ' guide';
+      el.className = cls;
+      el.setAttribute('aria-label', 'case ' + sq);   // ici, la coordonnée est le sujet
+    });
+
+    chipsToggle($('#view-opts'), VIEW_OPTS, V, function (k) {
+      V[k] = !V[k];
+      store.save();
+      renderView();
+    });
+
+    $('#view-side').textContent = 'Vu du côté des ' + (V.orientation === 'white' ? 'blancs' : 'noirs') +
+      (V.heat ? ' · teintes de maîtrise, tous exercices confondus' : '') +
+      (V.coords ? '' : ' · coordonnées masquées, comme pendant les exercices');
+
+    if (!sel) {
+      $('#view-sq').textContent = '—';
+      $('#view-desc').textContent = 'Touchez une case pour la détailler.';
+      return;
+    }
+    var rec = B.record(store.stats.squares, MODES, sel);
+    var n = B.attempts(rec);
+    var bits = ['case ' + (B.isLight(sel) ? 'blanche' : 'noire')];
+    if (n) {
+      bits.push('maîtrise ' + Math.round(B.mastery(rec) * 100) + ' %');
+      bits.push(rec.ok + (rec.ok > 1 ? ' réussites' : ' réussite'));
+      if (rec.err) bits.push(rec.err + (rec.err > 1 ? ' ratées' : ' ratée'));
+      if (rec.conf) bits.push(rec.conf + ' fois désignée à tort');
+      if (rec.ok) bits.push(secs(B.avgMs(rec)) + ' de moyenne');
+    } else {
+      bits.push('jamais rencontrée dans les exercices');
+    }
+    $('#view-sq').textContent = sel;
+    $('#view-desc').textContent = bits.join(' · ');
+  }
+
+  /* Puces à bascule : plusieurs peuvent être actives à la fois. */
+  function chipsToggle(el, options, state, onPick) {
+    el.innerHTML = '';
+    options.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip' + (state[o.k] ? ' on' : '');
+      b.textContent = o.l;
+      b.setAttribute('aria-pressed', state[o.k] ? 'true' : 'false');
+      b.onclick = function () { onPick(o.k); };
+      el.appendChild(b);
+    });
+  }
+
+  function flipView() {
+    var V = store.settings.view;
+    viewEl.classList.add('spin');
+    setTimeout(function () {
+      viewEl.classList.add('nofx');
+      viewEl.classList.remove('spin');
+      V.orientation = V.orientation === 'white' ? 'black' : 'white';
+      store.save();
+      renderView();
+      void viewEl.offsetWidth;
+      viewEl.classList.remove('nofx');
+    }, 460);
+  }
+
   /* ================================================================= RÉGLAGES */
   function renderSettings() {
     var st = store.settings;
@@ -718,6 +835,12 @@
     $('#ans-light').onclick = function () { answerColor(true); };
     $('#ans-dark').onclick = function () { answerColor(false); };
     $('#go-stats').onclick = function () { renderStats(); show('stats'); };
+    $('#go-board').onclick = function () {
+      show('board');
+      renderView();
+      requestAnimationFrame(fitView);
+    };
+    $('#view-flip').onclick = flipView;
     $('#go-settings').onclick = function () { renderSettings(); show('settings'); };
     $('#home-weak').onchange = function () {
       store.settings.weakMode = this.checked;
@@ -790,9 +913,11 @@
     store.load();
     applyTheme();
     initBoard();
+    initView();
     buildKeypad();
     bind();
     renderHome();
+    renderView();
     B.setPieces(boardEl, store.settings.pieces);
     B.layout(boardEl, 'white');
   }

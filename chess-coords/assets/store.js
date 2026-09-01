@@ -14,6 +14,14 @@
     orientation: 'random',   // 'white' | 'black' | 'random' (côté au départ)
     flip: 'off',             // 'off' | '3' | '5' | '10' | 'random'
     pieces: true,            // pièces en position de départ
+    // Échiquier de référence (hors exercice)
+    view: {
+      orientation: 'white',
+      coords: true,      // lettres et chiffres en bordure
+      pieces: true,      // position de départ
+      guides: true,      // ligne et colonne de la case touchée
+      heat: false        // maîtrise superposée
+    },
     // Confort
     keypad: true,
     sound: true,

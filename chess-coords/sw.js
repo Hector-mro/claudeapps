@@ -1,5 +1,5 @@
 /* Coordonnées — service worker : l'entraînement fonctionne hors ligne */
-var CACHE = 'chesscoords-v2';
+var CACHE = 'chesscoords-v3';
 var ASSETS = [
   './',
   './index.html',

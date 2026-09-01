@@ -59,6 +59,20 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
   se joue sans échiquier ; tous les autres (durée, pénalité, cases faibles,
   sons, thème) s'appliquent aux trois exercices.
 
+**Échiquier de référence** (hors exercice)
+- Un échiquier qu'on peut simplement **regarder**, sans lancer de série : pour
+  ancrer une remarque, vérifier une diagonale, se refaire l'œil.
+- **Coordonnées affichées** en bordure — le seul endroit de l'application où
+  elles apparaissent sur un échiquier.
+- Touchez une case : son nom, sa couleur, et ce que les exercices en disent
+  (maîtrise, réussites, ratées, fois où elle a été désignée à tort, temps moyen).
+- **Guides** : la ligne et la colonne de la case touchée sont soulignées, pour
+  voir comment la coordonnée se construit.
+- **Retournement** d'un bouton, **pièces** de départ affichables ou non, et
+  **maîtrise superposée** : les 64 cases prennent les teintes du damier de
+  chaleur, sur le vrai échiquier et du côté qu'on veut.
+- Chaque réglage est mémorisé.
+
 **Statistiques**
 - **Maîtrise case par case**, notée sur la précision (60 %) et la rapidité
   (40 %), tempérée tant que les essais sont peu nombreux — une case vue deux
