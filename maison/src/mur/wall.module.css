@@ -1,0 +1,167 @@
+/*
+  Écran mural. Contraintes de §6 respectées à la lettre :
+  pas de `:has()`, pas de container queries, pas de `gap` sur flexbox,
+  pas d'`aspect-ratio`, pas de nesting natif, pas de `color-mix()`, pas
+  d'`oklch()`. S'y ajoutent, par le même raisonnement, `inset`, `clamp()`,
+  `min()` et `max()`, tous postérieurs à Chrome 70. Les espacements passent
+  donc par des marges, les tailles par calc().
+
+  `--scale` est piloté par WallScreen : il part de 1 et descend par paliers
+  jusqu'à ce que le contenu tienne dans l'écran. Sans lui, cinq tâches plus
+  la section « Ça a glissé » débordent d'un 1280×800 et se font couper en
+  silence — un mur ne défile pas, donc ce qui dépasse disparaît.
+*/
+
+.wall {
+  --scale: 1;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden; /* un mur ne défile pas */
+  padding: 2.4vh 4vw;
+  background: #efebe1;
+  color: #191815;
+  font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+  Nuit : très sombre, faible contraste. Il ne s'agit pas de lire
+  confortablement à 23 h mais de ne pas éclairer le salon.
+*/
+.night {
+  background: #0b0b0c;
+  color: #4f4a42;
+}
+
+/*
+  Lisible à trois mètres. À l'échelle 1 : 49 px en 1280×800, 50 px en
+  800×1280. Le plancher de mise à l'échelle (0.82, dans WallScreen) est
+  calculé pour que le titre ne descende jamais sous les 40 px de la spec.
+*/
+.day {
+  margin: 0 0 calc(2vh * var(--scale));
+  padding-bottom: calc(1vh * var(--scale));
+  border-bottom: 2px solid currentColor;
+  font-size: calc((16px + 0.7vh + 0.5vw) * var(--scale));
+  letter-spacing: 0.02em;
+  opacity: 0.6;
+}
+
+.day::first-letter {
+  text-transform: uppercase;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task {
+  margin-bottom: calc(1.9vh * var(--scale));
+}
+
+/*
+  Une ligne, et une ellipse au-delà. Un déclencheur qui ne tient pas sur une
+  ligne à trois mètres ne remplit pas son office : « En rentrant du travail,
+  avant de poser mon sac » fait 46 signes et en laisse encore la place.
+*/
+.cue {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: calc((14px + 0.6vh + 0.45vw) * var(--scale));
+  font-style: italic;
+  line-height: 1.25;
+  opacity: 0.62;
+}
+
+.title {
+  margin-top: calc(0.4vh * var(--scale));
+  font-size: calc((30px + 1.1vh + 0.8vw) * var(--scale));
+  line-height: 1.1;
+}
+
+.owner {
+  margin-top: calc(0.3vh * var(--scale));
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: calc((11px + 0.45vh + 0.35vw) * var(--scale));
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+/* La nuit, la couleur du prénom s'éteint avec le reste. */
+.night .owner {
+  opacity: 0.42;
+}
+
+/* « +3 » : on dit qu'il y en a d'autres, on ne les liste pas. */
+.overflow {
+  margin: calc(1vh * var(--scale)) 0 0;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: calc((12px + 0.5vh + 0.4vw) * var(--scale));
+  letter-spacing: 0.1em;
+  opacity: 0.45;
+}
+
+.slipped {
+  margin-top: calc(2vh * var(--scale));
+  padding-top: calc(1.1vh * var(--scale));
+  border-top: 1px solid currentColor;
+  opacity: 0.5;
+}
+
+.slippedLabel {
+  margin: 0 0 calc(0.6vh * var(--scale));
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: calc((10px + 0.35vh + 0.3vw) * var(--scale));
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.slippedItem {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: calc(0.5vh * var(--scale));
+  font-size: calc((14px + 0.55vh + 0.4vw) * var(--scale));
+  line-height: 1.25;
+}
+
+.slippedOwner {
+  margin-left: 0.5em;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.late {
+  opacity: 0.7;
+}
+
+.empty {
+  margin-top: 6vh;
+  font-size: calc((24px + 1vh + 0.7vw) * var(--scale));
+  line-height: 1.3;
+  opacity: 0.6;
+}
+
+/*
+  Statut, pas contenu : n'apparaît qu'après dix minutes sans réponse. Sans
+  lui, un partage de connexion tombé laisse un mur qui affirme tranquillement
+  qu'il n'y a rien à faire.
+*/
+.stale {
+  position: absolute;
+  right: 4vw;
+  bottom: 1.4vh;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: calc(9px + 0.3vh + 0.25vw);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.3;
+}

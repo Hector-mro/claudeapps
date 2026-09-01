@@ -1,5 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { PhoneApp } from './app/PhoneApp';
+import { ErrorBoundary } from './mur/ErrorBoundary';
+import { WallScreen } from './mur/WallScreen';
 import './shared/theme.css';
 
 // Deux surfaces, deux URL, un jeton unique pour le foyer :
@@ -35,7 +37,11 @@ if (root !== null) {
     ) : target.kind === 'app' ? (
       <PhoneApp token={target.token} />
     ) : (
-      <Landing message="L'écran mural arrive au jalon 2." />
+      // Le mur tourne sans personne devant : une exception non attrapée y
+      // resterait une page blanche jusqu'à ce que quelqu'un s'en aperçoive.
+      <ErrorBoundary>
+        <WallScreen token={target.token} />
+      </ErrorBoundary>
     ),
   );
 }

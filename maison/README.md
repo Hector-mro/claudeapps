@@ -24,7 +24,7 @@ classement — voir `SPEC.md` pour les principes qui tranchent les arbitrages.
 | 1 | Schéma D1, migrations, seed, `GET /api/today` | ✅ |
 | 3 | Interface téléphone : cocher, repousser, ajouter | ✅ |
 | 4 | Revue hebdomadaire | ✅ |
-| 2 | Écran mural, compatible tablette ancienne | à venir |
+| 2 | Écran mural, compatible tablette ancienne | ✅ |
 | 5 | Déploiement Cloudflare | à venir |
 
 L'ordre a été inversé après le jalon 1 : l'application a de la valeur sur le
@@ -101,6 +101,78 @@ mise en veille dans les réglages système de la tablette** (Affichage → Veill
 Jamais), sinon l'écran s'éteindra malgré tout. La sonde indique si l'API est
 disponible.
 
+## Écran mural
+
+`/mur/:token`. Lecture seule : aucun bouton, aucun défilement, aucune
+rotation d'écrans. Une requête toutes les 60 secondes.
+
+**Le plafond de cinq est codé en dur** (`WALL_MAX`). Au-delà, « +N », sans
+lister. Une tâche en retard de plus de sept jours est déjà passée dans
+« Ça a glissé » côté API : elle n'apparaît jamais deux fois.
+
+**Aucun marqueur de retard dans « Aujourd'hui ».** La spec énumère ce que
+porte chaque ligne — déclencheur, titre, prénom — puis dit « rien d'autre ».
+Un « en retard depuis 3 jours » ajouterait de la culpabilité sans ajouter
+d'action : le tri suffit à les faire remonter. Le nombre de jours n'apparaît
+que dans « Ça a glissé », où c'est précisément le sujet.
+
+**Pas de titre « Aujourd'hui ».** La ligne de contexte dit déjà « mardi
+1 septembre » ; un intertitre juste en dessous ne dirait rien et coûterait
+une ligne sur un écran qui doit tenir sans défiler.
+
+### Tenir dans l'écran sans rien couper
+
+Un mur ne défile pas : ce qui dépasse est simplement invisible, et personne
+ne s'en aperçoit. Cinq tâches **plus** la section « Ça a glissé » débordent
+d'un 1280×800 aux tailles nominales — le premier jet coupait la section en
+silence.
+
+La page mesure donc son propre contenu après chaque changement (et après
+chaque rotation) et réduit la typographie par paliers de 4 % jusqu'à ce que
+tout tienne. Le plancher n'est pas une constante : il se déduit de la seule
+règle qui compte, **un titre ne descend jamais sous 40 px**.
+
+| Écran | Échelle | Titre | Déborde |
+| --- | --- | --- | --- |
+| 1280×800, cas courant | 1.00 | 50 px | non |
+| 1280×800, 5 tâches + 3 glissées | 0.84 | 41 px | non |
+| 800×1280 | 1.00 | 50 px | non |
+| 1024×600 (7 pouces) | 0.89 | 40 px | **oui** |
+
+Sur un écran plus court qu'une tablette 10 pouces, les deux exigences se
+contredisent : la lisibilité l'emporte et le bas de l'écran est rogné.
+
+Le déclencheur est limité à **une ligne**, avec ellipse au-delà. Un
+déclencheur qui ne tient pas sur une ligne à trois mètres ne remplit pas son
+office : « En rentrant du travail, avant de poser mon sac » fait 46 signes et
+en laisse encore la place.
+
+### Ne pas redessiner pour rien
+
+Une signature est calculée sur ce qui est réellement affiché. Si elle n'a pas
+changé, l'état React reste le même objet, React n'effectue aucun rendu, et le
+DOM n'est pas touché. Mesuré avec un `MutationObserver` : **0 mutation après
+trois rafraîchissements identiques**.
+
+### Quand la connexion tombe
+
+Le mur garde le dernier contenu connu — mieux vaut une liste d'il y a dix
+minutes qu'un écran vide. Passé dix minutes sans réponse, une mention
+minuscule apparaît en bas à droite : `hors ligne depuis 14:03`. C'est du
+statut, pas du contenu ; sans elle, un partage de connexion tombé laisse un
+mur qui affirme tranquillement qu'il n'y a rien à faire. Elle disparaît dès
+que le réseau revient.
+
+### Mise en veille et pannes
+
+`navigator.wakeLock` est demandé au montage et réacquis à chaque
+`visibilitychange` (le verrou est perdu dès que la page passe en
+arrière-plan). Absent, le repli est silencieux — voir plus bas.
+
+Un `ErrorBoundary` entoure le mur, et lui seul : une exception non attrapée
+sur un écran que personne ne surveille resterait une page blanche. À la
+place, une phrase sobre et un rechargement automatique une minute plus tard.
+
 ## Contraintes de compatibilité
 
 Cibles de build : `safari >= 12, chrome >= 70` (`browserslist` dans
@@ -115,9 +187,27 @@ Deux pièges traités explicitement dans la configuration :
   la syntaxe moderne que la tablette ignore en silence.
 
 Interdits dans le CSS servi au mur : `:has()`, container queries, `gap` sur
-flexbox, `aspect-ratio`, nesting natif, `color-mix()`, `oklch()`.
+flexbox, `aspect-ratio`, nesting natif, `color-mix()`, `oklch()`. S'y ajoutent,
+par le même raisonnement, `inset`, `clamp()`, `min()` et `max()` — tous
+postérieurs à Chrome 70. Les espacements du mur passent donc par des marges et
+les tailles par `calc()`.
+
 Interdits en JS : optional chaining non transpilé, `structuredClone`,
 `Array.at()`, `Object.hasOwn`, top-level await.
+
+**Vérifié sur les fichiers produits** (`dist/assets/`), moderne et legacy :
+
+| | Occurrences |
+| --- | --- |
+| `:has()`, `@container`, `@layer`, nesting | 0 |
+| `aspect-ratio`, `color-mix()`, `oklch()` | 0 |
+| `clamp()`, `min()`, `max()`, `inset:` | 0 |
+| `?.`, `??`, `.at(`, `Object.hasOwn`, `structuredClone` | 0 |
+
+`gap` subsiste dans quelques règles, toutes issues de l'interface téléphone et
+jamais appliquées au mur. Une **déclaration** inconnue est ignorée isolément
+par les vieux moteurs ; seuls un sélecteur ou une at-rule inconnus feraient
+tomber un bloc entier, et il n'y en a aucun.
 
 ## Modèle de données
 
