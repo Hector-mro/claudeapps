@@ -1,4 +1,4 @@
-import type { TodayResponse } from '../shared/types';
+import type { ReviewResponse, TodayResponse } from '../shared/types';
 
 export interface Domain {
   id: number;
@@ -52,6 +52,17 @@ export const api = {
 
   undo: (token: string, completionId: number) =>
     request<{ task_id: number; next_due_on: string }>(token, '/completions/' + completionId, { method: 'DELETE' }),
+
+  review: (token: string) => request<ReviewResponse>(token, '/review'),
+
+  reassign: (token: string, domainId: number, ownerId: number) =>
+    request<{ ok: true }>(token, '/domains/' + domainId + '/owner', {
+      method: 'POST',
+      body: JSON.stringify({ owner_id: ownerId }),
+    }),
+
+  deactivate: (token: string, taskId: number) =>
+    request<{ ok: true }>(token, '/tasks/' + taskId, { method: 'DELETE' }),
 
   addOneoff: (token: string, title: string, domainId: number) =>
     request<{ id: number }>(token, '/tasks', {

@@ -8,9 +8,11 @@ import './shared/theme.css';
 // Pas de bibliothèque de routage : il n'y a rien à router.
 function surface(): { kind: 'app' | 'mur'; token: string } | null {
   const parts = window.location.pathname.split('/').filter(Boolean);
-  if (parts.length !== 2) return null;
-  if (parts[0] === 'app') return { kind: 'app', token: parts[1] };
-  if (parts[0] === 'mur') return { kind: 'mur', token: parts[1] };
+  // /app/:token, /app/:token/revue, /mur/:token
+  if (parts[0] === 'app' && (parts.length === 2 || (parts.length === 3 && parts[2] === 'revue'))) {
+    return { kind: 'app', token: parts[1] };
+  }
+  if (parts[0] === 'mur' && parts.length === 2) return { kind: 'mur', token: parts[1] };
   return null;
 }
 

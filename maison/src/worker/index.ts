@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { addOneoff, completeTask, skipTask, undoCompletion } from './actions';
+import { buildReview, deactivateTask, reassignDomain } from './review';
 import { buildToday } from './today';
 
 interface Bindings {
@@ -56,6 +57,11 @@ app.get('/api/:token/domains', async (c) => {
      WHERE d.active = 1 ORDER BY d.name COLLATE NOCASE`,
   ).all();
   return c.json({ domains: results });
+});
+
+app.get('/api/:token/review', async (c) => {
+  const household = c.get('household');
+  return c.json(await buildReview(c.env.DB, household.weekly_review_weekday));
 });
 
 /** Codes HTTP des erreurs métier : tout le reste est un 400. */
@@ -121,6 +127,24 @@ app.post('/api/:token/tasks', async (c) => {
 
   const result = await addOneoff(c.env.DB, title, domainId);
   return isError(result) ? c.json(result, STATUS[result.error] ?? 400) : c.json(result, 201);
+});
+
+app.post('/api/:token/domains/:id/owner', async (c) => {
+  const domainId = asId(c.req.param('id'));
+  const ownerId = asId((await readBody(c)).owner_id);
+  if (domainId === null || ownerId === null) return c.json({ error: 'bad_request' }, 400);
+
+  const result = await reassignDomain(c.env.DB, domainId, ownerId);
+  return isError(result) ? c.json(result, STATUS[result.error] ?? 400) : c.json(result);
+});
+
+// Désactivation, pas suppression : l'historique des semaines passées reste lisible.
+app.delete('/api/:token/tasks/:id', async (c) => {
+  const taskId = asId(c.req.param('id'));
+  if (taskId === null) return c.json({ error: 'bad_request' }, 400);
+
+  const result = await deactivateTask(c.env.DB, taskId);
+  return isError(result) ? c.json(result, STATUS[result.error] ?? 400) : c.json(result);
 });
 
 app.notFound((c) => c.json({ error: 'not_found' }, 404));

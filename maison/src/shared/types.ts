@@ -42,3 +42,43 @@ export interface TodayResponse {
   weekly_review_weekday: number;
   is_review_day: boolean;
 }
+
+/* — Revue hebdomadaire — */
+
+export interface ReviewPerson extends Person {
+  /**
+   * Tâches accomplies sur 7 jours. Seul chiffre que le système affiche sur
+   * les personnes : pas de score, pas de classement, pas d'historique.
+   */
+  done_last_7_days: number;
+}
+
+export interface ResistingTask {
+  id: number;
+  title: string;
+  /** Reports consécutifs depuis la dernière fois que la tâche a été faite. */
+  skips: number;
+  /** null si elle n'a jamais été faite. */
+  last_done_on: string | null;
+  domain: { id: number; name: string };
+  owner: Person;
+}
+
+export interface DomainView {
+  id: number;
+  name: string;
+  minimum_standard: string;
+  owner_id: number;
+  active_tasks: number;
+}
+
+export interface ReviewResponse {
+  /** Début de la fenêtre de 7 jours, 'YYYY-MM-DD'. */
+  since: string;
+  people: ReviewPerson[];
+  /** Tâches repoussées au moins deux fois d'affilée, les plus tenaces d'abord. */
+  resisting: ResistingTask[];
+  domains: DomainView[];
+  weekly_review_weekday: number;
+  is_review_day: boolean;
+}

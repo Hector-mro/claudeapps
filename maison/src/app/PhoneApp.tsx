@@ -4,6 +4,7 @@ import { AddSheet } from './AddSheet';
 import { api } from './api';
 import { clearPersonId, readPersonId, writePersonId } from './person';
 import { TaskRow } from './TaskRow';
+import { ReviewScreen } from './ReviewScreen';
 import { TaskSheet } from './TaskSheet';
 import { WhoAreYou } from './WhoAreYou';
 import css from './phone.module.css';
@@ -16,8 +17,15 @@ interface Undoable {
   label: string;
 }
 
+/** Le menu tient en une entrée : il n'y a rien d'autre à atteindre. */
+function reviewPath(token: string): string {
+  return '/app/' + token + '/revue';
+}
+
 export function PhoneApp({ token }: { token: string }) {
   const [data, setData] = useState<TodayResponse | null>(null);
+  const [onReview, setOnReview] = useState(() => window.location.pathname === reviewPath(token));
+  const [pushed, setPushed] = useState(false);
   const [personId, setPersonId] = useState<number | null>(readPersonId);
   const [openTask, setOpenTask] = useState<TaskView | null>(null);
   const [adding, setAdding] = useState(false);
@@ -37,6 +45,16 @@ export function PhoneApp({ token }: { token: string }) {
   useEffect(() => {
     void refresh();
   }, [refresh]);
+
+  // Le bouton « retour » du téléphone doit ramener à la liste du jour,
+  // pas quitter l'application.
+  useEffect(() => {
+    function onPop() {
+      setOnReview(window.location.pathname === reviewPath(token));
+    }
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, [token]);
 
   useEffect(() => {
     if (undoable === null) return;
@@ -86,6 +104,26 @@ export function PhoneApp({ token }: { token: string }) {
       .catch(() => setFailed(true));
   }
 
+  function openReview() {
+    window.history.pushState(null, '', reviewPath(token));
+    setPushed(true);
+    setOnReview(true);
+  }
+
+  function closeReview() {
+    if (pushed) {
+      window.history.back();
+      setPushed(false);
+    } else {
+      // Arrivé directement sur /revue : rien à dépiler, on réécrit l'URL.
+      window.history.replaceState(null, '', '/app/' + token);
+    }
+    setOnReview(false);
+    void refresh();
+  }
+
+  if (onReview) return <ReviewScreen token={token} onBack={closeReview} />;
+
   if (data === null) {
     return (
       <div className={css.screen}>
@@ -129,6 +167,12 @@ export function PhoneApp({ token }: { token: string }) {
 
       {failed && <p className={css.error}>La dernière action n'est peut-être pas passée.</p>}
 
+      {data.is_review_day && (
+        <button type="button" className={css.reviewBanner} onClick={openReview}>
+          C'est le jour de la revue. Vingt minutes à deux.
+        </button>
+      )}
+
       {data.today.length === 0 && data.slipped.length === 0 ? (
         <p className={css.empty}>Rien aujourd'hui. C'est le but.</p>
       ) : null}
@@ -161,6 +205,10 @@ export function PhoneApp({ token }: { token: string }) {
           </ul>
         </>
       )}
+
+      <button type="button" className={css.menuLink} onClick={openReview}>
+        Revue de la semaine
+      </button>
 
       <button
         type="button"

@@ -23,7 +23,7 @@ classement — voir `SPEC.md` pour les principes qui tranchent les arbitrages.
 | --- | --- | --- |
 | 1 | Schéma D1, migrations, seed, `GET /api/today` | ✅ |
 | 3 | Interface téléphone : cocher, repousser, ajouter | ✅ |
-| 4 | Revue hebdomadaire | à venir |
+| 4 | Revue hebdomadaire | ✅ |
 | 2 | Écran mural, compatible tablette ancienne | à venir |
 | 5 | Déploiement Cloudflare | à venir |
 
@@ -148,6 +148,9 @@ minuit l'été, le mur afficherait la liste de la veille.
 | `POST /api/:token/tasks/:id/skip` | repousse de 2 jours et écrit `skipped = 1` |
 | `POST /api/:token/tasks` | ajoute une tâche ponctuelle due aujourd'hui |
 | `DELETE /api/:token/completions/:id` | annule un « fait » ou un « repoussé » récent |
+| `GET /api/:token/review` | comptes sur 7 jours, tâches qui résistent, domaines |
+| `POST /api/:token/domains/:id/owner` | réassigne un domaine |
+| `DELETE /api/:token/tasks/:id` | désactive une tâche (`active = 0`) |
 
 Un jeton inconnu renvoie `404` et non `403` : inutile de confirmer à qui tombe
 dessus qu'il y a quelque chose derrière l'adresse.
@@ -186,6 +189,33 @@ l'échéance : une tâche déjà en retard ne doit pas rester en retard après a
 
 Une tâche ponctuelle cochée est désactivée (`active = 0`), pas supprimée : la
 revue hebdomadaire a besoin de son historique.
+
+## Revue hebdomadaire
+
+`/app/:token/revue`, atteinte par l'entrée de menu en bas de la liste du jour,
+et par une bannière le jour configuré (`weekly_review_weekday`, dimanche par
+défaut).
+
+Trois sections, dans cet ordre.
+
+**Sept derniers jours.** Deux lignes, un prénom et un nombre. Rien d'autre :
+pas de barre, pas d'écart, pas de tri par score, pas d'historique. Les lignes
+sont ordonnées par identifiant de personne, jamais par nombre de tâches — un
+classement, même involontaire, transforme le foyer en comptabilité.
+
+**Ça résiste.** Les tâches repoussées **au moins deux fois d'affilée**. Les
+reports sont comptés *depuis la dernière réalisation* et non depuis toujours :
+trois reports étalés sur deux ans ne disent rien, trois reports d'affilée sans
+que la tâche ait jamais été faite disent tout. À partir de trois, la revue
+propose explicitement de la retirer.
+
+Retirer, c'est `active = 0`, pas un `DELETE` : les semaines passées doivent
+rester lisibles.
+
+**Domaines.** Chaque domaine porte son standard minimum et une bascule à deux
+positions pour son propriétaire. La réassignation se fait **ici et uniquement
+ici** : jamais au niveau d'une tâche isolée, qui recréerait la charge mentale
+qu'on cherche à supprimer.
 
 ## Quotas Cloudflare
 

@@ -370,3 +370,148 @@
   color: var(--ink-2);
   line-height: 1.4;
 }
+
+/* — Revue hebdomadaire — */
+
+.backLink {
+  min-height: var(--touch);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  background: none;
+  border: 0;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+}
+
+/* Mise en avant le jour configuré, et ce jour-là seulement. */
+.reviewBanner {
+  display: block;
+  width: 100%;
+  min-height: 62px;
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
+  text-align: left;
+  font-size: 1.05rem;
+}
+
+.menuLink {
+  display: block;
+  width: 100%;
+  min-height: var(--touch);
+  margin-top: 30px;
+  padding: 12px 0;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+}
+
+.tally {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+}
+
+.tallyRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 1.15rem;
+}
+
+.tallyCount {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}
+
+.resistRow {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.resistTitle {
+  font-size: 1.12rem;
+  line-height: 1.25;
+}
+
+.resistMeta {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+
+.resistVerdict {
+  margin: 10px 0 0;
+  font-style: italic;
+  color: var(--ink-2);
+  line-height: 1.4;
+}
+
+.smallAction {
+  min-height: var(--touch);
+  margin-top: 10px;
+  padding: 0 16px;
+  background: none;
+  border: 1px solid var(--ink);
+  font-size: 0.95rem;
+}
+
+.domainRow {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.domainName {
+  font-size: 1.12rem;
+}
+
+.domainStandard {
+  margin: 3px 0 10px;
+  font-style: italic;
+  color: var(--ink-2);
+  line-height: 1.35;
+  font-size: 0.92rem;
+}
+
+.owners {
+  display: flex;
+  gap: 8px;
+}
+
+.ownerPick {
+  flex: 1;
+  min-height: var(--touch);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+
+.ownerPickOn {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}

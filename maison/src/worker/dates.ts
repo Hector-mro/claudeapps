@@ -59,3 +59,32 @@ export function addDays(iso: string, days: number): string {
   const d = String(shifted.getUTCDate()).padStart(2, '0');
   return y + '-' + m + '-' + d;
 }
+
+/**
+ * Décalage du fuseau du foyer par rapport à UTC, à cet instant précis.
+ * `sv-SE` produit « 2026-09-01 14:30:00 », qu'on relit comme si c'était de
+ * l'UTC : l'écart mesuré est le décalage réel, changement d'heure compris.
+ */
+const LOCAL_STAMP = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: HOUSEHOLD_TZ,
+  dateStyle: 'short',
+  timeStyle: 'medium',
+  hour12: false,
+});
+
+function offsetMs(at: Date): number {
+  return Date.parse(LOCAL_STAMP.format(at).replace(' ', 'T') + 'Z') - at.getTime();
+}
+
+/**
+ * Minuit à Paris pour une date de calendrier, exprimé en UTC — la borne
+ * exacte d'un « depuis sept jours », alors qu'une comparaison naïve en UTC
+ * se trompe de deux heures chaque soir.
+ */
+export function startOfDayUTC(day: string): string {
+  const naive = Date.parse(day + 'T00:00:00Z');
+  const first = naive - offsetMs(new Date(naive));
+  // Deuxième passe : la nuit du changement d'heure, le décalage à minuit
+  // n'est pas celui de l'instant de départ.
+  return new Date(naive - offsetMs(new Date(first))).toISOString();
+}
