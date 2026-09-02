@@ -8,11 +8,13 @@
     "worker": "wrangler dev",
     "build": "npm run typecheck && vite build",
     "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.worker.json",
-    "preview": "vite preview",
-    "serve:lan": "vite preview --host 0.0.0.0 --port 4173",
+    "serve:lan": "npm run build && wrangler dev --ip 0.0.0.0 --port 8787",
     "db:reset": "node scripts/db-reset.mjs",
     "db:token": "wrangler d1 execute maison --local --command \"select display_token from household\"",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "setup:remote": "node scripts/setup-remote.mjs",
+    "db:migrate:remote": "wrangler d1 migrations apply maison --remote",
+    "db:token:remote": "wrangler d1 execute maison --remote --command \"select display_token from household\""
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260901.1",

@@ -1,0 +1,4 @@
+# Les deux surfaces sont protégées par un jeton dans l'URL, pas par un mot de
+# passe. Rien de tout cela n'a à se retrouver dans un index.
+User-agent: *
+Disallow: /

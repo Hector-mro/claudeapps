@@ -6,23 +6,25 @@
   "observability": { "enabled": true },
 
   // Un seul Worker sert l'API et le SPA.
-  // `run_worker_first` empêche le fallback SPA d'avaler les routes /api/*
-  // (sans lui, une URL d'API inconnue renverrait index.html en 200).
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application",
-    // Sans ça, `/sonde.html` répond 307 vers `/sonde` : une redirection de
-    // plus à traverser sur la tablette, et une URL différente de celle que
-    // sert `vite preview`. On garde les chemins littéraux.
+    // Chemins littéraux. Par défaut `/sonde.html` répond 307 vers `/sonde` :
+    // une redirection de plus à traverser sur une vieille tablette, pour une
+    // URL qu'il faudrait alors écrire différemment dans le README.
     "html_handling": "none",
-    "run_worker_first": ["/api/*"]
+    // `/api/*` : sans ça, le repli SPA renverrait index.html en 200 pour une
+    // URL d'API inconnue. `/_headers` : le service d'assets le sert parfois
+    // tel quel ; le Worker le renvoie en 404, quelle que soit la plateforme.
+    "run_worker_first": ["/api/*", "/_headers", "/_redirects"]
   },
 
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "maison",
-      "database_id": "REMPLACER_APRES_wrangler_d1_create",
+      // Renseigné par `npm run setup:remote`, à committer ensuite.
+      "database_id": "A_RENSEIGNER_PAR_setup_remote",
       "migrations_dir": "migrations"
     }
   ]

@@ -25,12 +25,91 @@ classement — voir `SPEC.md` pour les principes qui tranchent les arbitrages.
 | 3 | Interface téléphone : cocher, repousser, ajouter | ✅ |
 | 4 | Revue hebdomadaire | ✅ |
 | 2 | Écran mural, compatible tablette ancienne | ✅ |
-| 5 | Déploiement Cloudflare | à venir |
+| 5 | Déploiement Cloudflare, README d'installation | ✅ |
 
 L'ordre a été inversé après le jalon 1 : l'application a de la valeur sur le
 seul téléphone, donc le mur n'est plus le point de risque qui doit passer en
-premier. Il reste au programme — et sert aussi à décider si un TRMNL vaudrait
-l'achat.
+premier. Il sert aussi à décider si un TRMNL vaudrait l'achat.
+
+## Installation
+
+Une seule fois, sur ta machine. Il faut un compte Cloudflare — le palier
+gratuit suffit très largement, voir « Quotas » plus bas.
+
+```bash
+cd maison
+npm install
+npx wrangler login       # ouvre le navigateur
+npm run setup:remote     # crée la base D1, écrit son id, migre, sème
+npm run deploy
+```
+
+`setup:remote` affiche le **jeton du foyer** : trente-deux caractères tirés au
+hasard, générés dans la base au moment du seed. `deploy` affiche l'adresse du
+Worker. Les deux ensemble donnent les trois adresses à garder :
+
+```
+https://<adresse>/app/<jeton>     le téléphone   → signet, écran d'accueil
+https://<adresse>/mur/<jeton>     le mur         → la tablette, en plein écran
+https://<adresse>/sonde.html      la sonde       → diagnostic tablette
+```
+
+`setup:remote` modifie `wrangler.jsonc` pour y inscrire l'identifiant de la
+base : **committe ce fichier**, sinon le prochain déploiement repartira sur
+une base vide.
+
+Relire le jeton plus tard : `npm run db:token:remote`.
+
+### Il n'y a pas de mot de passe
+
+L'accès tient au jeton dans l'URL, et à rien d'autre. Ce qui en découle :
+
+- **Le lien est le secret.** Qui l'a peut tout lire et tout cocher. C'est
+  volontaire : demander un mot de passe à quelqu'un qui traverse le couloir
+  avec les bras chargés, c'est garantir que l'application ne servira pas.
+- Un jeton inconnu renvoie `404`, jamais `403` : inutile de confirmer qu'il y
+  a quelque chose derrière l'adresse.
+- `robots.txt`, `<meta name="robots">` et l'en-tête `X-Robots-Tag` interdisent
+  l'indexation ; `Referrer-Policy: no-referrer` empêche le jeton de fuir par
+  un en-tête `Referer`.
+- Pour le changer (lien envoyé au mauvais fil de discussion, tablette
+  revendue) :
+
+  ```bash
+  npx wrangler d1 execute maison --remote \
+    --command "update household set display_token = lower(hex(randomblob(16)))"
+  npm run db:token:remote
+  ```
+
+  Les anciens liens tombent en `404` dans la seconde. Il faut alors mettre à
+  jour les signets et l'onglet de la tablette.
+
+### Mettre à jour
+
+```bash
+npm run deploy
+```
+
+Une migration en attente s'applique séparément, **avant** le déploiement du
+code qui en dépend :
+
+```bash
+npm run db:migrate:remote
+npm run deploy
+```
+
+Le mur ne recharge pas la page de lui-même : il tourne des semaines sur le
+même bundle. Il se recharge donc tout seul à 4 h du matin, ce qui suffit à ce
+qu'un déploiement finisse par arriver jusqu'à lui sans traverser le salon.
+
+### Poser la tablette
+
+1. Ouvrir `https://<adresse>/sonde.html`, lire la ligne `navigator.wakeLock`.
+2. Ouvrir `https://<adresse>/mur/<jeton>`, puis « Ajouter à l'écran d'accueil »
+   (le mode plein écran retire la barre d'adresse).
+3. Si la sonde dit que `wakeLock` est absent : **Réglages → Affichage → Veille
+   → Jamais**. Sans ça, l'écran s'éteindra malgré tout.
+4. Brancher sur secteur — le mur interroge l'API en continu.
 
 ## Développement local
 
@@ -70,27 +149,30 @@ dépendance : c'est le seul fichier censé s'afficher même si tout le reste
 à `/api/health`.
 
 **2. Servir le build sur le réseau local**, pour ouvrir la vraie application
-depuis la tablette :
+depuis la tablette avant même d'avoir déployé :
 
 ```bash
-npm run build
-npm run serve:lan          # écoute sur 0.0.0.0:4173
+npm run serve:lan          # build, puis écoute sur 0.0.0.0:8787
 ```
 
-Puis, sur la tablette, ouvrir `http://<ip-du-portable>:4173/sonde.html`.
-L'adresse à utiliser :
+Cette commande sert le front **et** l'API sur la base locale : c'est un test
+complet, contrairement à un simple serveur de fichiers. Trouver l'adresse de
+la machine :
 
 ```bash
 hostname -I | awk '{print $1}'      # Linux
 ipconfig getifaddr en0              # macOS
 ```
 
-La tablette et le portable doivent être sur le même réseau — donc, ici,
-tous les deux sur le partage de connexion du téléphone.
+Puis, sur la tablette :
 
-> `vite preview` ne sert que le front. Pour un test complet avec l'API,
-> lancer `npm run build && npx wrangler dev --ip 0.0.0.0 --port 8787` et
-> ouvrir `http://<ip-du-portable>:8787/`.
+```
+http://<ip-de-la-machine>:8787/sonde.html
+http://<ip-de-la-machine>:8787/mur/<jeton local>
+```
+
+La tablette et la machine doivent être sur le même réseau — donc, ici, toutes
+les deux sur le partage de connexion du téléphone.
 
 ### Mise en veille
 

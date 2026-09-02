@@ -16,6 +16,21 @@ const REFRESH_MS = 60000;
 const STALE_AFTER_MS = 10 * 60 * 1000;
 
 /**
+ * Rechargement de nuit.
+ *
+ * Le mur ne recharge jamais la page de lui-même : il tourne des semaines sur
+ * le même bundle. Après un déploiement, il continuerait donc à exécuter
+ * l'ancien code jusqu'à ce que quelqu'un traverse le salon pour le rafraîchir
+ * à la main. Un rechargement quotidien à 4 h — personne devant l'écran —
+ * suffit à ce qu'une mise en ligne finisse par arriver toute seule, et purge
+ * au passage ce qu'un navigateur de tablette peut accumuler en un mois.
+ *
+ * La garde d'ancienneté évite qu'un mur allumé à 4 h 00 boucle sur lui-même.
+ */
+const RELOAD_HOUR = 4;
+const MIN_UPTIME_BEFORE_RELOAD_MS = 2 * 60 * 60 * 1000;
+
+/**
  * Réduction typographique par paliers quand le contenu déborde. Le plancher
  * n'est pas une constante mais se déduit de la seule règle qui compte :
  * un titre lisible à trois mètres ne descend pas sous 40 px. Quand les deux
@@ -64,6 +79,7 @@ export function WallScreen({ token }: { token: string }) {
   const [night, setNight] = useState(() => isNight(new Date()));
   const [staleSince, setStaleSince] = useState<string | null>(null);
   const lastSuccess = useRef(Date.now());
+  const loadedAt = useRef(Date.now());
   const shellRef = useRef<HTMLDivElement>(null);
 
   useWakeLock();
@@ -106,9 +122,19 @@ export function WallScreen({ token }: { token: string }) {
     let stopped = false;
 
     function tick() {
+      const now = new Date();
+
+      if (
+        now.getHours() === RELOAD_HOUR &&
+        Date.now() - loadedAt.current > MIN_UPTIME_BEFORE_RELOAD_MS
+      ) {
+        window.location.reload();
+        return;
+      }
+
       // La bascule jour/nuit est réévaluée à chaque battement : identique,
       // React abandonne le rendu tout seul.
-      setNight(isNight(new Date()));
+      setNight(isNight(now));
 
       api.today(token).then(
         (data) => {

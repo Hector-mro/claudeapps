@@ -1,0 +1,8 @@
+# En-têtes appliqués par Cloudflare Workers Assets.
+# Le jeton du foyer vit dans l'URL : le premier réflexe est de ne le laisser
+# fuir ni par un Referer, ni dans une iframe tierce.
+/*
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-Robots-Tag: noindex, nofollow
