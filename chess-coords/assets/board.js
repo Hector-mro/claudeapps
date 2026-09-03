@@ -77,7 +77,7 @@
 
   function clearMarks(el) {
     ALL.forEach(function (sq) {
-      el._squares[sq].classList.remove('target', 'good', 'bad');
+      el._squares[sq].classList.remove('target', 'next', 'good', 'bad');
     });
   }
 

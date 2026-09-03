@@ -175,7 +175,7 @@
       duration: st.duration,
       orientation: st.orientation === 'random' ? (Math.random() < 0.5 ? 'white' : 'black') : st.orientation,
       score: 0, ok: 0, err: 0, streak: 0, bestStreak: 0,
-      target: null, last: null, tStart: 0, sinceFlip: 0,
+      target: null, next: null, tStart: 0, sinceFlip: 0,
       times: [], missed: {},
       input: '', running: false, endsAt: 0, tick: null, locked: true
     };
@@ -198,6 +198,8 @@
     $('#hud-streak').textContent = 'série 0';
     $('#prompt-target').textContent = '—';
     $('#prompt-target').className = 'prompt-target';
+    $('#prompt-next').hidden = mode === 'name';   // en « nommer », l'annonce est sur l'échiquier
+    $('#prompt-next-sq').textContent = '';
     $('#prompt-sub').textContent = mode === 'find' ? 'touchez la case'
       : (mode === 'name' ? 'quelle est cette case ?' : 'blanche ou noire ?');
     setClock(D.duration * 1000);
@@ -285,26 +287,34 @@
     placeTarget();
   }
 
+  function draw(avoid) {
+    return B.pick({
+      weak: D.weak, avoid: avoid,
+      squares: store.stats.squares, modes: [D.mode]
+    });
+  }
+
   function placeTarget() {
     if (!D || !D.running) return;
-    var modes = D.mode === 'find' ? ['find'] : ['name'];
-    var sq = B.pick({
-      weak: D.weak, avoid: D.last, squares: store.stats.squares, modes: modes
-    });
+    // la case annoncée au tour précédent devient la consigne, et une nouvelle
+    // est annoncée dans la foulée : il y a toujours un coup d'avance à préparer
+    var sq = D.next || draw(D.target);
     D.target = sq;
-    D.last = sq;
+    D.next = draw(sq);
     D.sinceFlip++;
     D.input = '';
     B.clearMarks(boardEl);
 
-    if (D.mode === 'find' || D.mode === 'color') {
+    if (D.mode === 'name') {
+      $('#prompt-target').textContent = '?';
+      boardMap[sq].classList.add('target');
+      boardMap[D.next].classList.add('next');
+      renderEcho();
+    } else {
       $('#prompt-target').textContent = sq;
       $('#prompt-target').classList.add('pop');
       setTimeout(function () { $('#prompt-target').classList.remove('pop'); }, 200);
-    } else {
-      $('#prompt-target').textContent = '?';
-      boardMap[sq].classList.add('target');
-      renderEcho();
+      $('#prompt-next-sq').textContent = D.next;
     }
     D.tStart = performance.now();
   }

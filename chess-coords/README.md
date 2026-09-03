@@ -47,6 +47,12 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
 - L'écran de fin nomme les confusions telles quelles : `e4 → d4`.
 - Score, série en cours, temps de la dernière réponse, cadence par minute et
   record par exercice.
+- **La case suivante est annoncée** : on peut la préparer sans attendre, comme
+  on lit le mot d'après dans un test de frappe. En « trouver » et en
+  « couleur », elle s'affiche en petit à droite de la consigne, qui ne bouge
+  jamais de son axe ; en « nommer », elle est légèrement grisée sur
+  l'échiquier, loin derrière la case cible. Les temps mesurés s'en trouvent
+  mécaniquement raccourcis : les records d'avant ne sont plus comparables.
 
 **Échiquier**
 - Côté blancs, côté noirs, ou **tiré au sort** à chaque série.
@@ -99,6 +105,9 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
 - De l'iPhone SE à la tablette : l'échiquier prend toute la place disponible,
   jamais de défilement pendant un exercice.
 - Sons, vibrations, écran maintenu allumé, thème papier ou encre de nuit.
+- Pas de zoom intempestif : deux touches rapprochées sur l'échiquier sont un
+  geste de jeu, pas une demande d'agrandissement. Le zoom à deux doigts, lui,
+  reste disponible.
 - **PWA installable et 100 % hors ligne**, tout est gardé en local.
 
 ## 🎨 Direction artistique

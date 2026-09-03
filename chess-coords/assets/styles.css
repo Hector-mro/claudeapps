@@ -29,6 +29,8 @@
   --lv3: #7f9a6a; --lv3-ink: #12180f;
   --lv4: #3d7a4c; --lv4-ink: #f2f6ef;
 
+  --next-ring: rgba(25, 24, 21, .38);
+
   --btn-light:     #e7ddc6;
   --btn-light-ink: #191815;
   --btn-dark:      #6f6653;
@@ -60,13 +62,23 @@
 
   --lv2: #6f695c; --lv2-ink: #f0ece2;
 
+  --next-ring: rgba(236, 231, 221, .34);
+
   --btn-light:     #8d8a80;
   --btn-light-ink: #14130f;
   --btn-dark:      #2b2924;
   --btn-dark-ink:  #ece7dd;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  /* `manipulation` supprime le zoom au double-tap — deux clics rapides sur
+     l'échiquier sont un geste normal ici — sans toucher au zoom à deux doigts,
+     qui reste disponible. */
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
 [hidden] { display: none !important; }
 
 html {
@@ -271,6 +283,41 @@ body::after {
   flex-direction: column;
   justify-content: center;
 }
+/* La consigne reste centrée quoi qu'il arrive : la case annoncée occupe une
+   troisième colonne, sans jamais déplacer celle qu'on doit traiter. */
+.prompt-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
+  gap: 12px;
+}
+.prompt-target { grid-column: 2; }
+.prompt-next {
+  grid-column: 3;
+  justify-self: start;
+  align-self: end;          /* posée sur la ligne de pied de la consigne */
+  display: flex;
+  flex-direction: column-reverse;   /* le libellé passe au-dessus du nom */
+  align-items: flex-start;
+  line-height: 1.15;
+  text-align: left;
+  padding-bottom: .12em;
+}
+.prompt-next b {
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--ink-3);
+}
+.prompt-next i {
+  font-style: normal;
+  font-size: .5rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  opacity: .75;
+}
+.drill-color .prompt-next b { font-size: 1.5rem; }
+
 .prompt-target {
   font-size: 2.9rem;
   line-height: 1.05;
@@ -360,6 +407,18 @@ body::after {
   animation: beat 1.5s ease-in-out infinite;
 }
 @keyframes beat { 0%, 100% { opacity: .88; } 50% { opacity: .62; } }
+
+/* Case annoncée : présente mais nettement en retrait de la cible. */
+.sq.next::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  opacity: .17;
+  box-shadow: inset 0 0 0 3px var(--next-ring);
+}
+/* les cases sombres avalent le voile : on le rattrape */
+.sq.dark.next::after { opacity: .24; }
 
 .sq.good::after {
   content: '';
@@ -701,6 +760,8 @@ body::after {
 @media (max-height: 700px) {
   .prompt-target { font-size: 2.3rem; }
   .drill-color .prompt-target { font-size: 3.4rem; }
+  .prompt-next b { font-size: 1.05rem; }
+  .drill-color .prompt-next b { font-size: 1.25rem; }
   .colorpad { height: min(240px, 40dvh); }
   /* écran court : la consigne se contente de sa hauteur, l'échiquier prend le reste */
   .prompt { padding-bottom: 6px; flex: 0 1 auto; min-height: 0; }
