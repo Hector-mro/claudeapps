@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "maison",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-09-01",
+  "observability": { "enabled": true },
+
+  // Un seul Worker sert l'API et le SPA.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+    // Chemins littéraux. Par défaut `/sonde.html` répond 307 vers `/sonde` :
+    // une redirection de plus à traverser sur une vieille tablette, pour une
+    // URL qu'il faudrait alors écrire différemment dans le README.
+    "html_handling": "none",
+    // `/api/*` : sans ça, le repli SPA renverrait index.html en 200 pour une
+    // URL d'API inconnue. `/_headers` : le service d'assets le sert parfois
+    // tel quel ; le Worker le renvoie en 404, quelle que soit la plateforme.
+    "run_worker_first": ["/api/*", "/_headers", "/_redirects"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "maison",
+      // Renseigné par `npm run setup:remote`, à committer ensuite.
+      "database_id": "A_RENSEIGNER_PAR_setup_remote",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

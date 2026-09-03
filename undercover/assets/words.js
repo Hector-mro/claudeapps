@@ -24,8 +24,8 @@
     { id: 'custom',       name: 'Mes mots',              emoji: '✍️' }
   ];
 
-  // [ mot A, mot B, catégorie, difficulté ]
-  var RAW = [
+  // [ mot A, mot B, catégorie, difficulté ] — paires françaises
+  var RAW_FR = [
     ['Fraise', 'Framboise', 'food', 2],
     ['Banane', 'Mangue', 'food', 1],
     ['Pizza', 'Quiche', 'food', 2],
@@ -214,13 +214,83 @@
     ['Baptême', 'Communion', 'celebrations', 3]
   ];
 
-  var PAIRS = RAW.map(function (row, i) {
-    return { id: 'p' + i, a: row[0], b: row[1], cat: row[2], diff: row[3], builtin: true };
-  });
+  // Paires anglaises, jouables via le réglage « langue des mots »
+  var RAW_EN = [
+    ['Strawberry', 'Raspberry', 'food', 2],
+    ['Coffee', 'Tea', 'food', 1],
+    ['Pancake', 'Waffle', 'food', 2],
+    ['Honey', 'Jam', 'food', 2],
+    ['Cake', 'Pie', 'food', 2],
+
+    ['Cat', 'Dog', 'animals', 1],
+    ['Wolf', 'Fox', 'animals', 2],
+    ['Bee', 'Wasp', 'animals', 3],
+    ['Whale', 'Dolphin', 'animals', 2],
+    ['Crow', 'Raven', 'animals', 3],
+
+    ['Pen', 'Pencil', 'objects', 2],
+    ['Candle', 'Lamp', 'objects', 2],
+    ['Key', 'Lock', 'objects', 2],
+
+    ['Beach', 'Swimming pool', 'places', 1],
+    ['Hotel', 'Hostel', 'places', 3],
+    ['Castle', 'Palace', 'places', 3],
+
+    ['Soccer', 'Rugby', 'sports', 2],
+    ['Tennis', 'Badminton', 'sports', 2],
+    ['Skiing', 'Snowboarding', 'sports', 2],
+
+    ['Doctor', 'Nurse', 'jobs', 2],
+    ['Chef', 'Baker', 'jobs', 2],
+    ['Actor', 'Model', 'jobs', 2],
+
+    ['Rain', 'Snow', 'nature', 1],
+    ['Sun', 'Moon', 'nature', 1],
+    ['Storm', 'Hurricane', 'nature', 3],
+
+    ['Car', 'Motorbike', 'transport', 1],
+    ['Train', 'Subway', 'transport', 2],
+    ['Plane', 'Helicopter', 'transport', 1],
+
+    ['Hand', 'Foot', 'body', 1],
+    ['Sleep', 'Nap', 'body', 2],
+
+    ['Ghost', 'Vampire', 'culture', 2],
+    ['Movie', 'TV series', 'culture', 1],
+    ['Guitar', 'Ukulele', 'culture', 3],
+
+    ['Hat', 'Cap', 'clothes', 2],
+    ['Scarf', 'Shawl', 'clothes', 3],
+
+    ['Phone', 'Tablet', 'tech', 1],
+    ['Headphones', 'Earbuds', 'tech', 3],
+    ['Email', 'Text message', 'tech', 2],
+
+    ['Love', 'Friendship', 'abstract', 2],
+    ['Secret', 'Lie', 'abstract', 2],
+
+    ['Birthday', 'Wedding', 'celebrations', 1],
+    ['Christmas', 'New Year', 'celebrations', 1]
+  ];
+
+  function build(rows, prefix, lang) {
+    return rows.map(function (row, i) {
+      return { id: prefix + i, a: row[0], b: row[1], cat: row[2], diff: row[3], lang: lang, builtin: true };
+    });
+  }
+
+  // Les identifiants français restent 'p0', 'p1'… : l'historique des paires déjà
+  // tirées reste valable d'une version à l'autre.
+  var PAIRS = build(RAW_FR, 'p', 'fr').concat(build(RAW_EN, 'e', 'en'));
 
   global.UC = global.UC || {};
   global.UC.CATEGORIES = CATEGORIES;
   global.UC.PAIRS = PAIRS;
+  global.UC.LANGS = [
+    { id: 'fr', name: 'Français' },
+    { id: 'en', name: 'English' },
+    { id: 'both', name: 'Les deux' }
+  ];
   global.UC.categoryById = function (id) {
     for (var i = 0; i < CATEGORIES.length; i++) {
       if (CATEGORIES[i].id === id) return CATEGORIES[i];

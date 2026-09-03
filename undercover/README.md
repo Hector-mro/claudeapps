@@ -28,9 +28,11 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/undercover/ sur le té
 ## ✨ Fonctionnalités
 
 **Contenu**
-- **173 paires de mots** en français, réparties en 14 catégories (nourriture, animaux,
-  objets, lieux, sports, métiers, nature, transports, corps, culture, vêtements,
-  technologie, idées, fêtes).
+- **173 paires de mots** en français et **42 en anglais**, réparties en 14 catégories
+  (nourriture, animaux, objets, lieux, sports, métiers, nature, transports, corps,
+  culture, vêtements, technologie, idées, fêtes).
+- Réglage **langue des mots** : français, anglais, ou les deux mélangés. L'interface
+  reste en français ; seules les paires tirées changent.
 - Chaque paire est **symétrique** : n'importe lequel des deux mots peut être celui
   des civils ou celui de l'undercover, tiré au sort à chaque manche.
 - 3 niveaux de difficulté (`Facile` / `Moyen` / `Corsé`) selon la proximité des deux mots.
@@ -82,7 +84,7 @@ de presse.
 ```
 index.html               écrans de l'application
 assets/styles.css        direction artistique papier/encre, composants mobiles
-assets/words.js          banque de 173 paires + catégories
+assets/words.js          banque de 215 paires (fr + en) + catégories
 assets/store.js          réglages, joueurs, mots perso, stats (localStorage)
 assets/game.js           moteur de jeu (rôles, tours, votes, scores)
 assets/app.js            interface et enchaînement des écrans

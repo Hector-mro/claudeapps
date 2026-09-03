@@ -9,6 +9,7 @@ hors ligne, toutes ses données restant sur l'appareil.
 | --- | --- | --- |
 | 🕵️ **Undercover** | Le jeu de bluff et de déduction, à plusieurs autour d'un seul téléphone. | [`undercover/`](undercover/) |
 | ♜ **Coordonnées** | Entraînement aux coordonnées de l'échiquier : trouver, nommer, couleur — avec statistiques par case. | [`chess-coords/`](chess-coords/) |
+| 🏠 **Maison** | Tâches ménagères d'un foyer de deux adultes : un écran mural en lecture seule, une interface téléphone. | [`maison/`](maison/) |
 
 ## 🌐 Publication
 
@@ -24,6 +25,14 @@ https://hector-mro.github.io/claudeapps/chess-coords/
 
 Pour activer la publication : **Settings → Pages → Source : Deploy from a
 branch**, puis choisir la branche par défaut et le dossier `/ (root)`.
+
+## ⚠️ Une exception : `maison/`
+
+`maison/` ne suit pas les règles ci-dessous. C'est la seule application du
+dépôt qui a un build (Vite) et une base de données : elle se déploie sur
+**Cloudflare Workers + D1**, pas sur GitHub Pages, et n'est donc pas servie
+depuis ce site. Son installation est décrite dans
+[`maison/README.md`](maison/README.md).
 
 ## 🧱 Règles du dossier
 

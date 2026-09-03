@@ -1,0 +1,38 @@
+/*
+  Direction artistique commune aux applications du dépôt : papier, encre,
+  machine à écrire. Le mur reprendra ces variables avec ses propres valeurs
+  (contraste plus élevé le jour, thème très sombre la nuit).
+*/
+:root {
+  --paper: #efebe1;
+  --paper-2: #e4dfd2;
+  --card: #f7f4ed;
+  --ink: #191815;
+  --ink-2: #4e4a42;
+  --ink-3: #8b857a;
+  --rule: #c6bfb0;
+
+  --serif: Georgia, 'Iowan Old Style', 'Times New Roman', 'Noto Serif', serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Roboto Mono', monospace;
+
+  /* Cible tactile minimale, debout, d'une main, dans un couloir. */
+  --touch: 48px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+  cursor: pointer;
+}

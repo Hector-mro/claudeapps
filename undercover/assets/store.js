@@ -11,6 +11,7 @@
     autoRoles: true,             // calcule les rôles selon le nombre de joueurs
     undercoverKnows: false,      // l'undercover sait qu'il est undercover
     // Mots
+    wordLang: 'fr',              // 'fr' | 'en' | 'both'
     categories: null,            // null = toutes ; sinon tableau d'ids
     difficulties: [1, 2, 3],
     avoidRepeats: true,
