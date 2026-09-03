@@ -200,8 +200,9 @@
     $('#prompt-target').className = 'prompt-target';
     $('#prompt-next').hidden = mode === 'name';   // en « nommer », l'annonce est sur l'échiquier
     $('#prompt-next-sq').textContent = '';
-    $('#prompt-sub').textContent = mode === 'find' ? 'touchez la case'
-      : (mode === 'name' ? 'quelle est cette case ?' : 'blanche ou noire ?');
+    // en « trouver » et en « couleur », la consigne se suffit à elle-même
+    $('#prompt-sub').hidden = mode !== 'name';
+    $('#prompt-sub').textContent = 'quelle est cette case ?';
     setClock(D.duration * 1000);
     show('drill');
     requestWake();

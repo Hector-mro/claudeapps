@@ -49,10 +49,11 @@ npx http-server -p 8080 ..   # puis http://localhost:8080/chess-coords/ sur le t
   record par exercice.
 - **La case suivante est annoncée** : on peut la préparer sans attendre, comme
   on lit le mot d'après dans un test de frappe. En « trouver » et en
-  « couleur », elle s'affiche en petit à droite de la consigne, qui ne bouge
-  jamais de son axe ; en « nommer », elle est légèrement grisée sur
-  l'échiquier, loin derrière la case cible. Les temps mesurés s'en trouvent
-  mécaniquement raccourcis : les records d'avant ne sont plus comparables.
+  « couleur », elle s'affiche à droite de la consigne — à 60 % de sa taille et
+  en gris, la consigne restant rigoureusement sur l'axe de l'écran ; en
+  « nommer », elle est bleutée sur l'échiquier, à un tiers de l'intensité de la
+  case cible. Les temps mesurés s'en trouvent mécaniquement raccourcis : les
+  records d'avant ne sont plus comparables.
 
 **Échiquier**
 - Côté blancs, côté noirs, ou **tiré au sort** à chaque série.

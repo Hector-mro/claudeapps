@@ -29,7 +29,7 @@
   --lv3: #7f9a6a; --lv3-ink: #12180f;
   --lv4: #3d7a4c; --lv4-ink: #f2f6ef;
 
-  --next-ring: rgba(25, 24, 21, .38);
+  --next-ring: rgba(43, 99, 131, .55);
 
   --btn-light:     #e7ddc6;
   --btn-light-ink: #191815;
@@ -62,7 +62,7 @@
 
   --lv2: #6f695c; --lv2-ink: #f0ece2;
 
-  --next-ring: rgba(236, 231, 221, .34);
+  --next-ring: rgba(120, 180, 215, .5);
 
   --btn-light:     #8d8a80;
   --btn-light-ink: #14130f;
@@ -272,6 +272,7 @@ body::after {
 .timebar i { display: block; height: 100%; width: 100%; background: var(--ink); transition: width .1s linear; }
 
 .prompt {
+  --target-size: 3.5rem;
   position: relative;
   text-align: center;
   padding: 2px 0 10px;
@@ -292,34 +293,16 @@ body::after {
   gap: 12px;
 }
 .prompt-target { grid-column: 2; }
-.prompt-next {
-  grid-column: 3;
-  justify-self: start;
-  align-self: end;          /* posée sur la ligne de pied de la consigne */
-  display: flex;
-  flex-direction: column-reverse;   /* le libellé passe au-dessus du nom */
-  align-items: flex-start;
-  line-height: 1.15;
-  text-align: left;
-  padding-bottom: .12em;
-}
+.prompt-next { grid-column: 3; justify-self: start; }
+/* le gris dit déjà ce qu'elle est : elle peut donc être grande */
 .prompt-next b {
   font-weight: 400;
-  font-size: 1.25rem;
+  font-size: calc(var(--target-size) * .6);
   color: var(--ink-3);
 }
-.prompt-next i {
-  font-style: normal;
-  font-size: .5rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  opacity: .75;
-}
-.drill-color .prompt-next b { font-size: 1.5rem; }
 
 .prompt-target {
-  font-size: 2.9rem;
+  font-size: var(--target-size);
   line-height: 1.05;
   letter-spacing: .02em;
   font-variant-numeric: lining-nums;
@@ -408,17 +391,18 @@ body::after {
 }
 @keyframes beat { 0%, 100% { opacity: .88; } 50% { opacity: .62; } }
 
-/* Case annoncée : présente mais nettement en retrait de la cible. */
+/* Case annoncée : même bleu que la cible, à un tiers de son intensité —
+   assez pour accrocher l'œil, trop peu pour être prise pour la consigne. */
 .sq.next::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--ink);
-  opacity: .17;
+  background: var(--hl);
+  opacity: .28;
   box-shadow: inset 0 0 0 3px var(--next-ring);
 }
 /* les cases sombres avalent le voile : on le rattrape */
-.sq.dark.next::after { opacity: .24; }
+.sq.dark.next::after { opacity: .36; }
 
 .sq.good::after {
   content: '';
@@ -494,7 +478,7 @@ body::after {
 .cbtn.bad { box-shadow: inset 0 0 0 6px var(--stamp); animation: shake .3s ease; }
 
 /* sans échiquier, la coordonnée occupe toute la place */
-.drill-color .prompt-target { font-size: 4.4rem; }
+.drill-color .prompt { --target-size: 5.3rem; }
 
 /* ------------------------------------------------------------------- pavé */
 .keypad { margin-top: 12px; flex: none; }
@@ -758,10 +742,8 @@ body::after {
 
 /* --------------------------------------------------- écrans très compacts */
 @media (max-height: 700px) {
-  .prompt-target { font-size: 2.3rem; }
-  .drill-color .prompt-target { font-size: 3.4rem; }
-  .prompt-next b { font-size: 1.05rem; }
-  .drill-color .prompt-next b { font-size: 1.25rem; }
+  .prompt { --target-size: 2.75rem; }
+  .drill-color .prompt { --target-size: 4.1rem; }
   .colorpad { height: min(240px, 40dvh); }
   /* écran court : la consigne se contente de sa hauteur, l'échiquier prend le reste */
   .prompt { padding-bottom: 6px; flex: 0 1 auto; min-height: 0; }
