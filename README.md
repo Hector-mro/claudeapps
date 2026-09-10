@@ -1,38 +1,48 @@
 # Applications
 
-Un dépôt, plusieurs petites applications web autonomes : **ni serveur, ni
-dépendance, ni build**. Du HTML, du CSS et du JavaScript, servis tels quels par
-GitHub Pages. Chacune s'installe sur l'écran d'accueil et fonctionne ensuite
-hors ligne, toutes ses données restant sur l'appareil.
+Un dépôt, plusieurs petites applications web autonomes, chacune installable
+sur l'écran d'accueil et fonctionnant ensuite hors ligne, toutes ses données
+restant sur l'appareil. La plupart n'ont **ni serveur, ni dépendance, ni
+build** : du HTML, du CSS et du JavaScript, servis tels quels par GitHub
+Pages (voir les règles plus bas). `todo-app/` est l'exception « buildée » qui
+reste servie sur ce même site — voir plus bas.
 
 | Application | Ce que c'est | Dossier |
 | --- | --- | --- |
 | 🕵️ **Undercover** | Le jeu de bluff et de déduction, à plusieurs autour d'un seul téléphone. | [`undercover/`](undercover/) |
 | ♜ **Coordonnées** | Entraînement aux coordonnées de l'échiquier : trouver, nommer, couleur — avec statistiques par case. | [`chess-coords/`](chess-coords/) |
+| 🍃 **Tâches** | Liste de tâches sobre avec échéances, difficulté et une pointe de progression (série de jours, niveau). | [`todo-app/`](todo-app/) |
 | 🏠 **Maison** | Tâches ménagères d'un foyer de deux adultes : un écran mural en lecture seule, une interface téléphone. | [`maison/`](maison/) |
 
 ## 🌐 Publication
 
-Le site est servi par **GitHub Pages** depuis la racine de la branche par
-défaut. La page d'accueil (`index.html`) liste les applications, chaque
-sous-dossier est servi à son propre chemin :
+Le site est servi par **GitHub Pages**, source **GitHub Actions**
+([`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml)).
+À chaque push sur la branche par défaut, le workflow copie `index.html`,
+`.nojekyll`, `undercover/` et `chess-coords/` tels quels, build `todo-app/`
+avec Vite, puis publie l'ensemble :
 
 ```
 https://hector-mro.github.io/claudeapps/                 le portail
 https://hector-mro.github.io/claudeapps/undercover/
 https://hector-mro.github.io/claudeapps/chess-coords/
+https://hector-mro.github.io/claudeapps/todo-app/
 ```
 
-Pour activer la publication : **Settings → Pages → Source : Deploy from a
-branch**, puis choisir la branche par défaut et le dossier `/ (root)`.
+Pour activer la publication : **Settings → Pages → Source : GitHub Actions**.
 
-## ⚠️ Une exception : `maison/`
+## ⚠️ Deux exceptions
 
-`maison/` ne suit pas les règles ci-dessous. C'est la seule application du
-dépôt qui a un build (Vite) et une base de données : elle se déploie sur
-**Cloudflare Workers + D1**, pas sur GitHub Pages, et n'est donc pas servie
-depuis ce site. Son installation est décrite dans
-[`maison/README.md`](maison/README.md).
+- **`todo-app/`** est une application React + Vite (voir
+  [`todo-app/CLAUDE.md`](todo-app/CLAUDE.md)). Contrairement aux autres, son
+  code source n'est pas servi tel quel : le workflow ci-dessus le build et
+  publie sa sortie (`dist/`) à `todo-app/`. Elle garde son propre
+  `manifest.webmanifest` et `sw.js` (générés dans `public/`, copiés par Vite),
+  donc elle s'installe et fonctionne hors ligne comme les autres.
+- **`maison/`** ne suit pas les règles ci-dessous. C'est la seule application
+  du dépôt qui a une base de données : elle se déploie sur **Cloudflare
+  Workers + D1**, pas sur GitHub Pages, et n'est donc pas servie depuis ce
+  site. Son installation est décrite dans [`maison/README.md`](maison/README.md).
 
 ## 🧱 Règles du dossier
 
