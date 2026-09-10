@@ -13,6 +13,8 @@ export function groupAndSortTodos(todos: Todo[], nowMs: number = Date.now()): To
   const groups: TodoGroups = { overdue: [], dueSoon: [], upcoming: [], noDate: [], done: [] }
 
   for (const todo of todos) {
+    if (todo.parentId !== undefined) continue // subtasks render nested under their parent
+
     if (todo.done) {
       groups.done.push(todo)
       continue

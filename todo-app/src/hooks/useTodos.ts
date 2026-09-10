@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react'
 import { loadTodos, saveTodos } from '../storage'
+import { canNest } from '../subtasks'
 import type { Difficulty, Todo } from '../types'
 
 interface AddTodoInput {
   text: string
   difficulty: Difficulty
   dueAt?: number
+}
+
+/** Sets `parentId`'s done state to whether all of its subtasks are done. No-op if it has none. */
+function syncParentDone(todos: Todo[], parentId: string, nowMs: number): Todo[] {
+  const siblings = todos.filter((t) => t.parentId === parentId)
+  if (siblings.length === 0) return todos
+  const allDone = siblings.every((t) => t.done)
+  return todos.map((todo) =>
+    todo.id === parentId && todo.done !== allDone
+      ? { ...todo, done: allDone, completedAt: allDone ? nowMs : undefined }
+      : todo,
+  )
 }
 
 export function useTodos() {
@@ -32,22 +45,50 @@ export function useTodos() {
   }
 
   function toggleTodo(id: string) {
+    setTodos((prev) => {
+      const target = prev.find((t) => t.id === id)
+      if (!target) return prev
+
+      const nowMs = Date.now()
+      const nextDone = !target.done
+
+      // Toggling a task also toggles its subtasks (a parent stands for the whole group).
+      let next = prev.map((todo) =>
+        todo.id === id || todo.parentId === id
+          ? { ...todo, done: nextDone, completedAt: nextDone ? nowMs : undefined }
+          : todo,
+      )
+
+      // Toggling a subtask re-derives its parent: done once every subtask is done.
+      if (target.parentId) {
+        next = syncParentDone(next, target.parentId, nowMs)
+      }
+
+      return next
+    })
+  }
+
+  function updateTodo(id: string, updates: { text: string; difficulty: Difficulty; dueAt?: number }) {
+    const trimmed = updates.text.trim()
+    if (!trimmed) return
     setTodos((prev) =>
       prev.map((todo) =>
-        todo.id === id
-          ? {
-              ...todo,
-              done: !todo.done,
-              completedAt: !todo.done ? Date.now() : undefined,
-            }
-          : todo,
+        todo.id === id ? { ...todo, text: trimmed, difficulty: updates.difficulty, dueAt: updates.dueAt } : todo,
       ),
     )
   }
 
   function deleteTodo(id: string) {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id))
+    setTodos((prev) => prev.filter((todo) => todo.id !== id && todo.parentId !== id))
   }
 
-  return { todos, addTodo, toggleTodo, deleteTodo }
+  function nestTodo(childId: string, parentId: string) {
+    setTodos((prev) => {
+      if (!canNest(prev, childId, parentId)) return prev
+      const next = prev.map((todo) => (todo.id === childId ? { ...todo, parentId } : todo))
+      return syncParentDone(next, parentId, Date.now())
+    })
+  }
+
+  return { todos, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo }
 }

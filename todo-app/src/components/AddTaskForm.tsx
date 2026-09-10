@@ -1,15 +1,10 @@
 import { useState } from 'react'
 import type { Difficulty } from '../types'
+import { DifficultyPicker, DueDatePicker } from './TaskFields'
 
 interface AddTaskFormProps {
   onAdd: (input: { text: string; difficulty: Difficulty; dueAt?: number }) => void
 }
-
-const DIFFICULTIES: { value: Difficulty; label: string }[] = [
-  { value: 'easy', label: 'Facile' },
-  { value: 'medium', label: 'Moyen' },
-  { value: 'hard', label: 'Difficile' },
-]
 
 export function AddTaskForm({ onAdd }: AddTaskFormProps) {
   const [text, setText] = useState('')
@@ -54,34 +49,8 @@ export function AddTaskForm({ onAdd }: AddTaskFormProps) {
 
       {detailsOpen && (
         <div className="add-task-details">
-          <div className="difficulty-group" role="radiogroup" aria-label="Difficulté">
-            {DIFFICULTIES.map(({ value, label }) => (
-              <button
-                key={value}
-                type="button"
-                role="radio"
-                aria-checked={difficulty === value}
-                className={`difficulty-option${difficulty === value ? ' selected' : ''}`}
-                onClick={() => setDifficulty(value)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          <div className="due-input-row">
-            <input
-              type="datetime-local"
-              aria-label="Échéance"
-              value={dueAtLocal}
-              onChange={(event) => setDueAtLocal(event.target.value)}
-            />
-            {dueAtLocal && (
-              <button type="button" aria-label="Effacer l'échéance" onClick={() => setDueAtLocal('')}>
-                ×
-              </button>
-            )}
-          </div>
+          <DifficultyPicker value={difficulty} onChange={setDifficulty} />
+          <DueDatePicker value={dueAtLocal} onChange={setDueAtLocal} />
         </div>
       )}
     </form>

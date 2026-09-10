@@ -64,6 +64,35 @@ export function computeStreak(
   return { streak, lastCompletionDate }
 }
 
+export interface DailyXp {
+  dateKey: string
+  label: string
+  xp: number
+}
+
+/** XP earned per local-calendar-day over the trailing `days` window (oldest first, today last). */
+export function xpByDay(todos: Todo[], days: number, nowMs: number = Date.now()): DailyXp[] {
+  const buckets = new Map<string, number>()
+  const order: { key: string; label: string }[] = []
+
+  for (let i = days - 1; i >= 0; i--) {
+    const ms = addDays(nowMs, -i)
+    const key = toLocalDateKey(ms)
+    buckets.set(key, 0)
+    order.push({ key, label: new Date(ms).toLocaleDateString('fr-FR', { weekday: 'short' }) })
+  }
+
+  for (const todo of todos) {
+    if (!todo.done || todo.completedAt === undefined) continue
+    const key = toLocalDateKey(todo.completedAt)
+    if (buckets.has(key)) {
+      buckets.set(key, (buckets.get(key) ?? 0) + XP_BY_DIFFICULTY[todo.difficulty])
+    }
+  }
+
+  return order.map(({ key, label }) => ({ dateKey: key, label, xp: buckets.get(key) ?? 0 }))
+}
+
 export function deriveGamification(todos: Todo[], nowMs: number = Date.now()): GamificationSnapshot {
   const xp = todos
     .filter((t) => t.done)

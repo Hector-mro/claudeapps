@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { addDays } from './dateUtils'
-import { computeStreak, deriveGamification, levelForXp } from './gamification'
+import { computeStreak, deriveGamification, levelForXp, xpByDay } from './gamification'
 import type { Todo } from './types'
 
 const NOW = new Date(2026, 0, 15, 12, 0, 0).getTime()
@@ -81,5 +81,27 @@ describe('computeStreak', () => {
     const result = computeStreak(todos, NOW)
     expect(result.streak).toBe(0)
     expect(result.lastCompletionDate).not.toBeNull()
+  })
+})
+
+describe('xpByDay', () => {
+  it('buckets XP by local day across the trailing window, oldest first', () => {
+    const todos = [
+      makeTodo({ difficulty: 'easy', done: true, completedAt: NOW }),
+      makeTodo({ difficulty: 'hard', done: true, completedAt: addDays(NOW, -1) }),
+      makeTodo({ difficulty: 'medium', done: false }),
+    ]
+
+    const result = xpByDay(todos, 3, NOW)
+
+    expect(result).toHaveLength(3)
+    expect(result.map((d) => d.xp)).toEqual([0, 35, 10])
+    expect(result.at(-1)?.dateKey).toBe('2026-01-15')
+  })
+
+  it('ignores completions outside the window', () => {
+    const todos = [makeTodo({ difficulty: 'easy', done: true, completedAt: addDays(NOW, -10) })]
+    const result = xpByDay(todos, 3, NOW)
+    expect(result.reduce((sum, d) => sum + d.xp, 0)).toBe(0)
   })
 })

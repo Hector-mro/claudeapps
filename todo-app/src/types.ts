@@ -1,5 +1,11 @@
 export type Difficulty = 'easy' | 'medium' | 'hard'
 
+export const DIFFICULTY_OPTIONS: { value: Difficulty; label: string }[] = [
+  { value: 'easy', label: 'Facile' },
+  { value: 'medium', label: 'Moyen' },
+  { value: 'hard', label: 'Difficile' },
+]
+
 export interface Todo {
   id: string
   text: string
@@ -8,6 +14,7 @@ export interface Todo {
   difficulty: Difficulty
   done: boolean
   completedAt?: number
+  parentId?: string
 }
 
 export interface GamificationSnapshot {

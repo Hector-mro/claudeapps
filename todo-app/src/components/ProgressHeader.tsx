@@ -1,24 +1,34 @@
 import type { GamificationSnapshot } from '../types'
 
+interface ProgressHeaderProps extends GamificationSnapshot {
+  onOpenStats: () => void
+}
+
 export function ProgressHeader({
   level,
   xpIntoLevel,
   xpForNextLevel,
   progress,
   streak,
-}: GamificationSnapshot) {
+  onOpenStats,
+}: ProgressHeaderProps) {
   const percent = Math.round(progress * 100)
 
   return (
     <header className="progress-header">
       <div className="title-row">
         <h1>Tâches</h1>
-        {streak > 0 && (
-          <span className="streak-badge">
-            <span className="streak-dot" aria-hidden="true" />
-            {streak} jour{streak === 1 ? '' : 's'}
-          </span>
-        )}
+        <div className="title-row-right">
+          {streak > 0 && (
+            <span className="streak-badge">
+              <span className="streak-dot" aria-hidden="true" />
+              {streak} jour{streak === 1 ? '' : 's'}
+            </span>
+          )}
+          <button type="button" className="stats-link" onClick={onOpenStats} aria-label="Voir la progression">
+            📊
+          </button>
+        </div>
       </div>
       <div className="level-row">
         <span className="level-label">Niveau {level}</span>
