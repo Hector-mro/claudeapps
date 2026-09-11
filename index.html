@@ -1,114 +1,224 @@
 <!doctype html>
 <html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Applications</title>
-<meta name="description" content="Petites applications web, sans installation ni compte : tout tourne dans le navigateur et fonctionne hors ligne.">
-<meta name="theme-color" content="#efebe1">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23efebe1'/%3E%3Crect x='8' y='8' width='24' height='24' fill='%23191815'/%3E%3Crect x='32' y='32' width='24' height='24' fill='%23191815'/%3E%3C/svg%3E">
-<style>
-  /* Même direction artistique que les applications : papier, encre, machine à écrire. */
-  :root {
-    --paper: #efebe1; --paper-2: #e4dfd2; --card: #f7f4ed;
-    --ink: #191815; --ink-2: #4e4a42; --ink-3: #8b857a;
-    --rule: #c6bfb0; --grain: .05;
-    --serif: Georgia, 'Iowan Old Style', 'Times New Roman', 'Noto Serif', serif;
-    --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Roboto Mono', monospace;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: #141416; --paper-2: #1b1b1e; --card: #191a1c;
-      --ink: #ece7dd; --ink-2: #b0aaa0; --ink-3: #797369;
-      --rule: #35343a; --grain: .035;
-    }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; min-height: 100vh; min-height: 100dvh;
-    background: var(--paper); color: var(--ink);
-    font-family: var(--serif); font-size: 16.5px; line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-  body::after {
-    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 100;
-    opacity: var(--grain);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  main {
-    max-width: 640px; margin: 0 auto;
-    padding: calc(env(safe-area-inset-top) + 34px) 20px calc(env(safe-area-inset-bottom) + 34px);
-  }
-  header { border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 8px; }
-  h1 { margin: 0; font-size: 1.9rem; font-weight: 400; letter-spacing: -.01em; }
-  .kicker {
-    font-family: var(--mono); text-transform: uppercase; letter-spacing: .16em;
-    font-size: .64rem; color: var(--ink-3); margin: 0 0 6px;
-  }
-  .intro { color: var(--ink-2); font-size: .96rem; margin: 14px 0 26px; }
-  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-  a.app {
-    display: block; padding: 18px;
-    background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--ink);
-    color: inherit; text-decoration: none;
-  }
-  a.app:hover, a.app:focus-visible { background: var(--paper-2); outline: none; border-left-color: var(--ink-2); }
-  .app-title { display: flex; align-items: baseline; gap: 10px; }
-  .app-title b { font-weight: 400; font-size: 1.3rem; }
-  .app-title span {
-    font-family: var(--mono); font-size: .6rem; text-transform: uppercase;
-    letter-spacing: .14em; color: var(--ink-3);
-  }
-  .app p { margin: 6px 0 0; color: var(--ink-2); font-size: .92rem; }
-  .tags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .tags i {
-    font-style: normal; font-family: var(--mono); font-size: .58rem;
-    text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3);
-    border: 1px solid var(--rule); padding: 3px 7px;
-  }
-  footer {
-    margin-top: 30px; padding-top: 14px; border-top: 1px dashed var(--rule);
-    font-family: var(--mono); font-size: .62rem; text-transform: uppercase;
-    letter-spacing: .1em; color: var(--ink-3);
-  }
-  footer a { color: inherit; }
-</style>
-</head>
-<body>
-<main>
-  <header>
-    <p class="kicker">Sans installation · sans compte · hors ligne</p>
-    <h1>Applications</h1>
-  </header>
-  <p class="intro">
-    Des applications web autonomes : ni serveur, ni dépendance, ni donnée qui s'échappe.
-    Chacune s'installe sur l'écran d'accueil et fonctionne ensuite sans réseau.
-  </p>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Applications</title>
+    <meta
+      name="description"
+      content="Petites applications web, sans installation ni compte : tout tourne dans le navigateur et fonctionne hors ligne."
+    />
+    <meta name="theme-color" content="#efebe1" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23efebe1'/%3E%3Crect x='8' y='8' width='24' height='24' fill='%23191815'/%3E%3Crect x='32' y='32' width='24' height='24' fill='%23191815'/%3E%3C/svg%3E"
+    />
+    <style>
+      /* Même direction artistique que les applications : papier, encre, machine à écrire. */
+      :root {
+        --paper: #efebe1;
+        --paper-2: #e4dfd2;
+        --card: #f7f4ed;
+        --ink: #191815;
+        --ink-2: #4e4a42;
+        --ink-3: #8b857a;
+        --rule: #c6bfb0;
+        --grain: 0.05;
+        --serif:
+          Georgia, "Iowan Old Style", "Times New Roman", "Noto Serif", serif;
+        --mono:
+          ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+          "Roboto Mono", monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #141416;
+          --paper-2: #1b1b1e;
+          --card: #191a1c;
+          --ink: #ece7dd;
+          --ink-2: #b0aaa0;
+          --ink-3: #797369;
+          --rule: #35343a;
+          --grain: 0.035;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--serif);
+        font-size: 16.5px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 100;
+        opacity: var(--grain);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+      main {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: calc(env(safe-area-inset-top) + 34px) 20px
+          calc(env(safe-area-inset-bottom) + 34px);
+      }
+      header {
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 12px;
+        margin-bottom: 8px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.9rem;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+      .kicker {
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 0.64rem;
+        color: var(--ink-3);
+        margin: 0 0 6px;
+      }
+      .intro {
+        color: var(--ink-2);
+        font-size: 0.96rem;
+        margin: 14px 0 26px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 12px;
+      }
+      a.app {
+        display: block;
+        padding: 18px;
+        background: var(--card);
+        border: 1px solid var(--rule);
+        border-left: 4px solid var(--ink);
+        color: inherit;
+        text-decoration: none;
+      }
+      a.app:hover,
+      a.app:focus-visible {
+        background: var(--paper-2);
+        outline: none;
+        border-left-color: var(--ink-2);
+      }
+      .app-title {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .app-title b {
+        font-weight: 400;
+        font-size: 1.3rem;
+      }
+      .app-title span {
+        font-family: var(--mono);
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--ink-3);
+      }
+      .app p {
+        margin: 6px 0 0;
+        color: var(--ink-2);
+        font-size: 0.92rem;
+      }
+      .tags {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .tags i {
+        font-style: normal;
+        font-family: var(--mono);
+        font-size: 0.58rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--ink-3);
+        border: 1px solid var(--rule);
+        padding: 3px 7px;
+      }
+      footer {
+        margin-top: 30px;
+        padding-top: 14px;
+        border-top: 1px dashed var(--rule);
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--ink-3);
+      }
+      footer a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="kicker">Sans installation · sans compte · hors ligne</p>
+        <h1>Applications</h1>
+      </header>
+      <p class="intro">
+        Des applications web autonomes : ni serveur, ni dépendance, ni donnée
+        qui s'échappe. Chacune s'installe sur l'écran d'accueil et fonctionne
+        ensuite sans réseau.
+      </p>
 
-  <ul>
-    <li>
-      <a class="app" href="./undercover/">
-        <span class="app-title"><b>🕵️ Undercover</b> <span>jeu de bluff</span></span>
-        <p>
-          Le jeu de bluff et de déduction, à plusieurs autour d'un seul téléphone.
-          173 paires de mots, rôles paramétrables, votes, scores et statistiques.
-        </p>
-        <span class="tags"><i>3 à 20 joueurs</i><i>français</i><i>hors ligne</i></span>
-      </a>
-    </li>
-    <li>
-      <a class="app" href="./chess-coords/">
-        <span class="app-title"><b>♜ Coordonnées</b> <span>entraînement échecs</span></span>
-        <p>
-          Nommer les 64 cases sans réfléchir : trouver la case annoncée, nommer la case
-          surlignée, ou dire de quelle couleur elle est. Chrono, pénalités, échiquier qui
-          se retourne, statistiques par case, mode « cases faibles » et échiquier de
-          référence à consulter.
-        </p>
-        <span class="tags"><i>solo</i><i>3 exercices</i><i>français</i><i>hors ligne</i></span>
-      </a>
-    </li>
-    <li>
+      <ul>
+        <li>
+          <a class="app" href="./undercover/">
+            <span class="app-title"
+              ><b>🕵️ Undercover</b> <span>jeu de bluff</span></span
+            >
+            <p>
+              Le jeu de bluff et de déduction, à plusieurs autour d'un seul
+              téléphone. 173 paires de mots, rôles paramétrables, votes, scores
+              et statistiques.
+            </p>
+            <span class="tags"
+              ><i>3 à 20 joueurs</i><i>français</i><i>hors ligne</i></span
+            >
+          </a>
+        </li>
+        <li>
+          <a class="app" href="./chess-coords/">
+            <span class="app-title"
+              ><b>♜ Coordonnées</b> <span>entraînement échecs</span></span
+            >
+            <p>
+              Nommer les 64 cases sans réfléchir : trouver la case annoncée,
+              nommer la case surlignée, ou dire de quelle couleur elle est.
+              Chrono, pénalités, échiquier qui se retourne, statistiques par
+              case, mode « cases faibles » et échiquier de référence à
+              consulter.
+            </p>
+            <span class="tags"
+              ><i>solo</i><i>3 exercices</i><i>français</i
+              ><i>hors ligne</i></span
+            >
+          </a>
+        </li>
+        <!-- <li>
       <a class="app" href="./todo-app/">
         <span class="app-title"><b>🍃 Tâches</b> <span>liste calme</span></span>
         <p>
@@ -117,12 +227,15 @@
         </p>
         <span class="tags"><i>solo</i><i>français</i><i>hors ligne</i></span>
       </a>
-    </li>
-  </ul>
+    </li> -->
+      </ul>
 
-  <footer>
-    Code source : <a href="https://github.com/Hector-mro/claudeapps">github.com/Hector-mro/claudeapps</a>
-  </footer>
-</main>
-</body>
+      <footer>
+        Code source :
+        <a href="https://github.com/Hector-mro/claudeapps"
+          >github.com/Hector-mro/claudeapps</a
+        >
+      </footer>
+    </main>
+  </body>
 </html>
