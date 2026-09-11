@@ -2,6 +2,19 @@ import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { useTodos } from './useTodos'
 
+describe('useTodos addTodo', () => {
+  it('records who added a task when the phone knows, and nothing otherwise', () => {
+    const { result } = renderHook(() => useTodos())
+
+    act(() => result.current.addTodo({ text: 'Loyer', difficulty: 'easy', zone: 'hector', createdBy: 'nina' }))
+    act(() => result.current.addTodo({ text: 'Pain', difficulty: 'easy', zone: 'commun' }))
+
+    const [fromNina, unknownAuthor] = result.current.todos
+    expect(fromNina.createdBy).toBe('nina')
+    expect('createdBy' in unknownAuthor).toBe(false)
+  })
+})
+
 describe('useTodos subtasks', () => {
   it('nests a task under another and marks the parent done once all subtasks are done', () => {
     const { result } = renderHook(() => useTodos())

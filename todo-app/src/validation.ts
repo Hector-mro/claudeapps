@@ -55,8 +55,14 @@ export function isStoredArchivedCompletion(value: unknown): value is StoredArchi
 /** Strict check for a todo exchanged with the server. */
 export function isTodo(value: unknown): value is Todo {
   if (!isStoredTodo(value)) return false
-  const { zone, dueAt, completedAt, parentId } = value
-  return isZone(zone) && isOptional(dueAt, 'number') && isOptional(completedAt, 'number') && isOptional(parentId, 'string')
+  const { zone, dueAt, completedAt, parentId, createdBy } = value
+  return (
+    isZone(zone) &&
+    isOptional(dueAt, 'number') &&
+    isOptional(completedAt, 'number') &&
+    isOptional(parentId, 'string') &&
+    (createdBy === undefined || isPerson(createdBy))
+  )
 }
 
 /** Strict check for an archived completion exchanged with the server. */

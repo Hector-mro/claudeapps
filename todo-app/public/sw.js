@@ -9,9 +9,10 @@
  * Changer CACHE modifie ce fichier : les apps restées ouvertes sur une
  * ancienne version voient alors un nouveau service worker et se rechargent
  * (voir src/main.tsx). v2 : l'arrivée de la synchronisation. v3 : les
- * notifications (les écouteurs `push` et `notificationclick` en bas).
+ * notifications (les écouteurs `push` et `notificationclick` en bas). v4 :
+ * chaque tâche retient qui l'a ajoutée, pour prévenir l'autre.
  */
-var CACHE = 'taches-v3'
+var CACHE = 'taches-v4'
 
 self.addEventListener('install', function (event) {
   event.waitUntil(self.skipWaiting())

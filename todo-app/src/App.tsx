@@ -73,7 +73,7 @@ function App() {
         onChangeZone={() => setZone(null)}
         onOpenStats={() => setView('stats')}
       />
-      <AddTaskForm onAdd={(input) => addTodo({ ...input, zone })} />
+      <AddTaskForm onAdd={(input) => addTodo({ ...input, zone, createdBy: notifications.person ?? undefined })} />
       <TaskList todos={zoneTodos} onToggle={toggleTodo} onUpdate={updateTodo} onDelete={deleteTodo} onNest={nestTodo} />
     </main>
   )

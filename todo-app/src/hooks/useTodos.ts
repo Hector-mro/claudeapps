@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { loadArchivedCompletions, loadTodos, saveArchivedCompletions, saveTodos } from '../storage'
 import { canNest } from '../subtasks'
-import type { ArchivedCompletion, Difficulty, SyncSnapshot, Todo, Zone } from '../types'
+import type { ArchivedCompletion, Difficulty, Person, SyncSnapshot, Todo, Zone } from '../types'
 
 interface AddTodoInput {
   text: string
   difficulty: Difficulty
   dueAt?: number
   zone: Zone
+  /** Whose phone adds it (see `Todo.createdBy`); left out when the phone doesn't know. */
+  createdBy?: Person
 }
 
 /** Sets `parentId`'s done state to whether all of its subtasks are done. No-op if it has none. */
@@ -36,7 +38,7 @@ export function useTodos() {
     saveArchivedCompletions(archivedCompletions)
   }, [archivedCompletions])
 
-  function addTodo({ text, difficulty, dueAt, zone }: AddTodoInput) {
+  function addTodo({ text, difficulty, dueAt, zone, createdBy }: AddTodoInput) {
     const trimmed = text.trim()
     if (!trimmed) return
     setTodos((prev) => [
@@ -49,6 +51,7 @@ export function useTodos() {
         difficulty,
         done: false,
         zone,
+        ...(createdBy ? { createdBy } : {}),
       },
     ])
   }
