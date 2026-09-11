@@ -137,6 +137,12 @@ Chaque téléphone reçoit ce qui concerne sa zone et Commun :
 Le serveur regarde toutes les 5 minutes (déclencheur planifié du Worker) : un
 rappel peut arriver jusqu'à 5 minutes après l'heure « 1 h avant ».
 
+**Aucun rappel n'arrive ?** Vérifier que le déclencheur tourne : depuis
+`todo-app/`, `npx wrangler tail taches-api --format pretty` doit afficher
+`"*/5 * * * *" @ … - Ok` toutes les 5 minutes. Sinon,
+`npx wrangler triggers deploy` le réenregistre. C'est arrivé après le premier
+déploiement : le déclencheur était bien déclaré, mais ne partait pas.
+
 **Les couper** : « Désactiver » sur l'écran des zones, ou Réglages ›
 Notifications › Tâches. Des notifications refusées ne se réautorisent que
 dans les Réglages.
