@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { loadArchivedCompletions, loadTodos, saveArchivedCompletions, saveTodos } from '../storage'
 import { canNest } from '../subtasks'
-import type { ArchivedCompletion, Difficulty, Todo, Zone } from '../types'
+import type { ArchivedCompletion, Difficulty, SyncSnapshot, Todo, Zone } from '../types'
 
 interface AddTodoInput {
   text: string
@@ -90,7 +90,12 @@ export function useTodos() {
   function deleteTodo(id: string) {
     const toArchive = todos
       .filter((t) => (t.id === id || t.parentId === id) && t.done && t.completedAt !== undefined)
-      .map((t) => ({ completedAt: t.completedAt as number, difficulty: t.difficulty, zone: t.zone }))
+      .map((t) => ({
+        id: crypto.randomUUID(),
+        completedAt: t.completedAt as number,
+        difficulty: t.difficulty,
+        zone: t.zone,
+      }))
 
     if (toArchive.length > 0) {
       setArchivedCompletions((prev) => [...prev, ...toArchive])
@@ -107,5 +112,11 @@ export function useTodos() {
     })
   }
 
-  return { todos, archivedCompletions, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo }
+  /** Swaps in a whole synced state (see `useSync`). Stable across renders. */
+  const replaceAll = useCallback((snapshot: SyncSnapshot) => {
+    setTodos(snapshot.todos)
+    setArchivedCompletions(snapshot.archived)
+  }, [])
+
+  return { todos, archivedCompletions, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo, replaceAll }
 }

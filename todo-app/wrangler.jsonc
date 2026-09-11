@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // The sync API only — the app itself is served by GitHub Pages.
+  "name": "taches-api",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-01",
+  "observability": { "enabled": true },
+
+  // Overridden in local dev by `.dev.vars`. ACCESS_KEY is a secret:
+  // `npx wrangler secret put ACCESS_KEY`.
+  "vars": {
+    "ALLOWED_ORIGIN": "https://hector-mro.github.io"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "taches",
+      "database_id": "0c57bb52-e84b-4fc0-aa99-a93f2bba5201",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

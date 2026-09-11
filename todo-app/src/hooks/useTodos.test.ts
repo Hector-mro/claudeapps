@@ -90,7 +90,7 @@ describe('useTodos subtasks', () => {
 
     expect(result.current.todos).toHaveLength(0)
     expect(result.current.archivedCompletions).toEqual([
-      { completedAt: expect.any(Number), difficulty: 'hard', zone: 'hector' },
+      { id: expect.any(String), completedAt: expect.any(Number), difficulty: 'hard', zone: 'hector' },
     ])
   })
 
@@ -132,7 +132,7 @@ describe('useTodos subtasks', () => {
     act(() => result.current.deleteTodo(child.id))
 
     expect(result.current.archivedCompletions).toEqual([
-      { completedAt: expect.any(Number), difficulty: 'medium', zone: 'hector' },
+      { id: expect.any(String), completedAt: expect.any(Number), difficulty: 'medium', zone: 'hector' },
     ])
   })
 
@@ -173,7 +173,7 @@ describe('useTodos zones', () => {
     act(() => result.current.deleteTodo(task.id))
 
     expect(result.current.archivedCompletions).toEqual([
-      { completedAt: expect.any(Number), difficulty: 'easy', zone: 'nina' },
+      { id: expect.any(String), completedAt: expect.any(Number), difficulty: 'easy', zone: 'nina' },
     ])
   })
 
