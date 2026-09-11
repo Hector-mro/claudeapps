@@ -17,6 +17,11 @@ export interface Todo {
   parentId?: string
 }
 
+export interface ArchivedCompletion {
+  completedAt: number
+  difficulty: Difficulty
+}
+
 export interface GamificationSnapshot {
   xp: number
   level: number

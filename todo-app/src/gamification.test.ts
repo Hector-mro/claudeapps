@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { addDays } from './dateUtils'
 import { computeStreak, deriveGamification, levelForXp, xpByDay } from './gamification'
-import type { Todo } from './types'
+import type { ArchivedCompletion, Todo } from './types'
 
 const NOW = new Date(2026, 0, 15, 12, 0, 0).getTime()
 
@@ -44,6 +44,13 @@ describe('deriveGamification', () => {
     expect(result.level).toBe(1)
     expect(result.streak).toBe(1)
   })
+
+  it('folds archived completions into XP and streak', () => {
+    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'hard' }]
+    const result = deriveGamification([], NOW, archived)
+    expect(result.xp).toBe(35)
+    expect(result.streak).toBe(1)
+  })
 })
 
 describe('computeStreak', () => {
@@ -82,6 +89,17 @@ describe('computeStreak', () => {
     expect(result.streak).toBe(0)
     expect(result.lastCompletionDate).not.toBeNull()
   })
+
+  it('counts an archived-only completion toward the streak', () => {
+    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'easy' }]
+    expect(computeStreak([], NOW, archived).streak).toBe(1)
+  })
+
+  it('combines a live completion with an archived one from the day before', () => {
+    const todos = [makeTodo({ done: true, completedAt: NOW })]
+    const archived: ArchivedCompletion[] = [{ completedAt: addDays(NOW, -1), difficulty: 'easy' }]
+    expect(computeStreak(todos, NOW, archived).streak).toBe(2)
+  })
 })
 
 describe('xpByDay', () => {
@@ -103,5 +121,12 @@ describe('xpByDay', () => {
     const todos = [makeTodo({ difficulty: 'easy', done: true, completedAt: addDays(NOW, -10) })]
     const result = xpByDay(todos, 3, NOW)
     expect(result.reduce((sum, d) => sum + d.xp, 0)).toBe(0)
+  })
+
+  it('folds an archived completion into its day, alongside a live todo on the same day', () => {
+    const todos = [makeTodo({ difficulty: 'easy', done: true, completedAt: NOW })]
+    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'medium' }]
+    const result = xpByDay(todos, 3, NOW, archived)
+    expect(result.at(-1)?.xp).toBe(30)
   })
 })

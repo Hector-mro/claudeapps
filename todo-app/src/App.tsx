@@ -8,14 +8,19 @@ import { useGamification } from './hooks/useGamification'
 import { useTodos } from './hooks/useTodos'
 
 function App() {
-  const { todos, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo } = useTodos()
-  const gamification = useGamification(todos)
+  const { todos, archivedCompletions, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo } = useTodos()
+  const gamification = useGamification(todos, archivedCompletions)
   const [view, setView] = useState<'tasks' | 'stats'>('tasks')
 
   if (view === 'stats') {
     return (
       <main className="app">
-        <StatsPage todos={todos} gamification={gamification} onBack={() => setView('tasks')} />
+        <StatsPage
+          todos={todos}
+          archivedCompletions={archivedCompletions}
+          gamification={gamification}
+          onBack={() => setView('tasks')}
+        />
       </main>
     )
   }

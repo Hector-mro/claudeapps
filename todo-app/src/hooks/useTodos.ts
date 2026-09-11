@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { loadTodos, saveTodos } from '../storage'
+import { loadArchivedCompletions, loadTodos, saveArchivedCompletions, saveTodos } from '../storage'
 import { canNest } from '../subtasks'
-import type { Difficulty, Todo } from '../types'
+import type { ArchivedCompletion, Difficulty, Todo } from '../types'
 
 interface AddTodoInput {
   text: string
@@ -23,10 +23,17 @@ function syncParentDone(todos: Todo[], parentId: string, nowMs: number): Todo[] 
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>(() => loadTodos())
+  const [archivedCompletions, setArchivedCompletions] = useState<ArchivedCompletion[]>(() =>
+    loadArchivedCompletions(),
+  )
 
   useEffect(() => {
     saveTodos(todos)
   }, [todos])
+
+  useEffect(() => {
+    saveArchivedCompletions(archivedCompletions)
+  }, [archivedCompletions])
 
   function addTodo({ text, difficulty, dueAt }: AddTodoInput) {
     const trimmed = text.trim()
@@ -79,6 +86,14 @@ export function useTodos() {
   }
 
   function deleteTodo(id: string) {
+    const toArchive = todos
+      .filter((t) => (t.id === id || t.parentId === id) && t.done && t.completedAt !== undefined)
+      .map((t) => ({ completedAt: t.completedAt as number, difficulty: t.difficulty }))
+
+    if (toArchive.length > 0) {
+      setArchivedCompletions((prev) => [...prev, ...toArchive])
+    }
+
     setTodos((prev) => prev.filter((todo) => todo.id !== id && todo.parentId !== id))
   }
 
@@ -90,5 +105,5 @@ export function useTodos() {
     })
   }
 
-  return { todos, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo }
+  return { todos, archivedCompletions, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo }
 }

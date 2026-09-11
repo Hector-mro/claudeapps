@@ -1,5 +1,5 @@
 import { addDays, toLocalDateKey } from './dateUtils'
-import type { Difficulty, GamificationSnapshot, Todo } from './types'
+import type { ArchivedCompletion, Difficulty, GamificationSnapshot, Todo } from './types'
 
 export const XP_BY_DIFFICULTY: Record<Difficulty, number> = {
   easy: 10,
@@ -31,12 +31,14 @@ export function levelForXp(xp: number): {
 export function computeStreak(
   todos: Todo[],
   nowMs: number = Date.now(),
+  archived: ArchivedCompletion[] = [],
 ): { streak: number; lastCompletionDate: string | null } {
-  const dateKeys = new Set(
-    todos
+  const dateKeys = new Set([
+    ...todos
       .filter((t) => t.done && t.completedAt !== undefined)
       .map((t) => toLocalDateKey(t.completedAt as number)),
-  )
+    ...archived.map((a) => toLocalDateKey(a.completedAt)),
+  ])
 
   if (dateKeys.size === 0) return { streak: 0, lastCompletionDate: null }
 
@@ -71,7 +73,12 @@ export interface DailyXp {
 }
 
 /** XP earned per local-calendar-day over the trailing `days` window (oldest first, today last). */
-export function xpByDay(todos: Todo[], days: number, nowMs: number = Date.now()): DailyXp[] {
+export function xpByDay(
+  todos: Todo[],
+  days: number,
+  nowMs: number = Date.now(),
+  archived: ArchivedCompletion[] = [],
+): DailyXp[] {
   const buckets = new Map<string, number>()
   const order: { key: string; label: string }[] = []
 
@@ -90,16 +97,27 @@ export function xpByDay(todos: Todo[], days: number, nowMs: number = Date.now())
     }
   }
 
+  for (const completion of archived) {
+    const key = toLocalDateKey(completion.completedAt)
+    if (buckets.has(key)) {
+      buckets.set(key, (buckets.get(key) ?? 0) + XP_BY_DIFFICULTY[completion.difficulty])
+    }
+  }
+
   return order.map(({ key, label }) => ({ dateKey: key, label, xp: buckets.get(key) ?? 0 }))
 }
 
-export function deriveGamification(todos: Todo[], nowMs: number = Date.now()): GamificationSnapshot {
-  const xp = todos
-    .filter((t) => t.done)
-    .reduce((sum, t) => sum + XP_BY_DIFFICULTY[t.difficulty], 0)
+export function deriveGamification(
+  todos: Todo[],
+  nowMs: number = Date.now(),
+  archived: ArchivedCompletion[] = [],
+): GamificationSnapshot {
+  const liveXp = todos.filter((t) => t.done).reduce((sum, t) => sum + XP_BY_DIFFICULTY[t.difficulty], 0)
+  const archivedXp = archived.reduce((sum, a) => sum + XP_BY_DIFFICULTY[a.difficulty], 0)
+  const xp = liveXp + archivedXp
 
   const { level, xpIntoLevel, xpForNextLevel, progress } = levelForXp(xp)
-  const { streak, lastCompletionDate } = computeStreak(todos, nowMs)
+  const { streak, lastCompletionDate } = computeStreak(todos, nowMs, archived)
 
   return { xp, level, xpIntoLevel, xpForNextLevel, progress, streak, lastCompletionDate }
 }

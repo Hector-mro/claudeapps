@@ -79,6 +79,63 @@ describe('useTodos subtasks', () => {
     expect(result.current.todos).toHaveLength(0)
   })
 
+  it('banks XP for a done task when it is deleted', () => {
+    const { result } = renderHook(() => useTodos())
+
+    act(() => result.current.addTodo({ text: 'Task', difficulty: 'hard' }))
+    const [task] = result.current.todos
+    act(() => result.current.toggleTodo(task.id))
+
+    act(() => result.current.deleteTodo(task.id))
+
+    expect(result.current.todos).toHaveLength(0)
+    expect(result.current.archivedCompletions).toEqual([
+      { completedAt: expect.any(Number), difficulty: 'hard' },
+    ])
+  })
+
+  it('banks nothing when a not-done task is deleted', () => {
+    const { result } = renderHook(() => useTodos())
+
+    act(() => result.current.addTodo({ text: 'Task', difficulty: 'easy' }))
+    const [task] = result.current.todos
+
+    act(() => result.current.deleteTodo(task.id))
+
+    expect(result.current.archivedCompletions).toEqual([])
+  })
+
+  it('banks the parent and each done subtask when a parent deletion cascades', () => {
+    const { result } = renderHook(() => useTodos())
+
+    act(() => result.current.addTodo({ text: 'Parent', difficulty: 'easy' }))
+    act(() => result.current.addTodo({ text: 'Child', difficulty: 'medium' }))
+    const [parent, child] = result.current.todos
+    act(() => result.current.nestTodo(child.id, parent.id))
+    act(() => result.current.toggleTodo(child.id))
+
+    act(() => result.current.deleteTodo(parent.id))
+
+    expect(result.current.archivedCompletions).toHaveLength(2)
+    expect(result.current.archivedCompletions.map((a) => a.difficulty).sort()).toEqual(['easy', 'medium'])
+  })
+
+  it('banks XP for a done subtask deleted directly', () => {
+    const { result } = renderHook(() => useTodos())
+
+    act(() => result.current.addTodo({ text: 'Parent', difficulty: 'easy' }))
+    act(() => result.current.addTodo({ text: 'Child', difficulty: 'medium' }))
+    const [parent, child] = result.current.todos
+    act(() => result.current.nestTodo(child.id, parent.id))
+    act(() => result.current.toggleTodo(child.id))
+
+    act(() => result.current.deleteTodo(child.id))
+
+    expect(result.current.archivedCompletions).toEqual([
+      { completedAt: expect.any(Number), difficulty: 'medium' },
+    ])
+  })
+
   it('refuses to nest beyond two levels or onto/around invalid targets', () => {
     const { result } = renderHook(() => useTodos())
 
