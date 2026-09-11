@@ -59,6 +59,34 @@
   color: var(--color-text-muted);
 }
 
+/* Sync status (under the zone picker) */
+
+.sync-status {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0 var(--space-2);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.sync-status.sync-bad-key {
+  color: var(--color-urgent);
+}
+
+.sync-connect-link {
+  min-height: var(--tap-min);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-accent);
+  font-size: inherit;
+  text-decoration: underline;
+}
+
 /* Progress header */
 
 .progress-header {

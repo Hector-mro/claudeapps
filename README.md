@@ -1,8 +1,8 @@
 # Applications
 
 Un dépôt, plusieurs petites applications web autonomes, chacune installable
-sur l'écran d'accueil et fonctionnant ensuite hors ligne, toutes ses données
-restant sur l'appareil. La plupart n'ont **ni serveur, ni dépendance, ni
+sur l'écran d'accueil et fonctionnant ensuite hors ligne, ses données
+restant sur l'appareil (seule `todo-app/` sait les partager entre appareils). La plupart n'ont **ni serveur, ni dépendance, ni
 build** : du HTML, du CSS et du JavaScript, servis tels quels par GitHub
 Pages (voir les règles plus bas). `todo-app/` est l'exception « buildée » qui
 reste servie sur ce même site — voir plus bas.
@@ -38,11 +38,15 @@ Pour activer la publication : **Settings → Pages → Source : GitHub Actions**
   code source n'est pas servi tel quel : le workflow ci-dessus le build et
   publie sa sortie (`dist/`) à `todo-app/`. Elle garde son propre
   `manifest.webmanifest` et `sw.js` (générés dans `public/`, copiés par Vite),
-  donc elle s'installe et fonctionne hors ligne comme les autres.
-- **`maison/`** ne suit pas les règles ci-dessous. C'est la seule application
-  du dépôt qui a une base de données : elle se déploie sur **Cloudflare
-  Workers + D1**, pas sur GitHub Pages, et n'est donc pas servie depuis ce
-  site. Son installation est décrite dans [`maison/README.md`](maison/README.md).
+  donc elle s'installe et fonctionne hors ligne comme les autres. Ses
+  données, elles, peuvent être partagées entre appareils : une petite API sur
+  **Cloudflare Workers + D1** (`todo-app/worker/`, déployée à part) les
+  synchronise dès qu'un appareil a le code d'accès — voir
+  [`todo-app/README.md`](todo-app/README.md).
+- **`maison/`** ne suit pas les règles ci-dessous. Elle a sa propre base de
+  données : elle se déploie entièrement sur **Cloudflare Workers + D1**, pas
+  sur GitHub Pages, et n'est donc pas servie depuis ce site. Son installation
+  est décrite dans [`maison/README.md`](maison/README.md).
 
 ## 🧱 Règles du dossier
 

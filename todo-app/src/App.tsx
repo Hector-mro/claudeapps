@@ -3,14 +3,18 @@ import './App.css'
 import { AddTaskForm } from './components/AddTaskForm'
 import { ProgressHeader } from './components/ProgressHeader'
 import { StatsPage } from './components/StatsPage'
+import { SyncStatus } from './components/SyncStatus'
 import { TaskList } from './components/TaskList'
 import { ZonePicker } from './components/ZonePicker'
 import { useGamification } from './hooks/useGamification'
+import { useSync } from './hooks/useSync'
 import { useTodos } from './hooks/useTodos'
 import { ZONE_LABELS, type Zone } from './types'
 
 function App() {
-  const { todos, archivedCompletions, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo } = useTodos()
+  const { todos, archivedCompletions, addTodo, toggleTodo, updateTodo, deleteTodo, nestTodo, replaceAll } =
+    useTodos()
+  const sync = useSync({ todos, archivedCompletions, replaceAll })
   const [zone, setZone] = useState<Zone | null>(null)
   const [view, setView] = useState<'tasks' | 'stats'>('tasks')
 
@@ -31,6 +35,7 @@ function App() {
     return (
       <main className="app">
         <ZonePicker todos={todos} onSelect={openZone} />
+        <SyncStatus status={sync.status} onConnect={sync.connect} />
       </main>
     )
   }

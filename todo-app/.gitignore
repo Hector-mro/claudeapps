@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Sync worker: local secrets and local D1 state
+.dev.vars
+.wrangler
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

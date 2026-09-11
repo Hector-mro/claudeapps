@@ -30,9 +30,23 @@ export interface Todo {
 }
 
 export interface ArchivedCompletion {
+  id: string
   completedAt: number
   difficulty: Difficulty
   zone: Zone
+}
+
+/** Everything that is synced — a device's state, or the server's. */
+export interface SyncSnapshot {
+  todos: Todo[]
+  archived: ArchivedCompletion[]
+}
+
+/** What a device changed since the server's last confirmed state; the body of `POST /api/sync`. */
+export interface SyncChanges {
+  upserts: Todo[]
+  deletes: string[]
+  archived: ArchivedCompletion[]
 }
 
 export interface GamificationSnapshot {
