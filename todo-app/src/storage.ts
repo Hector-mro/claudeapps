@@ -1,9 +1,19 @@
-import type { ArchivedCompletion, Todo } from './types'
+import { ZONES, type ArchivedCompletion, type Todo, type Zone } from './types'
 
 const STORAGE_KEY = 'todo-app:v1'
 const ARCHIVED_STORAGE_KEY = 'todo-app:archived:v1'
 
-function isTodo(value: unknown): value is Todo {
+/** Zone given to entries saved before zones existed (they carry no `zone` field). */
+export const LEGACY_ZONE: Zone = 'hector'
+
+type Stored<T extends { zone: Zone }> = Omit<T, 'zone'> & { zone?: unknown }
+
+function withZone<T extends { zone: Zone }>(item: Stored<T>): T {
+  const zone = ZONES.includes(item.zone as Zone) ? (item.zone as Zone) : LEGACY_ZONE
+  return { ...item, zone } as T
+}
+
+function isTodo(value: unknown): value is Stored<Todo> {
   if (typeof value !== 'object' || value === null) return false
   const t = value as Record<string, unknown>
   return (
@@ -15,7 +25,7 @@ function isTodo(value: unknown): value is Todo {
   )
 }
 
-function isArchivedCompletion(value: unknown): value is ArchivedCompletion {
+function isArchivedCompletion(value: unknown): value is Stored<ArchivedCompletion> {
   if (typeof value !== 'object' || value === null) return false
   const a = value as Record<string, unknown>
   return (
@@ -30,7 +40,7 @@ export function loadTodos(): Todo[] {
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
-    return parsed.filter(isTodo)
+    return parsed.filter(isTodo).map((t) => withZone<Todo>(t))
   } catch {
     return []
   }
@@ -50,7 +60,7 @@ export function loadArchivedCompletions(): ArchivedCompletion[] {
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
-    return parsed.filter(isArchivedCompletion)
+    return parsed.filter(isArchivedCompletion).map((a) => withZone<ArchivedCompletion>(a))
   } catch {
     return []
   }

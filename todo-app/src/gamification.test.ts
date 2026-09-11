@@ -12,6 +12,7 @@ function makeTodo(overrides: Partial<Todo> = {}): Todo {
     createdAt: NOW,
     difficulty: 'medium',
     done: false,
+    zone: 'hector',
     ...overrides,
   }
 }
@@ -46,7 +47,7 @@ describe('deriveGamification', () => {
   })
 
   it('folds archived completions into XP and streak', () => {
-    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'hard' }]
+    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'hard', zone: 'hector' }]
     const result = deriveGamification([], NOW, archived)
     expect(result.xp).toBe(35)
     expect(result.streak).toBe(1)
@@ -91,13 +92,13 @@ describe('computeStreak', () => {
   })
 
   it('counts an archived-only completion toward the streak', () => {
-    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'easy' }]
+    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'easy', zone: 'hector' }]
     expect(computeStreak([], NOW, archived).streak).toBe(1)
   })
 
   it('combines a live completion with an archived one from the day before', () => {
     const todos = [makeTodo({ done: true, completedAt: NOW })]
-    const archived: ArchivedCompletion[] = [{ completedAt: addDays(NOW, -1), difficulty: 'easy' }]
+    const archived: ArchivedCompletion[] = [{ completedAt: addDays(NOW, -1), difficulty: 'easy', zone: 'hector' }]
     expect(computeStreak(todos, NOW, archived).streak).toBe(2)
   })
 })
@@ -125,7 +126,7 @@ describe('xpByDay', () => {
 
   it('folds an archived completion into its day, alongside a live todo on the same day', () => {
     const todos = [makeTodo({ difficulty: 'easy', done: true, completedAt: NOW })]
-    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'medium' }]
+    const archived: ArchivedCompletion[] = [{ completedAt: NOW, difficulty: 'medium', zone: 'hector' }]
     const result = xpByDay(todos, 3, NOW, archived)
     expect(result.at(-1)?.xp).toBe(30)
   })

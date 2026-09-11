@@ -6,6 +6,17 @@ export const DIFFICULTY_OPTIONS: { value: Difficulty; label: string }[] = [
   { value: 'hard', label: 'Difficile' },
 ]
 
+export type Zone = 'hector' | 'nina' | 'commun'
+
+/** Zones in menu order. */
+export const ZONES: Zone[] = ['hector', 'nina', 'commun']
+
+export const ZONE_LABELS: Record<Zone, string> = {
+  hector: 'Hector',
+  nina: 'Nina',
+  commun: 'Commun',
+}
+
 export interface Todo {
   id: string
   text: string
@@ -15,11 +26,13 @@ export interface Todo {
   done: boolean
   completedAt?: number
   parentId?: string
+  zone: Zone
 }
 
 export interface ArchivedCompletion {
   completedAt: number
   difficulty: Difficulty
+  zone: Zone
 }
 
 export interface GamificationSnapshot {

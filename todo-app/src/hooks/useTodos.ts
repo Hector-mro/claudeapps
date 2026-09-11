@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { loadArchivedCompletions, loadTodos, saveArchivedCompletions, saveTodos } from '../storage'
 import { canNest } from '../subtasks'
-import type { ArchivedCompletion, Difficulty, Todo } from '../types'
+import type { ArchivedCompletion, Difficulty, Todo, Zone } from '../types'
 
 interface AddTodoInput {
   text: string
   difficulty: Difficulty
   dueAt?: number
+  zone: Zone
 }
 
 /** Sets `parentId`'s done state to whether all of its subtasks are done. No-op if it has none. */
@@ -35,7 +36,7 @@ export function useTodos() {
     saveArchivedCompletions(archivedCompletions)
   }, [archivedCompletions])
 
-  function addTodo({ text, difficulty, dueAt }: AddTodoInput) {
+  function addTodo({ text, difficulty, dueAt, zone }: AddTodoInput) {
     const trimmed = text.trim()
     if (!trimmed) return
     setTodos((prev) => [
@@ -47,6 +48,7 @@ export function useTodos() {
         dueAt,
         difficulty,
         done: false,
+        zone,
       },
     ])
   }
@@ -88,7 +90,7 @@ export function useTodos() {
   function deleteTodo(id: string) {
     const toArchive = todos
       .filter((t) => (t.id === id || t.parentId === id) && t.done && t.completedAt !== undefined)
-      .map((t) => ({ completedAt: t.completedAt as number, difficulty: t.difficulty }))
+      .map((t) => ({ completedAt: t.completedAt as number, difficulty: t.difficulty, zone: t.zone }))
 
     if (toArchive.length > 0) {
       setArchivedCompletions((prev) => [...prev, ...toArchive])
