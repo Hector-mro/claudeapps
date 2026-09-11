@@ -9,6 +9,7 @@ function makeTodo(overrides: Partial<Todo>): Todo {
     createdAt: 0,
     difficulty: 'medium',
     done: false,
+    zone: 'hector',
     ...overrides,
   }
 }
@@ -69,6 +70,12 @@ describe('canNest', () => {
   it('rejects nesting onto a completed task', () => {
     const a = makeTodo({ id: 'a' })
     const b = makeTodo({ id: 'b', done: true })
+    expect(canNest([a, b], 'a', 'b')).toBe(false)
+  })
+
+  it('rejects nesting across zones', () => {
+    const a = makeTodo({ id: 'a', zone: 'hector' })
+    const b = makeTodo({ id: 'b', zone: 'nina' })
     expect(canNest([a, b], 'a', 'b')).toBe(false)
   })
 })

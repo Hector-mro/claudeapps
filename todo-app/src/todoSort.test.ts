@@ -13,6 +13,7 @@ function makeTodo(overrides: Partial<Todo>): Todo {
     createdAt: NOW,
     difficulty: 'medium',
     done: false,
+    zone: 'hector',
     ...overrides,
   }
 }

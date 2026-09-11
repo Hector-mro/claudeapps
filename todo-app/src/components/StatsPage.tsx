@@ -5,12 +5,13 @@ interface StatsPageProps {
   todos: Todo[]
   archivedCompletions: ArchivedCompletion[]
   gamification: GamificationSnapshot
+  backLabel: string
   onBack: () => void
 }
 
 const CHART_DAYS = 14
 
-export function StatsPage({ todos, archivedCompletions, gamification, onBack }: StatsPageProps) {
+export function StatsPage({ todos, archivedCompletions, gamification, backLabel, onBack }: StatsPageProps) {
   const daily = xpByDay(todos, CHART_DAYS, Date.now(), archivedCompletions)
   const maxXp = Math.max(1, ...daily.map((d) => d.xp))
   const totalDone = todos.filter((t) => t.done).length
@@ -20,7 +21,7 @@ export function StatsPage({ todos, archivedCompletions, gamification, onBack }: 
     <div className="stats-page">
       <div className="stats-header">
         <button type="button" className="back-button" onClick={onBack}>
-          ← Tâches
+          ← {backLabel}
         </button>
         <h1>Progression</h1>
       </div>
@@ -67,6 +68,7 @@ export function StatsPage({ todos, archivedCompletions, gamification, onBack }: 
       <section className="stats-rules">
         <h2>Comment ça marche</h2>
         <ul className="rules-list">
+          <li>Chaque zone a son propre niveau, sa propre série et ses propres statistiques.</li>
           <li>
             Chaque tâche terminée rapporte de l'XP selon sa difficulté : facile {XP_BY_DIFFICULTY.easy} XP, moyenne{' '}
             {XP_BY_DIFFICULTY.medium} XP, difficile {XP_BY_DIFFICULTY.hard} XP.

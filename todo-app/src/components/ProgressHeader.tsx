@@ -1,6 +1,8 @@
 import type { GamificationSnapshot } from '../types'
 
 interface ProgressHeaderProps extends GamificationSnapshot {
+  zoneLabel: string
+  onChangeZone: () => void
   onOpenStats: () => void
 }
 
@@ -10,6 +12,8 @@ export function ProgressHeader({
   xpForNextLevel,
   progress,
   streak,
+  zoneLabel,
+  onChangeZone,
   onOpenStats,
 }: ProgressHeaderProps) {
   const percent = Math.round(progress * 100)
@@ -17,7 +21,14 @@ export function ProgressHeader({
   return (
     <header className="progress-header">
       <div className="title-row">
-        <h1>Tâches</h1>
+        <h1>
+          <button type="button" className="zone-switch" onClick={onChangeZone} title="Changer de zone">
+            {zoneLabel}
+            <span className="zone-switch-icon" aria-hidden="true">
+              ▾
+            </span>
+          </button>
+        </h1>
         <div className="title-row-right">
           {streak > 0 && (
             <span className="streak-badge">
