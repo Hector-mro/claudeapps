@@ -32,6 +32,11 @@ export interface Todo {
   completedAt?: number
   parentId?: string
   zone: Zone
+  /**
+   * Who added it, from the phone's « C'est qui ? » (see Notifications): the other person
+   * is notified. Missing on tasks added before this existed or on a phone that doesn't know.
+   */
+  createdBy?: Person
 }
 
 export interface ArchivedCompletion {

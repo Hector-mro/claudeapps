@@ -1,9 +1,10 @@
 // Push notifications: due-date reminders and the morning summary, run by the
-// cron trigger (`scheduled` in index.ts, every 5 minutes), plus the phones'
-// subscriptions. What to send is decided by `planNotifications`, a pure
-// function; `runNotifications` reads D1, sends that plan and records it.
+// cron trigger (`scheduled` in index.ts, every 5 minutes); "X added a task",
+// sent right after the sync that brought it (index.ts); and the phones'
+// subscriptions. What to send is decided by pure functions (`planNotifications`,
+// `planAdded`); the rest reads D1, sends that plan and records it.
 import { countBadge, localDateKey, zonesFor } from '../src/notify'
-import { ZONE_LABELS, type Person, type PushSubscribeBody, type Todo, type Zone } from '../src/types'
+import { PERSONS, ZONE_LABELS, type Person, type PushSubscribeBody, type Todo, type Zone } from '../src/types'
 import { isPerson, isTodo } from '../src/validation'
 import { sendPush, type PushTarget, type VapidKeys } from './webpush'
 
@@ -33,14 +34,24 @@ export interface Subscriber extends PushTarget {
 
 type DueTodo = Todo & { dueAt: number }
 
+/** A task whose author is known (see `Todo.createdBy`). */
+export type AuthoredTodo = Todo & { createdBy: Person }
+
 /** An open task with a due date, and the due date a reminder was already sent for. */
 export interface DueTask {
   todo: DueTodo
   remindedDueAt: number | null
 }
 
+export interface Message {
+  subscriber: Subscriber
+  payload: NotificationPayload
+  /** How long the push service may hold it for a phone that's offline. */
+  ttlSeconds: number
+}
+
 export interface Plan {
-  messages: { subscriber: Subscriber; payload: NotificationPayload; ttlSeconds: number }[]
+  messages: Message[]
   /** Reminders now handled, with the due date they were for — including ones no phone wanted. */
   reminded: { id: string; dueAt: number }[]
   /** Phones whose morning summary is handled for that local day: sent, or nothing was due. */
@@ -53,8 +64,12 @@ export const REMINDER_LEAD_MS = 60 * 60_000
 const SUMMARY_FROM_HOUR = 8
 const SUMMARY_UNTIL_HOUR = 11
 const SUMMARY_TTL_SECONDS = 3 * 3600
+/** Only tasks created this recently count as just added: a device's first sync uploads its whole history. */
+export const ADDED_MAX_AGE_MS = 24 * 3600_000
+const ADDED_TTL_SECONDS = 24 * 3600
 /** A notification is a glance, and a push payload is capped at 4 KB. */
 const MAX_TITLE = 80
+const SELECT_SUBSCRIPTIONS = 'SELECT endpoint, p256dh, auth, person, time_zone, last_summary_date FROM push_subscriptions'
 
 export function planNotifications(subscribers: Subscriber[], open: DueTask[], nowMs: number): Plan {
   const todos = open.map((task) => task.todo)
@@ -98,6 +113,57 @@ function dueLaterToday(todos: DueTodo[], zones: Zone[], nowMs: number, timeZone:
     .sort((a, b) => a.dueAt - b.dueAt)
 }
 
+/**
+ * The tasks of a sync that may deserve an "added" notification: open, recent, and with a
+ * known author. Tasks added before `createdBy` existed, or on a phone that never said
+ * whose it is, have none. Whether the server already knew them is `findAdded`'s job.
+ */
+export function addedCandidates(upserts: Todo[], nowMs: number): AuthoredTodo[] {
+  return upserts.filter(
+    (t): t is AuthoredTodo => t.createdBy !== undefined && !t.done && t.createdAt >= nowMs - ADDED_MAX_AGE_MS,
+  )
+}
+
+/**
+ * One notification per phone for the tasks the *other* person just added to its zones —
+ * its own zone or Commun. Nobody hears about their own additions.
+ */
+export function planAdded(subscribers: Subscriber[], added: AuthoredTodo[], todos: Todo[], nowMs: number): Message[] {
+  const messages: Message[] = []
+  for (const subscriber of subscribers) {
+    const zones = zonesFor(subscriber.person)
+    const forThem = added.filter((t) => t.createdBy !== subscriber.person && zones.includes(t.zone))
+    if (forThem.length === 0) continue
+    const badge = countBadge(todos, zones, nowMs, subscriber.timeZone)
+    messages.push({
+      subscriber,
+      payload: addedPayload(forThem, subscriber.timeZone, badge),
+      ttlSeconds: ADDED_TTL_SECONDS,
+    })
+  }
+  return messages
+}
+
+/** « Nina t'a ajouté une tâche », « Nina a ajouté une tâche à Commun », or a count for several. */
+export function addedPayload(tasks: AuthoredTodo[], timeZone: string, badge: number): NotificationPayload {
+  // With two people, everything a phone hears about was added by the same one: the other.
+  const author = ZONE_LABELS[tasks[0].createdBy]
+  const shared = tasks.filter((t) => t.zone === 'commun').length
+  const tag = `added-${tasks[0].id}`
+  if (tasks.length === 1) {
+    const [task] = tasks
+    const title = shared ? `${author} a ajouté une tâche à Commun` : `${author} t'a ajouté une tâche`
+    const due = task.dueAt === undefined ? '' : ` · ${formatDay(task.dueAt, timeZone)}`
+    return { title, body: `${shorten(task.text)}${due}`, tag, badge }
+  }
+  const count = tasks.length
+  let title: string
+  if (shared === 0) title = `${author} t'a ajouté ${count} tâches`
+  else if (shared === count) title = `${author} a ajouté ${count} tâches à Commun`
+  else title = `${author} a ajouté ${count} tâches`
+  return { title, body: `${listNames(tasks)}.`, tag, badge }
+}
+
 export function reminderPayload(todo: DueTodo, timeZone: string, badge: number): NotificationPayload {
   return {
     title: shorten(todo.text),
@@ -109,26 +175,46 @@ export function reminderPayload(todo: DueTodo, timeZone: string, badge: number):
 
 export function summaryPayload(person: Person, tasks: Todo[], badge: number): NotificationPayload | null {
   if (tasks.length === 0) return null
-  const [first, second] = tasks.map((t) => shorten(t.text))
-  const others = tasks.length - 2
-  let body: string
-  if (tasks.length === 1) body = `Une seule chose au programme aujourd'hui : ${first}.`
-  else if (tasks.length === 2) body = `Au programme aujourd'hui : ${first} et ${second}.`
-  else body = `Au programme aujourd'hui : ${first}, ${second} et ${others} autre${others > 1 ? 's' : ''}.`
+  const body =
+    tasks.length === 1
+      ? `Une seule chose au programme aujourd'hui : ${listNames(tasks)}.`
+      : `Au programme aujourd'hui : ${listNames(tasks)}.`
   return { title: `Bonjour ${ZONE_LABELS[person]} ☀️`, body, tag: 'summary', badge }
 }
 
 export function welcomePayload(person: Person): NotificationPayload {
   const [own, shared] = zonesFor(person).map((zone) => ZONE_LABELS[zone])
+  const other = ZONE_LABELS[PERSONS.find((p) => p !== person) ?? person]
   return {
     title: 'Notifications activées ✓',
-    body: `Un rappel 1 h avant chaque échéance (${own} et ${shared}), et le programme du jour chaque matin.`,
+    body: `Un rappel 1 h avant chaque échéance, le programme du jour chaque matin, et les tâches que ${other} ajoute — zones ${own} et ${shared}.`,
     tag: 'welcome',
   }
 }
 
+/** « A », « A et B », or « A, B et 3 autres ». */
+function listNames(tasks: Todo[]): string {
+  const [first, second] = tasks.map((t) => shorten(t.text))
+  if (tasks.length === 1) return first
+  if (tasks.length === 2) return `${first} et ${second}`
+  const others = tasks.length - 2
+  return `${first}, ${second} et ${others} autre${others > 1 ? 's' : ''}`
+}
+
 function formatTime(ms: number, timeZone: string): string {
   return new Intl.DateTimeFormat('fr-FR', { timeZone, hour: '2-digit', minute: '2-digit' }).format(ms)
+}
+
+/** A due date with its day, e.g. « ven. 12 sept., 14:30 ». */
+function formatDay(ms: number, timeZone: string): string {
+  return new Intl.DateTimeFormat('fr-FR', {
+    timeZone,
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(ms)
 }
 
 function shorten(text: string): string {
@@ -166,6 +252,18 @@ function toDueTask(row: TaskRow): DueTask[] {
   return [{ todo: { ...todo, dueAt: todo.dueAt }, remindedDueAt: row.reminded_due_at }]
 }
 
+/** Sends every message; resolves to the subscriptions the push service says are gone (404/410). */
+async function sendAll(messages: Message[], vapid: VapidKeys): Promise<string[]> {
+  const results = await Promise.all(messages.map((m) => sendPush(m.subscriber, m.payload, vapid, m.ttlSeconds)))
+  return [...new Set(messages.filter((_, i) => results[i] === 'gone').map((m) => m.subscriber.endpoint))]
+}
+
+function deleteGone(db: D1Database, endpoints: string[]): D1PreparedStatement {
+  return db
+    .prepare('DELETE FROM push_subscriptions WHERE endpoint IN (SELECT value FROM json_each(?1))')
+    .bind(JSON.stringify(endpoints))
+}
+
 /** One cron tick. Everything it handled is recorded in one batch, so the next tick doesn't repeat it. */
 export async function runNotifications(env: NotifyEnv, nowMs: number): Promise<void> {
   const vapid = vapidKeys(env)
@@ -175,7 +273,7 @@ export async function runNotifications(env: NotifyEnv, nowMs: number): Promise<v
   }
 
   const [subscriptions, tasks] = await env.DB.batch([
-    env.DB.prepare('SELECT endpoint, p256dh, auth, person, time_zone, last_summary_date FROM push_subscriptions'),
+    env.DB.prepare(SELECT_SUBSCRIPTIONS),
     // Every open task with a due date — a household's worth — feeds reminders, summaries and badges.
     env.DB.prepare('SELECT data, reminded_due_at FROM todos WHERE deleted = 0 AND done = 0 AND due_at IS NOT NULL'),
   ])
@@ -184,9 +282,7 @@ export async function runNotifications(env: NotifyEnv, nowMs: number): Promise<v
     (tasks.results as TaskRow[]).flatMap(toDueTask),
     nowMs,
   )
-
-  const results = await Promise.all(plan.messages.map((m) => sendPush(m.subscriber, m.payload, vapid, m.ttlSeconds)))
-  const gone = [...new Set(plan.messages.filter((_, i) => results[i] === 'gone').map((m) => m.subscriber.endpoint))]
+  const gone = await sendAll(plan.messages, vapid)
 
   // Recorded even when a push failed: better one missed reminder than one repeated every 5 minutes.
   const writes: D1PreparedStatement[] = []
@@ -209,14 +305,29 @@ export async function runNotifications(env: NotifyEnv, nowMs: number): Promise<v
       ).bind(JSON.stringify(plan.summarized)),
     )
   }
-  if (gone.length > 0) {
-    writes.push(
-      env.DB.prepare('DELETE FROM push_subscriptions WHERE endpoint IN (SELECT value FROM json_each(?1))').bind(
-        JSON.stringify(gone),
-      ),
-    )
-  }
+  if (gone.length > 0) writes.push(deleteGone(env.DB, gone))
   if (writes.length > 0) await env.DB.batch(writes)
+}
+
+/** Of `candidates`, the tasks the server didn't know yet. Call it before applying the sync. */
+export async function findAdded(db: D1Database, candidates: AuthoredTodo[]): Promise<AuthoredTodo[]> {
+  if (candidates.length === 0) return []
+  // Tombstones count as known: a deleted task sent again by a stale phone isn't news.
+  const { results } = await db
+    .prepare('SELECT id FROM todos WHERE id IN (SELECT value FROM json_each(?1))')
+    .bind(JSON.stringify(candidates.map((t) => t.id)))
+    .all<{ id: string }>()
+  const known = new Set(results.map((row) => row.id))
+  return candidates.filter((t) => !known.has(t.id))
+}
+
+/** The "X added a task" notifications for one sync; runs after the sync has answered (`ctx.waitUntil`). */
+export async function notifyAdded(env: NotifyEnv, added: AuthoredTodo[], todos: Todo[], nowMs: number): Promise<void> {
+  const vapid = vapidKeys(env)
+  if (!vapid || added.length === 0) return
+  const { results } = await env.DB.prepare(SELECT_SUBSCRIPTIONS).all<SubscriptionRow>()
+  const gone = await sendAll(planAdded(results.flatMap(toSubscriber), added, todos, nowMs), vapid)
+  if (gone.length > 0) await deleteGone(env.DB, gone).run()
 }
 
 /** Insert or refresh a phone's subscription; its summary bookkeeping survives a refresh. */

@@ -1,10 +1,20 @@
 // Sync API for todo-app. The app itself stays on GitHub Pages and calls this
 // Worker cross-origin; the data lives in D1 (`migrations/`). One shared access
 // code (the `ACCESS_KEY` secret), no accounts. Sync model: `src/sync/diff.ts`.
-// Also sends the push notifications (`notifications.ts`), from a cron trigger.
+// Also sends the push notifications (`notifications.ts`): from a cron trigger,
+// and right after a sync that brings tasks added for the other person.
 import type { SyncChanges, SyncSnapshot } from '../src/types'
 import { parseChanges, parsePushSubscribeBody } from '../src/validation'
-import { deleteSubscription, runNotifications, saveSubscription, sendWelcome, type NotifyEnv } from './notifications'
+import {
+  addedCandidates,
+  deleteSubscription,
+  findAdded,
+  notifyAdded,
+  runNotifications,
+  saveSubscription,
+  sendWelcome,
+  type NotifyEnv,
+} from './notifications'
 
 interface Env extends NotifyEnv {
   /** The shared access code — `wrangler secret put ACCESS_KEY`. */
@@ -14,7 +24,7 @@ interface Env extends NotifyEnv {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const cors = corsHeaders(request, env)
     const json = (body: unknown, status = 200) =>
       Response.json(body, { status, headers: { ...cors, 'cache-control': 'no-store' } })
@@ -32,8 +42,14 @@ export default {
     if (pathname === '/api/sync' && request.method === 'POST') {
       const changes = parseChanges(await request.json().catch(() => null))
       if (!changes) return json({ error: 'bad_request' }, 400)
+      const now = Date.now()
+      // Read before applying: "added" means the server didn't know the task yet.
+      const added = await findAdded(env.DB, addedCandidates(changes.upserts, now))
       await applyChanges(env.DB, changes)
-      return json(await readState(env.DB))
+      const state = await readState(env.DB)
+      // After the answer, so the phone that synced doesn't wait for the pushes.
+      if (added.length > 0) ctx.waitUntil(notifyAdded(env, added, state.todos, now))
+      return json(state)
     }
 
     if (pathname === '/api/push/subscribe' && request.method === 'POST') {

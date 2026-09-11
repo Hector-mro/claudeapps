@@ -1,7 +1,17 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest'
 import type { Person, Todo } from '../src/types'
-import { planNotifications, summaryPayload, type DueTask, type Plan, type Subscriber } from './notifications'
+import {
+  addedCandidates,
+  addedPayload,
+  planAdded,
+  planNotifications,
+  summaryPayload,
+  type AuthoredTodo,
+  type DueTask,
+  type Plan,
+  type Subscriber,
+} from './notifications'
 
 const PARIS = 'Europe/Paris'
 
@@ -132,5 +142,71 @@ describe('summaryPayload', () => {
       "Au programme aujourd'hui : Courses, Pharmacie et 1 autre.",
     )
     expect(summaryPayload('nina', [], 0)).toBeNull()
+  })
+})
+
+/** A task Nina just added (unless overridden), created a minute before `now` below. */
+function added(text: string, overrides: Partial<Todo> = {}): AuthoredTodo {
+  const todo = { id: text, text, createdAt: paris(21, 0), difficulty: 'easy', done: false, zone: 'hector' }
+  return { ...todo, createdBy: 'nina', ...overrides } as AuthoredTodo
+}
+
+describe('added tasks', () => {
+  const now = paris(21, 1)
+
+  it('only considers open, recent tasks whose author is known', () => {
+    const candidates = addedCandidates(
+      [
+        added('Nouvelle'),
+        added('Sans auteur', { createdBy: undefined }),
+        added('Déjà faite', { done: true }),
+        added('Historique', { createdAt: now - 25 * 3600_000 }),
+      ],
+      now,
+    )
+    expect(candidates.map((t) => t.id)).toEqual(['Nouvelle'])
+  })
+
+  it('tells the other person about their zone and Commun, never the author', () => {
+    const messages = planAdded(
+      [HECTOR, NINA],
+      [added('Loyer'), added('Pain', { zone: 'commun' }), added('Dentiste', { zone: 'nina' })],
+      [],
+      now,
+    )
+
+    expect(messages.map((m) => [m.subscriber.person, m.payload.title])).toEqual([
+      ['hector', 'Nina a ajouté 2 tâches'],
+    ])
+    expect(messages[0].payload.body).toBe('Loyer et Pain.')
+  })
+
+  it("says whether a single task went to the person's zone or to Commun", () => {
+    const own = addedPayload([added('Loyer', { dueAt: paris(14, 30, 12) })], PARIS, 0)
+    expect(own).toMatchObject({ title: "Nina t'a ajouté une tâche", tag: 'added-Loyer' })
+    // 12 September 2026 is a Saturday; the exact separator before the time depends on ICU.
+    expect(own.body).toMatch(/^Loyer · sam\. 12 sept\..*14:30$/)
+
+    expect(addedPayload([added('Pain', { zone: 'commun' })], PARIS, 3)).toEqual({
+      title: 'Nina a ajouté une tâche à Commun',
+      body: 'Pain',
+      tag: 'added-Pain',
+      badge: 3,
+    })
+  })
+
+  it('groups several tasks into one notification', () => {
+    expect(addedPayload(['Loyer', 'Banque', 'Jardin'].map((t) => added(t)), PARIS, 0)).toMatchObject({
+      title: "Nina t'a ajouté 3 tâches",
+      body: 'Loyer, Banque et 1 autre.',
+    })
+    expect(addedPayload(['Pain', 'Lait'].map((t) => added(t, { zone: 'commun' })), PARIS, 0).title).toBe(
+      'Nina a ajouté 2 tâches à Commun',
+    )
+  })
+
+  it("carries the phone's icon badge", () => {
+    const loyer = added('Loyer', { dueAt: paris(22, 0) })
+    expect(planAdded([HECTOR], [loyer], [loyer], now)[0].payload.badge).toBe(1)
   })
 })

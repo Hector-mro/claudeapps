@@ -130,6 +130,12 @@ Chaque téléphone reçoit ce qui concerne sa zone et Commun :
 - **Le programme du jour, vers 8 h** : les tâches prévues aujourd'hui qui
   restent à venir — jamais les retards. Rien ne part les jours où rien n'est
   prévu.
+- **Les tâches ajoutées par l'autre**, dans sa zone ou dans Commun
+  (« Nina t'a ajouté une tâche », « Nina a ajouté une tâche à Commun »).
+  Aussitôt, sans attendre le passage des 5 minutes ; plusieurs ajouts d'un
+  coup font une seule notification. Seules comptent les tâches ajoutées
+  depuis un téléphone qui sait qui l'utilise : celui où l'on a choisi Hector
+  ou Nina en activant les notifications.
 - **Le chiffre sur l'icône** : les tâches du jour et en retard. Il se met à
   jour à l'ouverture de l'app et à chaque notification : iOS ne permet pas de
   le changer autrement.
