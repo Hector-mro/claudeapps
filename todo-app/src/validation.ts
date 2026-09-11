@@ -1,4 +1,15 @@
-import { ZONES, type ArchivedCompletion, type Difficulty, type SyncChanges, type SyncSnapshot, type Todo, type Zone } from './types'
+import {
+  PERSONS,
+  ZONES,
+  type ArchivedCompletion,
+  type Difficulty,
+  type Person,
+  type PushSubscribeBody,
+  type SyncChanges,
+  type SyncSnapshot,
+  type Todo,
+  type Zone,
+} from './types'
 
 // Type guards shared by the app (localStorage, server responses) and the sync
 // worker (request bodies, see `worker/index.ts`) — so this file must stay DOM-free.
@@ -59,6 +70,32 @@ export function parseSnapshot(value: unknown): SyncSnapshot | null {
   const { todos, archived } = value as Record<string, unknown>
   if (!Array.isArray(todos) || !Array.isArray(archived)) return null
   return { todos: todos.filter(isTodo), archived: archived.filter(isArchivedCompletion) }
+}
+
+export function isPerson(value: unknown): value is Person {
+  return PERSONS.includes(value as Person)
+}
+
+function isTimeZone(value: unknown): value is string {
+  if (typeof value !== 'string' || value === '') return false
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone: value })
+    return true
+  } catch {
+    return false
+  }
+}
+
+/** The body of `POST /api/push/subscribe`, or `null` if anything in it is off. */
+export function parsePushSubscribeBody(value: unknown): PushSubscribeBody | null {
+  if (typeof value !== 'object' || value === null) return null
+  const { endpoint, keys, person, timeZone, welcome } = value as Record<string, unknown>
+  if (typeof endpoint !== 'string' || !endpoint.startsWith('https://')) return null
+  if (typeof keys !== 'object' || keys === null) return null
+  const { p256dh, auth } = keys as Record<string, unknown>
+  if (typeof p256dh !== 'string' || typeof auth !== 'string' || !p256dh || !auth) return null
+  if (!isPerson(person) || !isTimeZone(timeZone)) return null
+  return { endpoint, keys: { p256dh, auth }, person, timeZone, welcome: welcome === true }
 }
 
 /** The body of `POST /api/sync`; rejected as a whole if any entry is invalid. */

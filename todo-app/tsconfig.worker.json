@@ -17,6 +17,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  // The worker shares the app's types and validation — no DOM here, so those two must stay DOM-free.
-  "include": ["worker", "src/types.ts", "src/validation.ts"]
+  // The worker shares these app files — no DOM here, so they must stay DOM-free.
+  "include": ["worker", "src/types.ts", "src/validation.ts", "src/notify.ts", "src/base64url.ts"]
 }

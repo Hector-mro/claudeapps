@@ -1,5 +1,6 @@
-import type { ArchivedCompletion, SyncSnapshot, Todo, Zone } from './types'
+import type { ArchivedCompletion, Person, SyncSnapshot, Todo, Zone } from './types'
 import {
+  isPerson,
   isStoredArchivedCompletion,
   isStoredTodo,
   isZone,
@@ -12,6 +13,7 @@ const STORAGE_KEY = 'todo-app:v1'
 const ARCHIVED_STORAGE_KEY = 'todo-app:archived:v1'
 const SYNC_BASE_STORAGE_KEY = 'todo-app:base:v1'
 const ACCESS_KEY_STORAGE_KEY = 'todo-app:key:v1'
+const PERSON_STORAGE_KEY = 'todo-app:person:v1'
 
 /** Zone given to entries saved before zones existed (they carry no `zone` field). */
 export const LEGACY_ZONE: Zone = 'hector'
@@ -81,4 +83,14 @@ export function loadAccessKey(): string | null {
 
 export function saveAccessKey(key: string): void {
   writeJson(ACCESS_KEY_STORAGE_KEY, key)
+}
+
+/** Whose phone this is, chosen when turning notifications on; `null` until then. */
+export function loadPerson(): Person | null {
+  const person = readJson(PERSON_STORAGE_KEY)
+  return isPerson(person) ? person : null
+}
+
+export function savePerson(person: Person): void {
+  writeJson(PERSON_STORAGE_KEY, person)
 }
