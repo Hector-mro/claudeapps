@@ -1,16 +1,17 @@
 import { XP_BY_DIFFICULTY, cumulativeXpForLevel, xpByDay } from '../gamification'
-import type { GamificationSnapshot, Todo } from '../types'
+import type { ArchivedCompletion, GamificationSnapshot, Todo } from '../types'
 
 interface StatsPageProps {
   todos: Todo[]
+  archivedCompletions: ArchivedCompletion[]
   gamification: GamificationSnapshot
   onBack: () => void
 }
 
 const CHART_DAYS = 14
 
-export function StatsPage({ todos, gamification, onBack }: StatsPageProps) {
-  const daily = xpByDay(todos, CHART_DAYS, Date.now())
+export function StatsPage({ todos, archivedCompletions, gamification, onBack }: StatsPageProps) {
+  const daily = xpByDay(todos, CHART_DAYS, Date.now(), archivedCompletions)
   const maxXp = Math.max(1, ...daily.map((d) => d.xp))
   const totalDone = todos.filter((t) => t.done).length
   const nextLevelXp = cumulativeXpForLevel(gamification.level + 1)
@@ -75,6 +76,10 @@ export function StatsPage({ todos, gamification, onBack }: StatsPageProps) {
             {nextLevelXp} XP.
           </li>
           <li>Décocher une tâche retire l'XP qu'elle avait rapportée : le score reflète toujours les tâches actuellement terminées.</li>
+          <li>
+            Supprimer une tâche terminée conserve l'XP, le jour de série et le graphique qu'elle avait déjà
+            rapportés — seule la tâche disparaît de la liste.
+          </li>
           <li>La série de jours grandit tant qu'une tâche est terminée chaque jour ; elle repart à zéro dès qu'un jour est manqué.</li>
           <li>
             Glisser une tâche sur une autre en fait une sous-tâche. La tâche principale se valide automatiquement une
