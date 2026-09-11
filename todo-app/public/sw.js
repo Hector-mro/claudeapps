@@ -5,8 +5,12 @@
  * à jour à la main (les noms des fichiers buildés par Vite changent à
  * chaque build). Le cache ne sert que de repli hors ligne, rempli au fil
  * des visites.
+ *
+ * Changer CACHE modifie ce fichier : les apps restées ouvertes sur une
+ * ancienne version voient alors un nouveau service worker et se rechargent
+ * (voir src/main.tsx). v2 : l'arrivée de la synchronisation.
  */
-var CACHE = 'taches-v1'
+var CACHE = 'taches-v2'
 
 self.addEventListener('install', function (event) {
   event.waitUntil(self.skipWaiting())
