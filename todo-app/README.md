@@ -92,17 +92,71 @@ Il faut un fichier `.dev.vars` (ignoré par git) :
 ```
 ACCESS_KEY=dev
 ALLOWED_ORIGIN=http://localhost:5173,http://127.0.0.1:5173
+VAPID_PUBLIC_KEY=<clé publique de dev>
+VAPID_PRIVATE_KEY=<clé privée de dev>
 ```
+
+(Une paire de dev, via `node scripts/vapid-keys.mjs` ; sa clé publique est
+aussi `VITE_VAPID_PUBLIC_KEY` dans `.env.development`.)
 
 Puis ouvrir `http://localhost:5173/#cle=dev`. Une fenêtre normale et une
 fenêtre privée font deux téléphones.
 
+Pour les notifications : Chrome sur ordinateur les reçoit aussi depuis
+`localhost`. Lancer l'API avec `npx wrangler dev --test-scheduled`, puis
+`curl http://127.0.0.1:8787/__scheduled` fait un passage du cron sans
+attendre.
+
 Tests, lint, build : `npm test`, `npm run lint`, `npm run build`.
 
-## Plus tard : les notifications
+## Notifications
 
-L'architecture est prête, rien n'est encore construit. La base garde
-l'échéance, l'état et la zone de chaque tâche en vraies colonnes : un
-déclencheur planifié du Worker (cron) peut y chercher les tâches dues et
-envoyer une notification Web Push, reçue par `public/sw.js`. Sur iPhone, les
-notifications web demandent que l'app soit installée sur l'écran d'accueil.
+Sur iPhone, l'app installée sur l'écran d'accueil reçoit de vraies
+notifications : écran verrouillé, bannière, et un chiffre sur l'icône. Il faut
+iOS 16.4 ou plus, et le code d'accès (le serveur ne connaît que les tâches
+synchronisées).
+
+**Les activer** : ouvrir l'app *depuis l'écran d'accueil*, toucher
+« Activer les notifications » sur l'écran des zones, choisir qui on est
+(Hector ou Nina), puis « Autoriser ». Une notification « Notifications
+activées ✓ » arrive aussitôt. Dans Safari, hors de l'app installée, la ligne
+invite à ajouter l'app à l'écran d'accueil.
+
+Chaque téléphone reçoit ce qui concerne sa zone et Commun :
+
+- **Un rappel 1 h avant chaque échéance** (« Payer le loyer — À 14:30 ·
+  Commun »). Un seul par tâche ; si l'échéance change, un nouveau rappel
+  partira. Une tâche créée déjà en retard n'en reçoit pas.
+- **Le programme du jour, vers 8 h** : les tâches prévues aujourd'hui qui
+  restent à venir — jamais les retards. Rien ne part les jours où rien n'est
+  prévu.
+- **Le chiffre sur l'icône** : les tâches du jour et en retard. Il se met à
+  jour à l'ouverture de l'app et à chaque notification : iOS ne permet pas de
+  le changer autrement.
+
+Le serveur regarde toutes les 5 minutes (déclencheur planifié du Worker) : un
+rappel peut arriver jusqu'à 5 minutes après l'heure « 1 h avant ».
+
+**Les couper** : « Désactiver » sur l'écran des zones, ou Réglages ›
+Notifications › Tâches. Des notifications refusées ne se réautorisent que
+dans les Réglages.
+
+### Mise en place (une fois)
+
+Les notifications sont signées par une paire de clés VAPID :
+
+```bash
+node scripts/vapid-keys.mjs   # affiche une nouvelle paire
+```
+
+La clé publique va dans `wrangler.jsonc` (`VAPID_PUBLIC_KEY`) et dans
+`.env.production` (`VITE_VAPID_PUBLIC_KEY`), la clé privée seulement dans le
+secret du Worker :
+
+```bash
+npx wrangler secret put VAPID_PRIVATE_KEY   # coller la clé privée
+npm run db:migrate:remote
+npm run worker:deploy
+```
+
+Changer de paire oblige chaque téléphone à réactiver les notifications.

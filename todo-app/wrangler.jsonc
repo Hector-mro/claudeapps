@@ -6,11 +6,19 @@
   "compatibility_date": "2026-09-01",
   "observability": { "enabled": true },
 
-  // Overridden in local dev by `.dev.vars`. ACCESS_KEY is a secret:
-  // `npx wrangler secret put ACCESS_KEY`.
+  // Overridden in local dev by `.dev.vars`. ACCESS_KEY and VAPID_PRIVATE_KEY
+  // are secrets: `npx wrangler secret put ACCESS_KEY` (same for VAPID_PRIVATE_KEY).
   "vars": {
-    "ALLOWED_ORIGIN": "https://hector-mro.github.io"
+    "ALLOWED_ORIGIN": "https://hector-mro.github.io",
+    // Push notifications (worker/webpush.ts). The pair comes from
+    // `node scripts/vapid-keys.mjs`; this public half is also VITE_VAPID_PUBLIC_KEY
+    // in .env.production.
+    "VAPID_PUBLIC_KEY": "BL9EyuEmPJkhamCZFbApHHuRsrxwe3qNxtWa27pZI2m6pEeysYBIeQW-lLoo9gnsJWE8YC0Mj6dsYqpiYMPAZrg",
+    "VAPID_SUBJECT": "https://hector-mro.github.io/claudeapps/todo-app/"
   },
+
+  // Due-date reminders and the morning summary (worker/notifications.ts).
+  "triggers": { "crons": ["*/5 * * * *"] },
 
   "d1_databases": [
     {

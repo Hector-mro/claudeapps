@@ -8,9 +8,10 @@
  *
  * Changer CACHE modifie ce fichier : les apps restées ouvertes sur une
  * ancienne version voient alors un nouveau service worker et se rechargent
- * (voir src/main.tsx). v2 : l'arrivée de la synchronisation.
+ * (voir src/main.tsx). v2 : l'arrivée de la synchronisation. v3 : les
+ * notifications (les écouteurs `push` et `notificationclick` en bas).
  */
-var CACHE = 'taches-v2'
+var CACHE = 'taches-v3'
 
 self.addEventListener('install', function (event) {
   event.waitUntil(self.skipWaiting())
@@ -61,4 +62,46 @@ self.addEventListener('fetch', function (event) {
   var url = new URL(event.request.url)
   if (url.origin !== self.location.origin) return
   event.respondWith(networkFirst(event.request))
+})
+
+/* Notifications, envoyées par le Worker (worker/notifications.ts) :
+ * { title, body, tag, badge }. iOS exige qu'un push affiche toujours une
+ * notification — sinon il finit par couper l'abonnement. */
+self.addEventListener('push', function (event) {
+  var data = {}
+  try {
+    data = event.data ? event.data.json() : {}
+  } catch {
+    // Pas du JSON : une notification générique plutôt que rien.
+  }
+  event.waitUntil(
+    Promise.all([
+      self.registration.showNotification(data.title || 'Tâches', {
+        body: data.body || '',
+        tag: data.tag,
+        icon: './favicon.svg',
+      }),
+      setBadge(data.badge),
+    ]),
+  )
+})
+
+// Le chiffre sur l'icône : les tâches du jour ou en retard (src/notify.ts).
+function setBadge(count) {
+  var nav = self.navigator
+  if (typeof count !== 'number' || !nav.setAppBadge) return Promise.resolve()
+  var done = count > 0 ? nav.setAppBadge(count) : nav.clearAppBadge()
+  return done.catch(function () {})
+}
+
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close()
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (windows) {
+      for (var i = 0; i < windows.length; i++) {
+        if ('focus' in windows[i]) return windows[i].focus()
+      }
+      return self.clients.openWindow('./')
+    }),
+  )
 })

@@ -17,6 +17,11 @@ export const ZONE_LABELS: Record<Zone, string> = {
   commun: 'Commun',
 }
 
+/** Who a phone belongs to, for notifications: each person hears about their own zone plus `commun`. */
+export type Person = 'hector' | 'nina'
+
+export const PERSONS: Person[] = ['hector', 'nina']
+
 export interface Todo {
   id: string
   text: string
@@ -47,6 +52,17 @@ export interface SyncChanges {
   upserts: Todo[]
   deletes: string[]
   archived: ArchivedCompletion[]
+}
+
+/** The body of `POST /api/push/subscribe`: the browser's push subscription, plus whose phone it is and where. */
+export interface PushSubscribeBody {
+  endpoint: string
+  keys: { p256dh: string; auth: string }
+  person: Person
+  /** IANA time zone of the phone (e.g. `Europe/Paris`): "today", 8 h and due times are computed in it. */
+  timeZone: string
+  /** Send a confirmation notification right away — set when notifications are turned on. */
+  welcome: boolean
 }
 
 export interface GamificationSnapshot {

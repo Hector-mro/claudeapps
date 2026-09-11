@@ -1,11 +1,12 @@
 // Sync API for todo-app. The app itself stays on GitHub Pages and calls this
 // Worker cross-origin; the data lives in D1 (`migrations/`). One shared access
 // code (the `ACCESS_KEY` secret), no accounts. Sync model: `src/sync/diff.ts`.
+// Also sends the push notifications (`notifications.ts`), from a cron trigger.
 import type { SyncChanges, SyncSnapshot } from '../src/types'
-import { parseChanges } from '../src/validation'
+import { parseChanges, parsePushSubscribeBody } from '../src/validation'
+import { deleteSubscription, runNotifications, saveSubscription, sendWelcome, type NotifyEnv } from './notifications'
 
-interface Env {
-  DB: D1Database
+interface Env extends NotifyEnv {
   /** The shared access code — `wrangler secret put ACCESS_KEY`. */
   ACCESS_KEY: string
   /** Comma-separated origins allowed to call the API: the Pages site (localhost in `.dev.vars`). */
@@ -35,7 +36,27 @@ export default {
       return json(await readState(env.DB))
     }
 
+    if (pathname === '/api/push/subscribe' && request.method === 'POST') {
+      const body = parsePushSubscribeBody(await request.json().catch(() => null))
+      if (!body) return json({ error: 'bad_request' }, 400)
+      await saveSubscription(env.DB, body, Date.now())
+      if (body.welcome) await sendWelcome(env, body)
+      return json({ ok: true })
+    }
+
+    if (pathname === '/api/push/unsubscribe' && request.method === 'POST') {
+      const body: unknown = await request.json().catch(() => null)
+      const endpoint = typeof body === 'object' && body !== null ? (body as Record<string, unknown>).endpoint : null
+      if (typeof endpoint !== 'string') return json({ error: 'bad_request' }, 400)
+      await deleteSubscription(env.DB, endpoint)
+      return json({ ok: true })
+    }
+
     return json({ error: 'not_found' }, 404)
+  },
+
+  scheduled(controller, env, ctx) {
+    ctx.waitUntil(runNotifications(env, controller.scheduledTime))
   },
 } satisfies ExportedHandler<Env>
 
