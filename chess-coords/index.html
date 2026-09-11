@@ -287,9 +287,27 @@
 <script src="./assets/app.js"></script>
 <script>
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    // Une version déjà installée doit pouvoir être remplacée : on vérifie les
+    // mises à jour au lancement, puis une fois par heure si l'app reste ouverte.
+    var hadController = !!navigator.serviceWorker.controller;
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('./sw.js').catch(function () {});
+      navigator.serviceWorker.register('./sw.js').then(function (reg) {
+        reg.update();
+        setInterval(function () { reg.update(); }, 3600000);
+      }).catch(function () {});
     });
+
+    // Quand un nouveau service worker prend la main, on recharge une fois pour
+    // afficher la nouvelle version. Jamais à la première installation, où il
+    // n'y avait encore rien à remplacer.
+    if (hadController) {
+      var reloading = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (reloading) return;
+        reloading = true;
+        location.reload();
+      });
+    }
   }
 </script>
 </body>
