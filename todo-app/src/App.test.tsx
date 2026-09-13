@@ -228,4 +228,53 @@ describe('App zones', () => {
     await openZone(user, 'Hector')
     expect(screen.getByText('Ancienne tâche')).toBeInTheDocument()
   })
+
+  it('reads a difficulty and a due date written in the task text', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await openZone(user, 'Hector')
+
+    await addTask(user, "Monter l'étagère, difficile, demain")
+
+    // The extras are gone from the name and have landed on the row instead.
+    expect(screen.getByText("Monter l'étagère")).toBeInTheDocument()
+    expect(screen.getByLabelText('Difficulté : difficile')).toBeInTheDocument()
+
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    tomorrow.setHours(8, 0, 0, 0)
+    expect(screen.getByText(formatDueLabel(tomorrow.getTime()))).toBeInTheDocument()
+  })
+
+  it('keeps a comma that is neither a date nor a difficulty', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await openZone(user, 'Hector')
+
+    await addTask(user, 'Acheter du pain, du lait')
+
+    expect(screen.getByText('Acheter du pain, du lait')).toBeInTheDocument()
+  })
+
+  it('lets an explicitly picked difficulty win over the one in the text', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await openZone(user, 'Hector')
+
+    await user.type(screen.getByLabelText('Nouvelle tâche'), 'Ranger, facile')
+    await user.click(screen.getByRole('button', { name: 'Ajouter des détails' }))
+    await user.click(screen.getByRole('radio', { name: 'Difficile' }))
+    await user.click(screen.getByRole('button', { name: 'Ajouter' }))
+
+    expect(screen.getByText('Ranger')).toBeInTheDocument()
+    expect(screen.getByLabelText('Difficulté : difficile')).toBeInTheDocument()
+  })
+
+  it('says nothing about any of this in the form', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await openZone(user, 'Hector')
+
+    expect(screen.getByLabelText('Nouvelle tâche')).toHaveAttribute('placeholder', 'Que faut-il faire ?')
+  })
 })
