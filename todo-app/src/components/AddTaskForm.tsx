@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { parseTaskInput } from '../taskInput'
 import type { Difficulty } from '../types'
 import { DifficultyPicker, DueDatePicker } from './TaskFields'
 
@@ -14,11 +15,19 @@ export function AddTaskForm({ onAdd }: AddTaskFormProps) {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
-    const trimmed = text.trim()
-    if (!trimmed) return
+    // The text may also carry a difficulty and a due date — « monter l'étagère, moyen,
+    // demain ». Whatever the pickers say explicitly wins over what the text implies,
+    // since the pickers are the half the user can actually see; the details panel is
+    // collapsed by default, so an untouched difficulty still reads as 'medium'.
+    const parsed = parseTaskInput(text)
+    if (!parsed.text) return
 
-    const dueAt = dueAtLocal ? new Date(dueAtLocal).getTime() : undefined
-    onAdd({ text: trimmed, difficulty, dueAt })
+    const pickedDueAt = dueAtLocal ? new Date(dueAtLocal).getTime() : undefined
+    onAdd({
+      text: parsed.text,
+      difficulty: difficulty !== 'medium' ? difficulty : (parsed.difficulty ?? 'medium'),
+      dueAt: pickedDueAt ?? parsed.dueAt,
+    })
 
     setText('')
     setDifficulty('medium')
