@@ -89,14 +89,14 @@ Un fichier `finales.json`, source unique alimentant l'app (et plus tard un PGN d
     {
       "id": "2a",
       "fen": "5k2/8/5PK1/8/8/8/8/8 w - - 0 1",
-      "camp_joue": "blancs",           // le camp que joue l'utilisateur
-      "objectif": "gagner",            // "gagner" | "tenir la nulle"
-      "fin": "promotion",              // "mat" | "promotion" | "position" | "coups:N"
-      "fin_detail": null,              // ex. FEN ou prédicat pour "position"
+      "camp_joue": "blancs", // le camp que joue l'utilisateur
+      "objectif": "gagner", // "gagner" | "tenir la nulle"
+      "fin": "promotion", // "mat" | "promotion" | "position" | "coups:N"
+      "fin_detail": null, // ex. FEN ou prédicat pour "position"
       "theme": "opposition",
-      "note": "…reformulation personnelle, pas le texte du livre…"
-    }
-  ]
+      "note": "…reformulation personnelle, pas le texte du livre…",
+    },
+  ],
 }
 ```
 
@@ -119,3 +119,4 @@ garde-fou contre les erreurs de transcription des diagrammes photographiés.
   le sont : ne pas les recopier, écrire ses propres notes.
 - Au-delà du chapitre 11, certaines finales dépasseront 7 pièces ; il faudra alors
   Stockfish ou des lignes préparées. Non bloquant pour les finales 1 à 20.
+- choisis un style d'échecs assez classique et lisible : échiquier en bois, interface pas surchargée
