@@ -1,0 +1,33 @@
+{
+  "_avertissement": "FICHIER D'EXEMPLE — ne pas confondre avec finales.json. Les deux positions ci-dessous ne sortent pas des photos du livre : ce sont deux positions d'école que j'ai posées moi-même pour montrer le format et le ton des notes. Le vrai finales.json reste à construire à partir des diagrammes.",
+  "version": 1,
+  "source": "exemple de format",
+  "finales": [
+    {
+      "numero": 0,
+      "titre": "Roi et pion contre roi : l'opposition",
+      "positions": [
+        {
+          "id": "0a",
+          "fen": "4k3/8/4K3/4P3/8/8/8/8 w - - 0 1",
+          "trait": "blancs",
+          "camp": "noirs",
+          "objectif": "annuler",
+          "conditionFin": "nulle_technique",
+          "theme": "opposition",
+          "note": "Roi devant son pion mais trait aux Blancs : les Noirs tiennent l'opposition et il n'y a rien. Garder le roi pile en face, jamais de côté."
+        },
+        {
+          "id": "0b",
+          "fen": "4k3/8/4K3/4P3/8/8/8/8 b - - 0 1",
+          "trait": "noirs",
+          "camp": "blancs",
+          "objectif": "gagner",
+          "conditionFin": "promotion",
+          "theme": "opposition",
+          "note": "Même position, trait inversé : les Noirs doivent céder l'opposition et le roi blanc passe sur la case abandonnée. Toute la finale tient à qui est au trait."
+        }
+      ]
+    }
+  ]
+}
