@@ -207,7 +207,11 @@
     this.compterRepetition();
   };
 
-  Partie.prototype.jouerUtilisateur = function (uci) {
+  /* `apresMonCoup` est appelé dès que le coup de l'utilisateur est posé sur
+     l'échiquier, avant l'interrogation de la tablebase et avant la réponse de
+     l'application. Sans ce point d'accroche, la pièce ne bougerait qu'une fois
+     l'adversaire ayant répondu, et les deux coups apparaîtraient ensemble. */
+  Partie.prototype.jouerUtilisateur = function (uci, apresMonCoup) {
     var self = this;
     if (this.termine) return Promise.resolve(null);
     if (!this.monTour()) return Promise.reject(new Error('ce n\'est pas votre trait'));
@@ -216,7 +220,12 @@
     if (!coup) return Promise.reject(new Error('coup illégal : ' + uci));
 
     this.appliquer(coup, 'moi');
-    return this.noter().then(function () {
+
+    /* Le retour de `apresMonCoup` est attendu : l'interface s'en sert pour
+       laisser le navigateur repeindre avant que l'adversaire ne réponde. */
+    return Promise.resolve(apresMonCoup ? apresMonCoup() : null).then(function () {
+      return self.noter();
+    }).then(function () {
       if (self.verifierFin()) return null;
       return self.jouerApp();
     });

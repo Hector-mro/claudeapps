@@ -53,6 +53,11 @@
       var btn = e.target.closest('.sq');
       if (btn) self.cliquer(btn.dataset.sq);
     });
+
+    /* Un clic hors de l'échiquier abandonne aussi la sélection. */
+    document.addEventListener('click', function (e) {
+      if (self.selection && !self.el.contains(e.target)) self.deselectionner();
+    });
   };
 
   /* Réordonne les cases dans le DOM selon l'orientation. */
@@ -122,9 +127,20 @@
     });
   };
 
+  Board.prototype.deselectionner = function () {
+    this.selection = null;
+    this.effacerIndices();
+  };
+
   Board.prototype.cliquer = function (nom) {
     if (!this.actif) return;
     var self = this;
+
+    /* Recliquer la pièce déjà sélectionnée l'abandonne. */
+    if (this.selection === nom) {
+      this.deselectionner();
+      return;
+    }
 
     if (this.selection) {
       var candidats = this.coups.filter(function (m) {
@@ -140,13 +156,14 @@
       }
     }
 
+    /* Sinon : soit on sélectionne une autre pièce jouable, soit on a cliqué à
+       côté et la sélection tombe. */
     var partants = this.coups.filter(function (m) { return Rules.algebraic(m.from) === nom; });
     if (partants.length) {
       this.selection = nom;
       this.montrerDestinations(nom);
     } else {
-      this.selection = null;
-      this.effacerIndices();
+      this.deselectionner();
     }
   };
 

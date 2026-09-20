@@ -215,10 +215,27 @@
     }
   }
 
+  /* Rend la main au navigateur le temps d'un rendu. `requestAnimationFrame`
+     s'exécute avant la peinture, le `setTimeout` qu'il programme après : la
+     combinaison garantit qu'au moins une image a été peinte. Sans ça, quand
+     toutes les positions sont déjà en cache, la chaîne de promesses se déroule
+     en microtâches et les deux coups apparaissent ensemble. */
+  function attendreRendu(ms) {
+    return new Promise(function (r) {
+      requestAnimationFrame(function () { setTimeout(r, ms || 0); });
+    });
+  }
+
   function jouerCoup(coup) {
-    penser(true);
     $('jeu-message').textContent = '';
-    partie.jouerUtilisateur(coup.uci).then(function () {
+    partie.jouerUtilisateur(coup.uci, function () {
+      // Le coup est posé : on le montre tout de suite, échiquier inerte.
+      board.marquerDernier(coup.uci);
+      board.dessiner(partie.fen(), [], false);
+      rendreCoups();
+      penser(true);
+      return attendreRendu(90);         // un battement, puis l'adversaire joue
+    }).then(function () {
       rafraichirJeu();
     }).catch(erreurReseau);
   }
