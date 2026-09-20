@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finales — entraînement</title>
+<meta name="description" content="Entraînement aux 100 finales de de la Villa : positions jouables contre une défense parfaite issue des tablebases, avec débriefing en fin d'exercice.">
+<meta name="theme-color" content="#efebe1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23efebe1'/%3E%3Crect x='8' y='8' width='24' height='24' fill='%23191815'/%3E%3Crect x='32' y='32' width='24' height='24' fill='%23191815'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+
+<div id="reseau" class="bandeau-reseau" hidden>
+  Tablebase injoignable — l'application a besoin du réseau pour arbitrer les positions.
+</div>
+
+<div id="app">
+
+  <!-- =============================================================== ACCUEIL -->
+  <section id="s-home" class="screen active">
+    <header class="topbar">
+      <h1 class="title">Finales</h1>
+    </header>
+
+    <p id="chargement" class="note mb">Chargement des finales…</p>
+
+    <div id="home-contenu" hidden>
+      <p class="note mb">
+        Les positions sont celles du livre. En face, la défense est parfaite : elle sort
+        des tablebases, elle accepte tous les chemins gagnants et ne lâche jamais rien
+        par accident.
+      </p>
+
+      <div class="panel">
+        <div class="field">
+          <span class="label-mono">Plage de finales</span>
+          <div class="plage">
+            <label>de <input id="plage-de" type="number" min="1" max="20" inputmode="numeric"></label>
+            <label>à <input id="plage-a" type="number" min="1" max="20" inputmode="numeric"></label>
+          </div>
+        </div>
+        <p id="recap" class="row-note"></p>
+        <button id="btn-tirage" class="btn primary">Tirage aléatoire</button>
+      </div>
+
+      <h2 class="section-titre label-mono">Choisir une position</h2>
+      <ul id="liste-finales" class="liste-finales"></ul>
+
+      <p class="note center mt">
+        Aucune correction pendant l'exercice. Le débriefing arrive à la fin.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================== EXERCICE -->
+  <section id="s-jeu" class="screen">
+    <header class="hud">
+      <button class="icon-btn" id="btn-quitter" title="Quitter l'exercice" aria-label="Quitter l'exercice">✕</button>
+      <div class="hud-titre">
+        <span class="mono" id="jeu-num"></span>
+        <b id="jeu-titre"></b>
+        <em id="jeu-theme"></em>
+      </div>
+    </header>
+
+    <div class="consigne">
+      <span class="consigne-valeur" id="jeu-objectif"></span>
+      <span class="consigne-detail" id="jeu-camp"></span>
+      <span class="consigne-detail" id="jeu-fin"></span>
+    </div>
+
+    <div class="board-wrap" id="jeu-board-slot">
+      <div id="board" class="board"></div>
+      <div id="jeu-attente" class="attente" hidden><span></span> l'adversaire réfléchit</div>
+    </div>
+
+    <p id="jeu-message" class="jeu-message"></p>
+
+    <div class="sous-echiquier">
+      <ul id="liste-coups" class="liste-coups"></ul>
+      <button id="btn-solution" class="btn ghost sm">J'abandonne · montrer la solution</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ DÉBRIEFING -->
+  <section id="s-debrief" class="screen">
+    <header class="topbar">
+      <h1 class="title">Débriefing</h1>
+    </header>
+
+    <p class="verdict" id="debrief-verdict"></p>
+    <p class="note" id="debrief-raison"></p>
+    <p class="row-note" id="debrief-consigne"></p>
+
+    <h2 class="section-titre label-mono">Évaluation coup par coup</h2>
+    <div id="frise" class="frise" role="group" aria-label="Évaluation théorique après chaque demi-coup"></div>
+    <p class="legende">
+      <span class="pastille gain"></span> gagnant
+      <span class="pastille nulle"></span> nulle
+      <span class="pastille perte"></span> perdant
+      <span class="legende-note">— dans votre repère ; le liseré marque vos coups</span>
+    </p>
+
+    <div class="board-wrap" id="debrief-board-slot"></div>
+
+    <div class="relecture">
+      <button class="icon-btn" id="debrief-prec" aria-label="Coup précédent">‹</button>
+      <span class="mono" id="debrief-pas"></span>
+      <button class="icon-btn" id="debrief-suiv" aria-label="Coup suivant">›</button>
+    </div>
+
+    <div id="debrief-bascule" class="panel"></div>
+
+    <h2 class="section-titre label-mono">La finale</h2>
+    <p class="note" id="debrief-note"></p>
+
+    <div class="actions">
+      <button id="debrief-continuer" class="btn" hidden>Continuer jusqu'au mat</button>
+      <button id="debrief-rejouer" class="btn">Rejouer cette position</button>
+      <button id="debrief-suivante" class="btn primary">Position suivante</button>
+      <button id="debrief-retour" class="btn ghost">Retour</button>
+    </div>
+  </section>
+
+</div>
+
+<script src="./assets/rules.js"></script>
+<script src="./assets/tablebase.js"></script>
+<script src="./assets/defense.js"></script>
+<script src="./assets/game.js"></script>
+<script src="./assets/board.js"></script>
+<script src="./assets/app.js"></script>
+</body>
+</html>

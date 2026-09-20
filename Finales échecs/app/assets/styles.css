@@ -1,0 +1,461 @@
+/* Finales — feuille de style « papier et encre ».
+
+   Même direction artistique que les autres applications du dépôt : papier
+   grainé, encre noire, libellés en machine à écrire, échiquier en bois clair.
+   Trois couleurs de signalisation seulement, et jamais pendant l'exercice :
+   vert (gagnant), gris-bleu (nulle), rouge (perdant). L'écran de jeu ne dit
+   rien — c'est le débriefing qui juge. */
+
+:root {
+  --paper:   #efebe1;
+  --paper-2: #e4dfd2;
+  --card:    #f7f4ed;
+  --ink:     #191815;
+  --ink-2:   #4e4a42;
+  --ink-3:   #8b857a;
+  --rule:    #c6bfb0;
+  --rule-2:  #ddd6c7;
+  --stamp:   #9c2f22;
+  --good:    #3d7a4c;
+  --hl:      #2b6383;
+
+  --sq-light: #e7ddc6;
+  --sq-dark:  #a1977f;
+  --sq-sel:   #c8b98e;
+  --sq-last:  #d8cb9f;
+
+  --serif: Georgia, 'Iowan Old Style', 'Times New Roman', 'Noto Serif', serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Roboto Mono', monospace;
+  --chess: 'Segoe UI Symbol', 'Apple Symbols', 'Noto Sans Symbols 2', 'DejaVu Sans', serif;
+  --tap: 44px;
+  --r: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:   #141416;
+    --paper-2: #1b1b1e;
+    --card:    #191a1c;
+    --ink:     #ece7dd;
+    --ink-2:   #b0aaa0;
+    --ink-3:   #797369;
+    --rule:    #35343a;
+    --rule-2:  #26262b;
+    --stamp:   #c9503f;
+    --good:    #59a06a;
+    --hl:      #4b91b9;
+
+    --sq-light: #6f6c63;
+    --sq-dark:  #45423b;
+    --sq-sel:   #7e7558;
+    --sq-last:  #5d5844;
+  }
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+
+html { height: 100%; }
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 18px 16px 48px;
+}
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ---------------------------------------------------------------- textes */
+
+.title {
+  font-size: 1.7rem;
+  margin: 0;
+  letter-spacing: .01em;
+}
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+}
+.note { color: var(--ink-2); margin: 0 0 4px; }
+.note.center { text-align: center; }
+.mb { margin-bottom: 18px; }
+.mt { margin-top: 18px; }
+.mono { font-family: var(--mono); font-size: .86em; }
+
+.label-mono {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.section-titre {
+  margin: 26px 0 10px;
+  font-size: .72rem;
+  font-weight: 400;
+  border-bottom: 1px solid var(--rule-2);
+  padding-bottom: 6px;
+}
+.row-note { color: var(--ink-3); font-size: .9rem; margin: 8px 0 0; }
+
+/* -------------------------------------------------------------- contrôles */
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  padding: 14px;
+}
+.field { display: flex; flex-direction: column; gap: 8px; }
+
+.plage { display: flex; gap: 16px; align-items: center; }
+.plage label { display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
+.plage input {
+  width: 4.2rem;
+  font: inherit;
+  font-family: var(--mono);
+  padding: 8px 10px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+}
+
+.btn {
+  display: inline-block;
+  min-height: var(--tap);
+  padding: 10px 18px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--ink-3); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn.ghost { background: transparent; }
+.btn.sm { min-height: 36px; padding: 6px 12px; font-size: .9rem; }
+#btn-tirage { width: 100%; margin-top: 12px; }
+
+.icon-btn {
+  width: var(--tap);
+  height: var(--tap);
+  font-size: 1.1rem;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r);
+  cursor: pointer;
+}
+.icon-btn:hover { border-color: var(--rule); color: var(--ink); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+
+/* --------------------------------------------------------- liste finales */
+
+.liste-finales { list-style: none; margin: 0; padding: 0; }
+.finale-item { border-bottom: 1px solid var(--rule-2); padding: 12px 0; }
+.finale-tete { display: flex; gap: 10px; align-items: baseline; }
+.finale-num { color: var(--ink-3); min-width: 1.6rem; }
+.finale-titre { font-weight: 600; }
+.finale-positions { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0 2.4rem; }
+
+.pos-chip {
+  font: inherit;
+  font-size: .88rem;
+  padding: 6px 11px;
+  min-height: 34px;
+  color: var(--ink-2);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  cursor: pointer;
+}
+.pos-chip:hover { border-color: var(--ink-3); color: var(--ink); }
+.pos-chip em { font-style: normal; color: var(--ink-3); }
+
+/* ------------------------------------------------------------- écran jeu */
+
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.hud-titre { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; min-width: 0; }
+.hud-titre .mono { color: var(--ink-3); }
+.hud-titre em { font-style: italic; color: var(--ink-3); font-size: .92rem; }
+
+.consigne {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  margin-bottom: 14px;
+}
+.consigne-valeur {
+  font-family: var(--mono);
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border: 1px solid currentColor;
+  border-radius: var(--r);
+}
+.obj-gain { color: var(--good); }
+.obj-nulle { color: var(--hl); }
+.consigne-detail { color: var(--ink-2); font-size: .94rem; }
+
+/* ------------------------------------------------------------- échiquier */
+
+.board-wrap {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100%;
+  aspect-ratio: 1;
+  border: 2px solid var(--ink);
+  border-radius: 1px;
+}
+.sq {
+  position: relative;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: var(--sq-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.sq.dark { background: var(--sq-dark); }
+.sq:disabled { cursor: default; }
+.sq.dernier { background: var(--sq-last); }
+.sq.dark.dernier { background: color-mix(in srgb, var(--sq-last) 62%, var(--sq-dark)); }
+.sq.sel { background: var(--sq-sel); }
+.sq.dark.sel { background: color-mix(in srgb, var(--sq-sel) 70%, var(--sq-dark)); }
+
+.piece {
+  pointer-events: none;
+  font-family: var(--chess);
+  font-size: min(8.2vw, 42px);
+  line-height: 1;
+  font-variant-emoji: text;
+  user-select: none;
+}
+.piece.p-w { color: #f7f3e8; text-shadow: 0 0 1px #14130f, 0 0 2px rgba(20,19,15,.85), 0 1px 1px rgba(0,0,0,.3); }
+.piece.p-b { color: #17160f; text-shadow: 0 0 1px rgba(255,255,255,.25); }
+@media (prefers-color-scheme: dark) {
+  .piece.p-w { color: #f2eee2; }
+  .piece.p-b { color: #0c0b09; text-shadow: 0 0 2px rgba(255,255,255,.45); }
+}
+
+/* Destinations légales : un point pour une case vide, un anneau pour une prise. */
+.sq.cible::after {
+  content: '';
+  position: absolute;
+  width: 26%;
+  height: 26%;
+  border-radius: 50%;
+  background: rgba(25,24,21,.34);
+}
+.sq.prise::after {
+  content: '';
+  position: absolute;
+  inset: 6%;
+  border: 3px solid rgba(25,24,21,.34);
+  border-radius: 50%;
+}
+@media (prefers-color-scheme: dark) {
+  .sq.cible::after { background: rgba(236,231,221,.34); }
+  .sq.prise::after { border-color: rgba(236,231,221,.34); }
+}
+.sq.echec { box-shadow: inset 0 0 0 3px var(--stamp); }
+
+.attente {
+  position: absolute;
+  left: 50%;
+  bottom: -30px;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: .76rem;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.attente span {
+  display: inline-block;
+  width: 7px; height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  animation: pulse 1s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+
+.jeu-message { min-height: 1.4em; margin: 34px 0 6px; color: var(--ink-2); text-align: center; }
+.jeu-message.alerte { color: var(--stamp); }
+
+.sous-echiquier {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.liste-coups {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1 1 260px;
+  max-height: 150px;
+  overflow-y: auto;
+  font-family: var(--mono);
+  font-size: .86rem;
+  color: var(--ink-2);
+}
+.liste-coups li { display: flex; gap: 8px; padding: 1px 0; }
+.liste-coups .num { color: var(--ink-3); min-width: 2.2rem; text-align: right; }
+.liste-coups .san { min-width: 4.2rem; }
+.liste-coups .san.moi { color: var(--ink); }
+.liste-coups .san.vide { color: var(--ink-3); }
+
+/* ------------------------------------------------------------ débriefing */
+
+.verdict {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+.verdict.ok { color: var(--good); }
+.verdict.ko { color: var(--stamp); }
+
+.frise { display: flex; flex-wrap: wrap; gap: 3px; }
+.frise-case {
+  width: 20px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 1px;
+  cursor: pointer;
+  background: var(--ink-3);
+}
+.frise-case.gain { background: var(--good); }
+.frise-case.nulle { background: var(--hl); }
+.frise-case.perte { background: var(--stamp); }
+.frise-case.moi { border-color: var(--ink); }
+.frise-case.bascule { outline: 2px solid var(--ink); outline-offset: 1px; }
+.frise-case.vu { height: 32px; margin-top: -6px; }
+
+.legende {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 10px 0 0;
+  font-size: .84rem;
+  color: var(--ink-3);
+}
+.pastille { display: inline-block; width: 11px; height: 11px; border-radius: 1px; margin-right: 3px; vertical-align: -1px; }
+.pastille.gain { background: var(--good); }
+.pastille.nulle { background: var(--hl); }
+.pastille.perte { background: var(--stamp); }
+.legende-note { flex-basis: 100%; }
+
+.relecture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 12px 0 18px;
+  color: var(--ink-2);
+}
+
+.bascule-entete { margin: 0 0 8px; }
+.variante {
+  background: var(--paper-2);
+  border-left: 2px solid var(--rule);
+  padding: 8px 10px;
+  margin: 8px 0;
+  font-size: .88rem;
+  overflow-wrap: anywhere;
+}
+#debrief-board-slot { margin: 16px auto; }
+
+/* ------------------------------------------------------------- promotion */
+
+.promo-couche {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,19,15,.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+.promo-boite {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 280px;
+}
+.promo-titre { flex-basis: 100%; margin: 0 0 4px; }
+.promo-choix {
+  width: 56px;
+  height: 56px;
+  background: var(--sq-light);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.promo-choix:hover { border-color: var(--ink); }
+.promo-choix .piece { font-size: 34px; }
+
+/* ---------------------------------------------------------------- réseau */
+
+.bandeau-reseau {
+  background: var(--stamp);
+  color: #fff;
+  text-align: center;
+  padding: 8px 14px;
+  font-size: .9rem;
+}
+
+/* ---------------------------------------------------------------- mobile */
+
+@media (max-width: 560px) {
+  #app { padding: 14px 12px 40px; }
+  .piece { font-size: min(10.5vw, 40px); }
+  .finale-positions { margin-left: 0; }
+  .actions .btn { flex: 1 1 100%; }
+}
