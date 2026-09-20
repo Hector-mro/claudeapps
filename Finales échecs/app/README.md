@@ -25,6 +25,12 @@ puis <http://127.0.0.1:8731/app/>.
   celui au trait — l'app joue alors le premier coup.
 - **Aucune correction pendant l'exercice.** L'écran de jeu ne dit rien. Si le
   gain est lâché, la défense parfaite fait la nulle et on la subit.
+- **L'objectif n'est pas annoncé.** Ni gagner ni tenir, ni la condition de fin,
+  ni le thème : reconnaître ce que vaut la position fait partie de l'exercice.
+  L'écran de jeu ne donne que le numéro de finale, son titre et le camp joué.
+  Le débriefing révèle tout.
+- **Bouton « recommencer »** pour reprendre la position à zéro sans voir la
+  solution.
 - **Débriefing à la fin** : frise de l'évaluation théorique demi-coup par
   demi-coup dans le repère du camp joué, coup exact où le résultat a basculé,
   coups qui tenaient à cet endroit, et suite correcte.

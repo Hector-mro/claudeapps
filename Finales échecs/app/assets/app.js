@@ -87,10 +87,12 @@
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'pos-chip';
+        /* Ni l'objectif ni la condition de fin ici non plus : la pastille ne
+           donne que l'identifiant, le thème et le camp joué. */
         b.appendChild(bal('span', 'mono', p.id));
         b.appendChild(document.createTextNode(' '));
-        b.appendChild(bal('em', null, p.objectif === 'gagner' ? 'gagner' : 'tenir'));
-        b.title = p.theme + ' — vous jouez les ' + p.camp_joue;
+        b.appendChild(bal('em', null, p.theme));
+        b.title = 'Vous jouez les ' + p.camp_joue;
         b.addEventListener('click', function () { lancer(f, p); });
         pos.appendChild(b);
       });
@@ -124,12 +126,7 @@
 
     texte($('jeu-num'), 'Finale ' + finale.numero);
     texte($('jeu-titre'), finale.titre);
-    texte($('jeu-theme'), position.theme);
-    texte($('jeu-objectif'), etiquetteObjectif(position));
     texte($('jeu-camp'), 'Vous jouez les ' + position.camp_joue);
-    texte($('jeu-fin'), etiquetteFin(position));
-    $('jeu-objectif').className = 'consigne-valeur ' +
-      (position.objectif === 'gagner' ? 'obj-gain' : 'obj-nulle');
 
     $('liste-coups').innerHTML = '';
     $('jeu-message').textContent = '';
@@ -286,8 +283,10 @@
     texte($('debrief-verdict'), ok ? 'Objectif atteint' : 'Objectif manqué');
     texte($('debrief-raison'),
       partie.prolonge ? 'Prolongation jusqu\'au mat : ' + partie.raison : partie.raison);
+    /* C'est ici, et seulement ici, qu'on révèle ce qu'il fallait obtenir. */
     texte($('debrief-consigne'), 'Finale ' + partie.finale.numero + ' · ' + partie.finale.titre +
-      ' · ' + etiquetteObjectif(partie.position).toLowerCase() + ' avec les ' + partie.position.camp_joue);
+      ' · ' + etiquetteObjectif(partie.position).toLowerCase() + ' avec les ' +
+      partie.position.camp_joue + ' · ' + etiquetteFin(partie.position));
     texte($('debrief-note'), partie.position.note);
 
     frise();
@@ -400,8 +399,11 @@
       lancer(partie.finale, partie.position);
     });
     $('debrief-suivante').addEventListener('click', tirage);
+    $('btn-recommencer').addEventListener('click', function () {
+      if (partie) lancer(partie.finale, partie.position);
+    });
+
     $('debrief-continuer').addEventListener('click', function () {
-      texte($('jeu-fin'), 'jusqu\'au mat');
       $('btn-solution').disabled = false;
       $('jeu-message').textContent = '';
       $('jeu-message').className = 'jeu-message';

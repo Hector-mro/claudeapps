@@ -57,17 +57,20 @@
   <section id="s-jeu" class="screen">
     <header class="hud">
       <button class="icon-btn" id="btn-quitter" title="Quitter l'exercice" aria-label="Quitter l'exercice">✕</button>
+      <!-- Pas de thème ici : « ressource de pat », « mat du Cavalier » ou
+           « bon coin » donnent la réponse. Il reste sur l'accueil, où l'on
+           choisit, et dans le débriefing. -->
       <div class="hud-titre">
         <span class="mono" id="jeu-num"></span>
         <b id="jeu-titre"></b>
-        <em id="jeu-theme"></em>
       </div>
     </header>
 
+    <!-- Ni l'objectif ni la condition de fin ne sont annoncés : reconnaître
+         si la position se gagne ou se tient fait partie de l'exercice. Le
+         débriefing les révèle. -->
     <div class="consigne">
-      <span class="consigne-valeur" id="jeu-objectif"></span>
-      <span class="consigne-detail" id="jeu-camp"></span>
-      <span class="consigne-detail" id="jeu-fin"></span>
+      <span class="consigne-valeur" id="jeu-camp"></span>
     </div>
 
     <div class="board-wrap" id="jeu-board-slot">
@@ -79,7 +82,10 @@
 
     <div class="sous-echiquier">
       <ul id="liste-coups" class="liste-coups"></ul>
-      <button id="btn-solution" class="btn ghost sm">J'abandonne · montrer la solution</button>
+      <div class="boutons-jeu">
+        <button id="btn-recommencer" class="btn ghost sm">Recommencer</button>
+        <button id="btn-solution" class="btn ghost sm">J'abandonne · montrer la solution</button>
+      </div>
     </div>
   </section>
 
