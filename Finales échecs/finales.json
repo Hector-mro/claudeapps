@@ -1,0 +1,593 @@
+[
+  {
+    "numero": 1,
+    "titre": "La règle du carré",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "1a",
+        "fen": "6k1/8/8/8/8/8/P7/7K w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "règle du carré",
+        "note": "Diagramme 1.1. Le Roi blanc est hors-jeu : tout se décide à la course. Le Roi noir est hors du carré du pion, donc il ne rattrape pas. Position de démonstration, pas de piège : aucun coup ne lâche le gain."
+      },
+      {
+        "id": "1b",
+        "fen": "8/4k3/2K5/8/8/8/1P6/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "interposition",
+        "note": "Diagramme 1.3. Le Roi noir est dans le carré : le pion seul ne passe pas. Le Roi blanc doit se placer en travers du chemin du Roi noir avant de pousser."
+      }
+    ]
+  },
+  {
+    "numero": 2,
+    "titre": "Le pion en sixième rangée",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "2a",
+        "fen": "5k2/8/5PK1/8/8/8/8/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "opposition",
+        "note": "Diagramme 1.4. Pion en sixième, Rois pas encore en opposition, et c'est aux Blancs de jouer : pousser le pion écarte le Roi noir et libère la dernière case."
+      },
+      {
+        "id": "2b",
+        "fen": "5k2/8/5PK1/8/8/8/8/8 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou pat",
+        "theme": "opposition",
+        "note": "Même diagramme 1.4, trait inversé : le résultat bascule. Le Roi noir doit prendre l'opposition du bon côté ; l'autre case perd sur-le-champ."
+      },
+      {
+        "id": "2c",
+        "fen": "k7/8/2P5/K7/8/8/8/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "opposition",
+        "note": "Diagramme 1.6. Même mécanique qu'en 2a mais collée au bord, et le Roi blanc est derrière son pion : une seule case prend l'opposition, sa voisine la cède."
+      },
+      {
+        "id": "2d",
+        "fen": "8/8/8/8/8/5kp1/7K/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou pat",
+        "theme": "pion-cavalier",
+        "note": "Diagramme 1.8, côté faible. Pion-cavalier : le coin donne au défenseur une ressource de pat que le même schéma avec un pion central n'offrirait pas."
+      }
+    ]
+  },
+  {
+    "numero": 3,
+    "titre": "Les cases clés",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "3a",
+        "fen": "5k2/8/4K3/5P2/8/8/8/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "cases clés",
+        "note": "Diagramme 1.9. Pion en cinquième : cases clés e6, f6, g6. Le Roi en occupe déjà une, donc c'est gagné — à condition d'avancer le Roi et non le pion."
+      },
+      {
+        "id": "3b",
+        "fen": "7k/5K2/8/6P1/8/8/8/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "pion-cavalier",
+        "note": "Diagramme 1.10. Même règle des cases clés, mais avec un pion-cavalier et le Roi noir au coin : le Roi blanc doit contourner du bon côté, l'autre route finit sur un pat."
+      },
+      {
+        "id": "3c",
+        "fen": "5k2/8/8/8/3PK3/8/8/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "cases clés",
+        "note": "Diagramme 1.11. Pion en quatrième : les cases clés reculent d'une rangée (c6, d6, e6). Le Roi doit viser la bonne, celle qui évite l'opposition adverse."
+      },
+      {
+        "id": "3d",
+        "fen": "8/8/8/1kp5/8/8/8/K7 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou pat",
+        "theme": "opposition à distance",
+        "note": "Diagramme 1.12, côté faible et Rois très éloignés. L'opposition à distance sur la colonne suffit à interdire les cases clés ; toute case qui la rompt perd."
+      }
+    ]
+  },
+  {
+    "numero": 4,
+    "titre": "Le pion-tour. Le Roi de la défense est devant le pion.",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "4a",
+        "fen": "8/8/8/8/8/6kp/8/6K1 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou pat",
+        "theme": "pion-tour",
+        "note": "Diagramme 1.14. Le pion-tour est le seul qui ne gagne pas quand le Roi adverse atteint sa case de promotion : le camp fort se pate lui-même. Une seule des deux cases disponibles tient, l'autre laisse promouvoir."
+      }
+    ]
+  },
+  {
+    "numero": 5,
+    "titre": "L'enfermement du Roi du camp fort",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "5a",
+        "fen": "8/8/8/p7/8/1k6/3K4/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou pat",
+        "theme": "pion-tour",
+        "note": "Diagramme 1.16. Autre façon de tenir contre un pion-tour : au lieu de se placer devant le pion, occuper une des deux premières cases de la colonne fou voisine. Le Roi fort s'enferme alors tout seul contre la bande."
+      }
+    ]
+  },
+  {
+    "numero": 6,
+    "titre": "Tour contre Fou. Le mauvais coin",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "6a",
+        "fen": "6k1/5R2/6K1/8/8/8/8/6b1 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "mauvais coin",
+        "note": "Diagramme 1.17. Tour contre Fou est nulle en général, sauf quand le Roi faible est acculé dans le coin de la couleur de son Fou. Il faut d'abord déloger le Fou de son abri, pas menacer le mat tout de suite."
+      }
+    ]
+  },
+  {
+    "numero": 7,
+    "titre": "Tour contre Fou. Le bon coin",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "7a",
+        "fen": "7k/R7/7K/8/8/1b6/8/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "noirs",
+        "objectif": "tenir la nulle",
+        "fin": "coups:20",
+        "fin_detail": null,
+        "theme": "bon coin",
+        "note": "Diagramme 1.18, à défendre. Même matériel qu'en 6a mais dans le coin de l'autre couleur : la défense tient facilement. Seule précaution, garder le Fou assez loin pour pouvoir donner échec sur la grande diagonale."
+      }
+    ]
+  },
+  {
+    "numero": 8,
+    "titre": "Tour contre Cavalier. Roi et Cavalier à la bande",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "8a",
+        "fen": "8/8/8/8/8/3k4/r7/3NK3 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "coups:20",
+        "fin_detail": null,
+        "theme": "Cavalier près du Roi",
+        "note": "Diagramme 1.19. Pièces à la bande mais pas au coin : ça tient, à condition de ne jamais séparer le Cavalier de son Roi. Les premiers coups sont forcés."
+      },
+      {
+        "id": "8b",
+        "fen": "8/8/8/3N4/8/5k2/2r5/4K3 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "position",
+        "fin_detail": "Cavalier capturé",
+        "theme": "Cavalier isolé",
+        "note": "Diagramme d'analyse 1.20 : ce qui arrive quand le Cavalier part seul. Le gain passe par la restriction de ses cases, puis par une attaque double ou un clouage."
+      }
+    ]
+  },
+  {
+    "numero": 9,
+    "titre": "Tour contre Cavalier. Roi et Cavalier dans le coin",
+    "chapitre": 1,
+    "positions": [
+      {
+        "id": "9a",
+        "fen": "8/8/8/8/8/6k1/r7/6NK w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "position",
+        "fin_detail": "Cavalier capturé",
+        "theme": "Roi et Cavalier au coin",
+        "note": "Diagramme 1.21. Les deux pièces au coin, le Roi sur la case d'angle : la mobilité tombe à rien et le Cavalier se perd quel que soit le trait."
+      },
+      {
+        "id": "9b",
+        "fen": "8/8/8/8/8/6k1/r7/6KN b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "position",
+        "fin_detail": "Cavalier capturé",
+        "theme": "Roi et Cavalier au coin",
+        "note": "Diagramme 1.22. Même chose avec le Cavalier sur la case d'angle : l'échange des deux pièces ne sauve rien, mais le gain se joue différemment. Les Noirs y sont en échec du Cavalier h1 : le trait leur est imposé, contrairement aux deux autres."
+      },
+      {
+        "id": "9c",
+        "fen": "r7/8/8/8/8/6k1/6N1/7K w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "position",
+        "fin_detail": "Cavalier capturé",
+        "theme": "case idiote du Cavalier",
+        "note": "Diagramme 1.23. Le Cavalier n'est même pas à la bande, mais g2 est une « case idiote » : toutes ses fuites sont couvertes. Premier exemple d'un motif récurrent."
+      }
+    ]
+  },
+  {
+    "numero": 10,
+    "titre": "Cavalier contre pion en septième rangée",
+    "chapitre": 3,
+    "positions": [
+      {
+        "id": "10a",
+        "fen": "8/K7/8/8/8/1k6/1N1p4/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou bloqué",
+        "theme": "Cavalier devant le pion",
+        "note": "Diagramme 3.1. Contre un pion central en septième, le Cavalier tient s'il arrive à se poster devant lui : de là il manœuvre des deux côtés et le Roi noir ne peut pas le déloger. Le premier coup est forcé."
+      },
+      {
+        "id": "10b",
+        "fen": "8/8/8/8/5N2/8/2p4K/2k5 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou bloqué",
+        "theme": "contrôle latéral",
+        "note": "Diagramme 3.2. Ici le Cavalier ne peut pas se mettre devant le pion, seulement contrôler la case de promotion. Il faut choisir le bon circuit : celui qui longe la rangée du pion, pas celui qui l'aborde par-derrière."
+      }
+    ]
+  },
+  {
+    "numero": 11,
+    "titre": "Le pion-cavalier",
+    "chapitre": 3,
+    "positions": [
+      {
+        "id": "11a",
+        "fen": "8/8/8/8/4N3/1p6/7K/1k6 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "pion-cavalier",
+        "note": "Diagramme 3.3, vu du camp fort. Avec un pion-cavalier, la proximité du bord prive le Cavalier d'une bonne case de l'autre côté du pion. Pousser tout de suite gagne ; amener le Roi d'abord laisse le Cavalier se placer devant et annule."
+      }
+    ]
+  },
+  {
+    "numero": 12,
+    "titre": "Le pion-tour en sixième rangée",
+    "chapitre": 3,
+    "positions": [
+      {
+        "id": "12a",
+        "fen": "8/8/K7/4N3/8/7p/7k/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou bloqué",
+        "theme": "circuit g4-e3-f1",
+        "note": "Diagramme 3.4. Pion-tour en sixième : le Cavalier ne peut que contrôler la case de promotion, depuis le circuit g4-e3-f1-h2, dont le Roi noir ne peut pas le chasser. Une seule entrée mène au bon circuit."
+      }
+    ]
+  },
+  {
+    "numero": 13,
+    "titre": "Le pion-Tour en septième rangée (La barrière)",
+    "chapitre": 3,
+    "positions": [
+      {
+        "id": "13a",
+        "fen": "K7/8/8/5N2/8/3k3p/8/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou bloqué",
+        "theme": "barrière",
+        "note": "Diagramme 3.5. Le Roi blanc est hors-jeu et le pion file : ça semble perdu, mais le Cavalier peut dresser une barrière de cases interdites au Roi noir et gagner le temps nécessaire à son propre Roi."
+      },
+      {
+        "id": "13b",
+        "fen": "8/2K5/8/8/4N3/2k5/7p/8 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou bloqué",
+        "theme": "barrière",
+        "note": "Diagramme 3.7, l'autre barrière. Depuis e4 le Cavalier peut bâtir sa barrière en f2 ou en g3 ; le choix dépend de la case qu'occupe le Roi noir. Les Noirs jouent et n'arrivent pas à la contourner."
+      },
+      {
+        "id": "13c",
+        "fen": "8/2K5/8/8/3k4/8/5N1p/8 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "position",
+        "fin_detail": "pion capturé ou bloqué",
+        "theme": "barrière en L",
+        "note": "Diagramme d'analyse 3.8. La barrière utile est toujours en forme de L ; ici e5-e4-e3-d3. Le Roi noir est du mauvais côté et le contournement coûte trop de coups."
+      }
+    ]
+  },
+  {
+    "numero": 14,
+    "titre": "Le Cavalier fait mat",
+    "chapitre": 3,
+    "positions": [
+      {
+        "id": "14a",
+        "fen": "8/8/8/8/8/p7/2K1N3/k7 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "mat du Cavalier",
+        "note": "Diagramme 3.9. Cas rare où le camp du Cavalier gagne : le Roi fort s'est enfermé devant son propre pion-tour. Attention au pat — il faut laisser aux Noirs le coup de pion, et un seul."
+      }
+    ]
+  },
+  {
+    "numero": 15,
+    "titre": "La case idiote du Cavalier",
+    "chapitre": 3,
+    "positions": [
+      {
+        "id": "15a",
+        "fen": "3k4/1n6/8/P7/8/8/7K/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "promotion",
+        "fin_detail": null,
+        "theme": "case idiote du Cavalier",
+        "note": "Diagramme 3.10. b7 est la « case idiote » : le Cavalier n'y arrête pas le pion-tour et, pire, il bouche la case par laquelle son propre Roi viendrait le faire."
+      }
+    ]
+  },
+  {
+    "numero": 16,
+    "titre": "Dame contre pion en septième rangée",
+    "chapitre": 4,
+    "positions": [
+      {
+        "id": "16a",
+        "fen": "6K1/8/3Q4/8/8/8/5kp1/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "manœuvre d'approche",
+        "note": "Diagramme 4.1, la méthode de gain. La Dame seule ne fait rien : elle gagne un temps en forçant le Roi devant son pion, puis le Roi blanc avance d'une case, et on recommence. Répéter les échecs sans ce coup clé ne mène nulle part."
+      },
+      {
+        "id": "16b",
+        "fen": "2Q5/3K4/8/8/8/8/3kp3/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "noirs",
+        "objectif": "tenir la nulle",
+        "fin": "coups:20",
+        "fin_detail": null,
+        "theme": "Roi gênant",
+        "note": "Diagramme 4.2, première exception. Les Blancs ont le trait mais aucun échec utile : leur propre Roi bouche la colonne d'où la Dame devrait agir. À défendre côté noir."
+      }
+    ]
+  },
+  {
+    "numero": 17,
+    "titre": "Dame contre pion-tour en septième rangée",
+    "chapitre": 4,
+    "positions": [
+      {
+        "id": "17a",
+        "fen": "8/5K1P/8/8/3q4/8/8/2k5 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "coups:20",
+        "fin_detail": null,
+        "theme": "ressource de pat",
+        "note": "Diagramme 4.3. Avec un pion-tour, forcer le Roi devant son pion ne sert à rien : il s'y trouve pat. Le camp faible doit reconnaître la case où se réfugier plutôt que d'éviter les échecs."
+      },
+      {
+        "id": "17b",
+        "fen": "8/6KP/8/4k3/3q4/8/8/8 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "Roi assez proche",
+        "note": "Diagramme 4.4. Même pion-tour, mais le Roi noir est assez près : les échecs servent enfin à gagner les temps nécessaires pour l'amener à pied d'œuvre."
+      },
+      {
+        "id": "17c",
+        "fen": "6KQ/4q3/6k1/8/8/8/8/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "Dame contre Dame au coin",
+        "note": "Diagramme 4.5, la suite de 17b après promotion. Les Blancs ont une Dame et le trait, et perdent quand même : leurs deux pièces se gênent dans le coin."
+      }
+    ]
+  },
+  {
+    "numero": 18,
+    "titre": "Dame contre pion-fou en septième rangée",
+    "chapitre": 4,
+    "positions": [
+      {
+        "id": "18a",
+        "fen": "8/5P2/3K4/8/8/1k6/8/q7 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "tenir la nulle",
+        "fin": "coups:20",
+        "fin_detail": null,
+        "theme": "ressource de pat",
+        "note": "Diagramme 4.6. Le pion-fou offre lui aussi un pat, mais il faut le préparer : promouvoir tout de suite perd la nouvelle Dame sur un échec à la découverte."
+      },
+      {
+        "id": "18b",
+        "fen": "8/5PK1/8/6k1/8/8/q7/8 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "Roi du bon côté",
+        "note": "Diagramme 4.7. Roi de la défense du « bon côté » (celui du coin) : la zone de gain est petite, il faut que le Roi fort soit à une seule case d'une case critique."
+      },
+      {
+        "id": "18c",
+        "fen": "8/4KP2/8/8/6k1/8/q7/8 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "Roi du mauvais côté",
+        "note": "Diagramme 4.8. Roi de la défense du mauvais côté : la zone de gain double. Ici le Roi noir est à deux cases de g6, et le gain passe par la promenade jusque-là."
+      },
+      {
+        "id": "18d",
+        "fen": "8/4KP2/8/1k6/8/8/q7/8 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "mat en d7",
+        "note": "Diagramme 4.9. Même thème que 18c mais par l'autre case critique, d7, avec un schéma de mat différent. Attention : s'approcher trop tôt laisse le Roi blanc repasser du bon côté et annule."
+      }
+    ]
+  },
+  {
+    "numero": 19,
+    "titre": "Un piège qui marche trop souvent",
+    "chapitre": 4,
+    "positions": [
+      {
+        "id": "19a",
+        "fen": "8/8/8/3K4/8/4Q3/2p5/1k6 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "noirs",
+        "objectif": "tenir la nulle",
+        "fin": "coups:20",
+        "fin_detail": null,
+        "theme": "piège du pion-fou",
+        "note": "Diagramme 4.10. Position nulle, mais le camp fort va jouer quelques coups anodins pour endormir la défense avant de poser son piège. À tenir côté noir."
+      },
+      {
+        "id": "19b",
+        "fen": "8/8/8/3K4/8/8/1kp1Q3/8 b - - 0 1",
+        "trait": "noirs",
+        "camp_joue": "noirs",
+        "objectif": "tenir la nulle",
+        "fin": "coups:20",
+        "fin_detail": null,
+        "theme": "piège du pion-fou",
+        "note": "Diagramme 4.11, le moment du piège. Le coup naturel perd sur place ; la seule case qui tient est celle qui paraît la plus passive."
+      },
+      {
+        "id": "19c",
+        "fen": "8/8/8/4K3/8/1Q6/2pk4/8 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "noirs",
+        "objectif": "tenir la nulle",
+        "fin": "coups:20",
+        "fin_detail": null,
+        "theme": "piège du pion-fou",
+        "note": "Diagramme 4.12, le même piège de l'autre côté — plus efficace en pratique parce que la case salvatrice est encore moins naturelle."
+      }
+    ]
+  },
+  {
+    "numero": 20,
+    "titre": "Dame contre Dame",
+    "chapitre": 4,
+    "positions": [
+      {
+        "id": "20a",
+        "fen": "8/8/8/8/8/k2K4/2Q5/q7 w - - 0 1",
+        "trait": "blancs",
+        "camp_joue": "blancs",
+        "objectif": "gagner",
+        "fin": "mat",
+        "fin_detail": null,
+        "theme": "Dame promue dans l'angle",
+        "note": "Diagramme 4.13. Deux Dames ne signifient pas nulle : une Dame promue dans l'angle est gênée par son propre Roi. Série d'échecs qui resserre la même configuration jusqu'au mat ou au gain de la Dame."
+      }
+    ]
+  }
+]
