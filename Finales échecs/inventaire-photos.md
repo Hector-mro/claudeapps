@@ -77,7 +77,7 @@ est à droite, donc page impaire, et la page précédente est 70 → 71.
 | # | Titre relevé sur la page | Page | Diagrammes |
 |---|---|---|---|
 | 1 | La règle du carré | 27 | 1.1 (+1.2, 1.3 p.28) |
-| 2 | Le pion en sixième rangée | 29 | 1.4 p.29, 1.5 p.30, 1.6/1.7 p.31 |
+| 2 | Le pion en sixième rangée | 29 | 1.4 p.29, 1.5 p.30, 1.6/1.7 p.31, 1.8 p.32 |
 | 3 | Les cases clés | 32 | 1.9 p.32, 1.10 p.33, 1.11 p.34, 1.12 p.35, 1.13 p.36 |
 | 4 | Le pion-tour. Le Roi de la défense est devant le pion. | 36 | 1.14 p.36, 1.15 p.37 |
 | 5 | L'enfermement du Roi du camp fort | 37 | 1.16 p.37 |
@@ -97,6 +97,9 @@ est à droite, donc page impaire, et la page précédente est 70 → 71.
 | 19 | Un piège qui marche trop souvent | 69 | 4.10, 4.11 p.69, 4.12 p.70 |
 | 20 | Dame contre Dame | 70 | 4.13 p.70 |
 
+Correction (relevée à la transcription) : le diagramme 1.8 (p.32, section « Le pion-cavalier »)
+précède l'en-tête de la Finale 3 et appartient donc encore à la Finale 2.
+
 ## Pages manquantes
 
 | Pages | Contenu attendu | Impact |
@@ -113,5 +116,7 @@ Aucune finale de 1 à 20 n'est perdue à cause de ces trous.
   sont incurvés. Lisible, mais impose une lecture case par case sur l'image pleine
   résolution plutôt qu'un repérage à la grille.
 - **Transparence du verso** visible sur la plupart des pages ; n'obscurcit aucun diagramme.
-- **Diagramme 1.15** (p.37, Finale 4) : 7 pièces (2 Rois + 5 pions noirs). C'est la limite
-  exacte des tablebases 7 pièces — à vérifier au moment de la validation.
+- **Diagramme 1.15** (p.37, Finale 4) : relecture à la transcription — il y a **six** pions-tours
+  noirs (h7, h6, h5, h4, h3, h2), donc **8 pièces** avec les deux Rois, et non 7. La position
+  est hors de portée des tablebases Syzygy : elle est exclue de `finales.json`, ce qui laisse
+  la Finale 4 avec le seul diagramme 1.14.
