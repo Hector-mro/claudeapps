@@ -8,7 +8,14 @@
       partie, et les conditions de fin ne se déclenchent pas à tort ;
 
    2. s'il joue un coup qui lâche le résultat, l'exercice se conclut sur
-      « objectif manqué » et le débriefing désigne exactement ce coup-là.
+      « objectif manqué » et le débriefing désigne exactement ce coup-là ;
+
+   3. dans un exercice « tenir la nulle », la défense ne liquide pas sa
+      pression : si un coup laissait à l'utilisateur au moins une façon de
+      tout jeter, le coup joué doit en laisser une aussi. C'est l'énoncé
+      direct d'un défaut corrigé — l'app rendait sa Dame contre le pion et
+      l'exercice se concluait au premier coup sur une nulle que personne
+      n'avait eu à défendre.
 
    usage : node verifier-app.js [ids séparés par des virgules] */
 'use strict';
@@ -120,6 +127,67 @@ async function prolonger(partie, plafond = 60) {
   return { avant, apres: partie.resultatExercice, termine: partie.termine, raison: partie.raison };
 }
 
+/* Nombre de réponses adverses qui jettent le résultat après `uci` — la
+   mesure sur laquelle la défense choisit son coup. Zéro veut dire que le coup
+   n'apprend rien : quoi que joue l'adversaire, rien ne change. */
+async function piegesApres(fen, uci) {
+  const apres = Game.apresCoup(fen, uci);
+  const pos = Rules.parseFen(apres);
+  if (Rules.insufficientMaterial(pos)) return 0;   // la partie s'arrête là
+  const p = await TB.probe(apres);
+  const best = TB.classe(p.category);
+  const coups = p.moves || [];
+  const correctes = coups.filter((m) => TB.classe(TB.inverse(m.category)) === best).length;
+  if (coups.length !== Rules.moves(pos).length) {
+    throw new Error(`éventail divergent après ${uci} : ${Rules.moves(pos).length} en local, ${coups.length} selon la tablebase`);
+  }
+  return coups.length - correctes;
+}
+
+async function coupCorrectAuHasard(fen) {
+  const p = await TB.probe(fen);
+  const bons = (p.moves || []).filter(
+    (m) => TB.classe(TB.inverse(m.category)) === TB.classe(p.category));
+  return bons.length ? bons[Math.floor(Math.random() * bons.length)].uci : null;
+}
+
+/* La première décision de l'application, et la position d'où elle l'a prise. */
+async function premiereDecisionApp(finale, position) {
+  const partie = new Game.Partie(finale, position);
+  await partie.demarrer();
+
+  let depuis;
+  if (partie.coups.length && partie.coups[0].par === 'app') {
+    depuis = position.fen;                       // l'app avait le trait d'entrée
+  } else {
+    if (partie.termine || !partie.aLaMain()) return null;
+    depuis = partie.fen();
+    const uci = await coupCorrectAuHasard(depuis);
+    if (!uci) return null;
+    await partie.jouerUtilisateur(uci);
+  }
+  const dernier = partie.coups[partie.coups.length - 1];
+  if (!dernier || dernier.par !== 'app') return null;
+  return { depuis, uci: dernier.uci, san: dernier.san };
+}
+
+/* Compare ce que l'app a joué à ce qu'elle pouvait jouer. */
+async function defenseTendue(finale, position) {
+  const d = await premiereDecisionApp(finale, position);
+  if (!d) return null;
+
+  const p = await TB.probe(d.depuis);
+  const maClasse = TB.classe(p.category);
+  const candidats = (p.moves || []).filter(
+    (m) => TB.classe(TB.inverse(m.category)) === maClasse);
+  if (candidats.length < 2) return null;         // rien à départager
+
+  let offert = 0;
+  for (const m of candidats) offert = Math.max(offert, await piegesApres(d.depuis, m.uci));
+  const joue = await piegesApres(d.depuis, d.uci);
+  return { san: d.san, joue, offert };
+}
+
 async function main() {
   const filtre = process.argv[2] ? new Set(process.argv[2].split(',')) : null;
   const cibles = toutesLesPositions().filter((x) => !filtre || filtre.has(x.position.id));
@@ -179,6 +247,22 @@ async function main() {
         soucis.push(`${position.id} : basculement attendu au demi-coup ${fautif.indexFaute}, obtenu ${g.basculement()}`);
       } else {
         ok++;
+      }
+    }
+
+    // 3. la défense ne liquide pas sa pression (exercices « tenir la nulle »)
+    if (position.objectif !== 'gagner') {
+      try {
+        const t = await defenseTendue(finale, position);
+        if (t) {
+          if (t.offert >= 1 && t.joue === 0) {
+            soucis.push(`${position.id} : la défense liquide — ${t.san} ne laisse aucun piège alors que ${t.offert} étaient offerts`);
+          } else {
+            ok++;
+          }
+        }
+      } catch (e) {
+        soucis.push(`${position.id} : exception au contrôle de défense — ${e.message}`);
       }
     }
 
