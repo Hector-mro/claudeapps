@@ -107,7 +107,9 @@
     var civilWord = flip ? pair.a : pair.b;
     var undercoverWord = flip ? pair.b : pair.a;
 
-    var order = shuffle(this.players);
+    // L'ordre de la table est celui de la création des joueurs : on n'y touche pas.
+    // Seuls les rôles sont tirés au sort.
+    var order = this.players.slice();
     var roles = [];
     var i;
     for (i = 0; i < s.undercoverCount; i++) roles.push(ROLE.UNDERCOVER);
@@ -128,14 +130,14 @@
       };
     });
 
-    // Ordre de passage fixe (circulaire), premier orateur tiré au sort
-    var baseOrder = s.randomFirstSpeaker ? shuffle(members).map(function (m) { return m.id; })
-                                         : members.map(function (m) { return m.id; });
-    var first = 0;
+    // Tour de table : on suit l'ordre des joueurs, en cercle.
+    // Seul le point de départ bouge d'une manche à l'autre.
+    var baseOrder = members.map(function (m) { return m.id; });
+    var first = s.randomFirstSpeaker ? Math.floor(Math.random() * baseOrder.length) : 0;
     if (s.whiteNeverFirst) {
       for (var k = 0; k < baseOrder.length; k++) {
-        var m = members.filter(function (x) { return x.id === baseOrder[k]; })[0];
-        if (m.role !== ROLE.WHITE) { first = k; break; }
+        var idx = (first + k) % baseOrder.length;
+        if (members[idx].role !== ROLE.WHITE) { first = idx; break; }
       }
     }
 
