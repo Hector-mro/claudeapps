@@ -94,18 +94,28 @@ describe('morning summary', () => {
     task('Chez Nina', paris(10, 0), { zone: 'nina' }),
   ]
 
-  it("lists today's tasks still ahead — never the late ones — with a kind word", () => {
+  it("lists all of today's tasks, earlier ones included — never a previous day's — with a kind word", () => {
     const plan = planNotifications([HECTOR], tasks, morning)
 
     expect(plan.messages).toHaveLength(1)
     expect(plan.messages[0].payload).toEqual({
       title: 'Bonjour Hector ☀️',
-      body: "Au programme aujourd'hui : Pharmacie et Courses.",
+      body: "Au programme aujourd'hui : Réveil matinal, Pharmacie et 1 autre.",
       tag: 'summary',
       // The badge still counts everything due by tonight, late ones included.
       badge: 4,
     })
     expect(plan.summarized).toEqual([{ endpoint: HECTOR.endpoint, date: '2026-09-11' }])
+  })
+
+  it('still lists a task due at 8:00 when the summary only goes out at 8:30', () => {
+    const plan = planNotifications([HECTOR], [task('Tôt', paris(8, 0)), task('Midi', paris(12, 30))], paris(8, 30))
+    expect(plan.messages[0].payload.body).toBe("Au programme aujourd'hui : Tôt et Midi.")
+  })
+
+  it('goes out for a day whose only task is already past', () => {
+    const plan = planNotifications([HECTOR], [task('Tôt', paris(0, 30))], morning)
+    expect(plan.messages[0].payload.body).toBe("Une seule chose au programme aujourd'hui : Tôt.")
   })
 
   it('is sent once a day', () => {
