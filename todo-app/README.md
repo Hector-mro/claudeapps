@@ -127,9 +127,10 @@ Chaque téléphone reçoit ce qui concerne sa zone et Commun :
 - **Un rappel 1 h avant chaque échéance** (« Payer le loyer — À 14:30 ·
   Commun »). Un seul par tâche ; si l'échéance change, un nouveau rappel
   partira. Une tâche créée déjà en retard n'en reçoit pas.
-- **Le programme du jour, vers 8 h** : les tâches prévues aujourd'hui qui
-  restent à venir — jamais les retards. Rien ne part les jours où rien n'est
-  prévu.
+- **Le programme du jour, vers 8 h** : toutes les tâches prévues aujourd'hui
+  et pas encore faites, y compris celles dont l'heure est déjà passée (une
+  tâche à 7 h ou à 8 h y figure) — jamais les retards des jours précédents.
+  Rien ne part les jours où rien n'est prévu.
 - **Les tâches ajoutées par l'autre**, dans sa zone ou dans Commun
   (« Nina t'a ajouté une tâche », « Nina a ajouté une tâche à Commun »).
   Aussitôt, sans attendre le passage des 5 minutes ; plusieurs ajouts d'un

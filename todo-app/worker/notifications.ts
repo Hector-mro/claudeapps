@@ -92,7 +92,7 @@ export function planNotifications(subscribers: Subscriber[], open: DueTask[], no
       plan.messages.push({ subscriber, payload: reminderPayload(todo, subscriber.timeZone, badge), ttlSeconds })
     }
     if (isSummaryTime(subscriber, nowMs)) {
-      const payload = summaryPayload(subscriber.person, dueLaterToday(todos, zones, nowMs, subscriber.timeZone), badge)
+      const payload = summaryPayload(subscriber.person, dueToday(todos, zones, nowMs, subscriber.timeZone), badge)
       if (payload) plan.messages.push({ subscriber, payload, ttlSeconds: SUMMARY_TTL_SECONDS })
       plan.summarized.push({ endpoint: subscriber.endpoint, date: localDateKey(nowMs, subscriber.timeZone) })
     }
@@ -105,11 +105,14 @@ function isSummaryTime({ timeZone, lastSummaryDate }: Subscriber, nowMs: number)
   return hour >= SUMMARY_FROM_HOUR && hour < SUMMARY_UNTIL_HOUR && lastSummaryDate !== localDateKey(nowMs, timeZone)
 }
 
-/** Today's tasks still ahead: the summary is the day's plan, never a list of what's late. */
-function dueLaterToday(todos: DueTodo[], zones: Zone[], nowMs: number, timeZone: string): DueTodo[] {
+/**
+ * Today's open tasks, from midnight on: one due at 7:00 or 8:00 is still part of the day's
+ * plan when the summary goes out. Earlier days are left out — it's never a list of what's late.
+ */
+function dueToday(todos: DueTodo[], zones: Zone[], nowMs: number, timeZone: string): DueTodo[] {
   const today = localDateKey(nowMs, timeZone)
   return todos
-    .filter((t) => !t.done && zones.includes(t.zone) && t.dueAt >= nowMs && localDateKey(t.dueAt, timeZone) === today)
+    .filter((t) => !t.done && zones.includes(t.zone) && localDateKey(t.dueAt, timeZone) === today)
     .sort((a, b) => a.dueAt - b.dueAt)
 }
 
