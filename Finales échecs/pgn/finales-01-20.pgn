@@ -1,0 +1,670 @@
+[Event "F01 · Diag. 1.1 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.27-28"]
+[Date "????.??.??"]
+[Round "1"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "6k1/8/8/8/8/8/P7/7K w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "1 - La règle du carré"]
+[Diagramme "1.1"]
+[Pages "27-28"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.47 (2).jpeg; WhatsApp Image 2026-09-19 at 12.13.08.jpeg"]
+
+{ p.27-28 · 12.12.47 (2) · 12.13.08 } 1. a4 $1 { Diag. 1.2 } 1... Kf7 2. a5 Ke6
+3. a6 Kd6 4. a7 Kc7 5. a8=Q 1-0
+
+[Event "F01 · Diag. 1.3 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.28-29"]
+[Date "????.??.??"]
+[Round "1"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "8/4k3/2K5/8/8/8/1P6/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "1 - La règle du carré"]
+[Diagramme "1.3"]
+[Pages "28-29"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.08.jpeg; WhatsApp Image 2026-09-19 at 12.12.47 (3).jpeg"]
+
+{ p.28-29 · 12.13.08 · 12.12.47 (3) } 1. Kc7 $1 Ke6 2. b4 Kd5 3. b5 1-0
+
+[Event "F02 · Diag. 1.4 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.29"]
+[Date "????.??.??"]
+[Round "2"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "5k2/8/5PK1/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "2 - Le pion en sixième rangée"]
+[Diagramme "1.4"]
+[Pages "29"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.47 (3).jpeg"]
+
+{ p.29 · 12.12.47 (3) } 1. f7 $1 Ke7 2. Kg7 $1 1-0
+
+[Event "F02 · Diag. 1.4 · trait aux Noirs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.29-30"]
+[Date "????.??.??"]
+[Round "2"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "5k2/8/5PK1/8/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "2 - Le pion en sixième rangée"]
+[Diagramme "1.4"]
+[Pages "29-30"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.47 (3).jpeg; WhatsApp Image 2026-09-19 at 12.12.48.jpeg"]
+
+{ p.29-30 · 12.12.47 (3) · 12.12.48 } 1... Kg8 $1 { Diag. 1.5 } 2. f7+ ( 2. Kg5
+Kf7 $1 ( 2... Kf8 ) 3. Kf5 Kf8 $1 4. Kf4 Kf7 $1 5. Kf5 Kf8 6. Ke6 Ke8 $1 7. f7+
+Kf8 8. Kf6 ) 2... Kf8 $1 3. Kf6 1/2-1/2
+
+[Event "F02 · Diag. 1.6 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.31"]
+[Date "????.??.??"]
+[Round "2"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "k7/8/2P5/K7/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "2 - Le pion en sixième rangée"]
+[Diagramme "1.6"]
+[Pages "31"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.08 (1).jpeg"]
+
+{ p.31 · 12.13.08 (1) } 1. Ka6 $1 ( 1. Kb6 $4 Kb8 $1 $10 ) 1... Kb8 2. Kb6 $1
+Kc8 ( 2... Ka8 3. Kc7 $1 ( 3. c7 $4 ) 3... Ka7 4. Kd7 ) 3. c7 Kd7 4. Kb7 1-0
+
+[Event "F02 · Diag. 1.7 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.31-32"]
+[Date "????.??.??"]
+[Round "2"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "8/6k1/4P3/6K1/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "2 - Le pion en sixième rangée"]
+[Diagramme "1.7"]
+[Pages "31-32"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.08 (1).jpeg; WhatsApp Image 2026-09-19 at 12.12.48 (1).jpeg"]
+
+{ p.31-32 · 12.13.08 (1) · 12.12.48 (1) } 1. Kf5 $1 Kg8 ( 1... Kf8 2. Kf6 ) 2.
+Kg6 $1 Kf8 3. Kf6 Ke8 4. e7 Kd7 5. Kf7 1-0
+
+[Event "F02 · Diag. 1.8 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.32"]
+[Date "????.??.??"]
+[Round "2"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/8/8/8/5kp1/7K/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "2 - Le pion en sixième rangée"]
+[Diagramme "1.8"]
+[Pages "32"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.48 (1).jpeg"]
+
+{ p.32 · 12.12.48 (1) } 1. Kh1 $1 Kf2 ( 1... Kg4 2. Kg2 $1 $10 ) 1/2-1/2
+
+[Event "F03 · Diag. 1.9 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.32-33"]
+[Date "????.??.??"]
+[Round "3"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "5k2/8/4K3/5P2/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "3 - Les cases clés"]
+[Diagramme "1.9"]
+[Pages "32-33"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.48 (1).jpeg; WhatsApp Image 2026-09-19 at 12.12.48 (2).jpeg"]
+
+{ p.32-33 · 12.12.48 (1) · 12.12.48 (2) } 1. Kf6 $1 ( 1. f6 $4 Ke8 $1 $10 )
+1... Ke8 2. Kg7 $1 Ke7 3. f6+ Ke6 4. f7 1-0
+
+[Event "F03 · Diag. 1.10 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.33-34"]
+[Date "????.??.??"]
+[Round "3"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "7k/5K2/8/6P1/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "3 - Les cases clés"]
+[Diagramme "1.10"]
+[Pages "33-34"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.48 (2).jpeg; WhatsApp Image 2026-09-19 at 12.12.49.jpeg"]
+
+{ p.33-34 · 12.12.48 (2) · 12.12.49 } 1. Kg6 $1 ( 1. g6 $2 ) ( 1. Kf6 Kh7 $1 (
+1... Kg8 2. Kg6 Kh8 3. Kf7 Kh7 4. g6+ Kh8 5. g7+ $18 ) 2. g6+ $4 ( 2. Kf7 $1 )
+2... Kh8 $1 $10 ) 1... Kg8 2. Kh6 Kh8 3. g6 Kg8 4. g7 Kf7 5. Kh7 1-0
+
+[Event "F03 · Diag. 1.11 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.34"]
+[Date "????.??.??"]
+[Round "3"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "5k2/8/8/8/3PK3/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "3 - Les cases clés"]
+[Diagramme "1.11"]
+[Pages "34"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.49.jpeg"]
+
+{ p.34 · 12.12.49 } 1. Kd5 $1 ( 1. Ke5 $4 Ke7 ) 1... Ke7 2. Kc6 Kd8 3. Kd6 Kc8
+4. Ke7 Kc7 5. d5 Kc8 6. d6 Kb7 7. d7 1-0
+
+[Event "F03 · Diag. 1.12 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.35"]
+[Date "????.??.??"]
+[Round "3"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/8/1kp5/8/8/8/K7 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "3 - Les cases clés"]
+[Diagramme "1.12"]
+[Pages "35"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.49 (1).jpeg"]
+
+{ p.35 · 12.12.49 (1) } 1. Kb1 $1 Kb4 ( 1... Kc4 2. Kc2 ) 2. Kb2 $1 c4 3. Kc2
+c3 4. Kc1 Kb3 5. Kb1 c2+ 6. Kc1 Kc3 $10 1/2-1/2
+
+[Event "F03 · Diag. 1.13 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.36"]
+[Date "????.??.??"]
+[Round "3"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "8/6k1/8/6K1/8/6P1/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "3 - Les cases clés"]
+[Diagramme "1.13"]
+[Pages "36"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.49 (2).jpeg"]
+
+{ p.36 · 12.12.49 (2) } 1. g4 Kh7 ( 1... Kf7 2. Kh6 ) 2. Kf6 Kh8 ( 2... Kh6 3.
+g5+ Kh7 4. Kf7 ) ( 2... Kg8 3. Kg6 Kf8 4. Kh7 ) 3. Kg6 Kg8 4. g5 $1 Kh8 5. Kf7
+Kh7 6. g6+ Kh6 7. g7 1-0
+
+[Event "F04 · Diag. 1.14 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.36-37"]
+[Date "????.??.??"]
+[Round "4"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/8/8/8/6kp/8/6K1 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "4 - Le pion-tour. Le Roi de la défense est devant le pion."]
+[Diagramme "1.14"]
+[Pages "36-37"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.49 (2).jpeg; WhatsApp Image 2026-09-19 at 12.12.50.jpeg"]
+
+{ p.36-37 · 12.12.49 (2) · 12.12.50 } 1. Kh1 h2 1/2-1/2
+
+[Event "F04 · Diag. 1.15 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.37"]
+[Date "????.??.??"]
+[Round "4"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/7p/7p/7p/7p/6kp/7p/6K1 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "4 - Le pion-tour. Le Roi de la défense est devant le pion."]
+[Diagramme "1.15"]
+[Pages "37"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.50.jpeg"]
+
+{ p.37 · 12.12.50 } 1. Kh1 Kf3 2. Kxh2 Kg4 3. Kh1 Kg3 4. Kg1 h2+ 5. Kh1 Kg4 6.
+Kxh2 h3 7. Kh1 Kg3 8. Kg1 h4 9. Kh1 h5 10. Kg1 h6 11. Kh1 Kf3 12. Kh2 Kg4 13.
+Kh1 Kg3 14. Kg1 h2+ 15. Kh1 1/2-1/2
+
+[Event "F05 · Diag. 1.16 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.37-38"]
+[Date "????.??.??"]
+[Round "5"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/8/p7/8/1k6/3K4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "5 - L'enfermement du Roi du camp fort"]
+[Diagramme "1.16"]
+[Pages "37-38"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.50.jpeg; WhatsApp Image 2026-09-19 at 12.12.50 (1).jpeg"]
+
+{ p.37-38 · 12.12.50 · 12.12.50 (1) } 1. Kc1 $1 Ka2 ( 1... a4 2. Kb1 a3 3. Ka1
+$10 ) 2. Kc2 $1 a4 ( 2... Ka3 3. Kb1 $10 ) 3. Kc1 a3 4. Kc2 Ka1 5. Kc1 1/2-1/2
+
+[Event "F06 · Diag. 1.17 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.38-39"]
+[Date "????.??.??"]
+[Round "6"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "6k1/5R2/6K1/8/8/8/8/6b1 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "6 - Tour contre Fou. Le mauvais coin"]
+[Diagramme "1.17"]
+[Pages "38-39"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.50 (1).jpeg; WhatsApp Image 2026-09-19 at 12.13.08 (2).jpeg"]
+
+{ p.38-39 · 12.12.50 (1) · 12.13.08 (2) } 1. Rf1 ( 1. Rb7 $4 Kf8 ) 1... Bh2 (
+1... Bd4 2. Rd1 Bb6 3. Rb1 Bc7 4. Rc1 ) 2. Rh1 Bg3 3. Rg1 Bh2 4. Rg2 Bd6 ( 4...
+Bf4 5. Kf5+ $18 ) 5. Rd2 Be7 6. Rc2 Bf8 7. Rc8 1-0
+
+[Event "F07 · Diag. 1.18 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.39"]
+[Date "????.??.??"]
+[Round "7"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "7k/R7/7K/8/8/1b6/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "7 - Tour contre Fou. Le bon coin"]
+[Diagramme "1.18"]
+[Pages "39"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.08 (2).jpeg"]
+
+{ p.39 · 12.13.08 (2) } 1. Ra8+ Bg8 2. Ra7 ( 2. Kg5 Kg7 3. Ra7+ Kh8 4. Kg6 Bc4
+5. Ra3 Bd5 6. Rh3+ Kg8 7. Re3 Kh8 ) 2... Bb3 3. Kg6 ( 3. Rh7+ Kg8 4. Rb7 Bd5 )
+3... Bc4 ( 3... Be6 $4 4. Rh7+ Kg8 5. Re7 $18 ) 4. Rh7+ Kg8 5. Rc7 Bd3+ 6. Kh6
+Be4 $10 1/2-1/2
+
+[Event "F08 · Diag. 1.19 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.40-41"]
+[Date "????.??.??"]
+[Round "8"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/8/8/8/3k4/r7/3NK3 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "8 - Tour contre Cavalier. Roi et Cavalier à la bande"]
+[Diagramme "1.19"]
+[Pages "40-41"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.08 (3).jpeg; WhatsApp Image 2026-09-19 at 12.12.50 (2).jpeg"]
+
+{ p.40-41 · 12.13.08 (3) · 12.12.50 (2) } 1. Nf2+ Ke3 2. Nd1+ Kf3 3. Nc3 ( 3.
+Kf1 Re2 4. Nc3 ) 3... Rc2 4. Nd1 ( 4. Nd5 $4 { Diag. 1.20 } 4... Rc4 5. Nb6 (
+5. Nf6 Rd4 6. Nh7 Kf4 7. Nf8 Kf5 $19 ) 5... Rb4 6. Nc8 ( 6. Nd5 Re4+ 7. Kf1 Rd4
+8. Nc3 Rd3 $19 ) 6... Rb7 $1 7. Kd2 ( 7. Nd6 Re7+ 8. Kf1 Rd7 $19 ) 7... Kf4 8.
+Ke2 Ke5 $19 ) 4... Re2+ 5. Kf1 Rh2 6. Ke1 Rc2 7. Kf1 $10 1/2-1/2
+
+[Event "F10 · Diag. 3.1 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.55"]
+[Date "????.??.??"]
+[Round "10"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/K7/8/8/8/1k6/1N1p4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "10 - Cavalier contre pion en septième rangée"]
+[Diagramme "3.1"]
+[Pages "55"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.50 (3).jpeg"]
+
+{ p.55 · 12.12.50 (3) } 1. Nd1 Kc2 2. Nf2 $1 ( 2. Ne3+ ) 2... Kc3 3. Ka6 Kd4 4.
+Kb5 Ke3 5. Nd1+ Ke2 6. Nb2 $1 $10 1/2-1/2
+
+[Event "F10 · Diag. 3.2 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.56"]
+[Date "????.??.??"]
+[Round "10"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/8/8/5N2/8/2p4K/2k5 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "10 - Cavalier contre pion en septième rangée"]
+[Diagramme "3.2"]
+[Pages "56"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.50 (4).jpeg"]
+
+{ p.56 · 12.12.50 (4) } 1. Ne2+ $1 ( 1. Nd3+ $4 Kd2 $1 2. Nc5 $5 Kc3 $1 3. Ne4+
+Kd3 4. Nc5+ Kc4 $19 ) 1... Kd2 ( 1... Kd1 2. Nc3+ $1 Kd2 3. Na2 $10 ) 2. Nd4 $1
+c1=Q 3. Nb3+ $10 1/2-1/2
+
+[Event "F11 · Diag. 3.3 · trait aux Noirs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.57"]
+[Date "????.??.??"]
+[Round "11"]
+[White "?"]
+[Black "?"]
+[Result "0-1"]
+[FEN "8/8/8/8/4N3/1p6/7K/1k6 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "11 - Le pion-cavalier"]
+[Diagramme "3.3"]
+[Pages "57"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.09 (2).jpeg"]
+
+{ p.57 · 12.13.09 (2) } 1... b2 $1 ( 1... Kc2 $6 2. Nd6 $1 Kc3 ( 2... b2 3. Nc4
+$10 ) ( 2... Kd3 3. Nb5 $10 ) 3. Ne4+ Kd4 4. Nd2 b2 5. Nb1 Kd3 6. Kg2 Kc2 7.
+Na3+ Kb3 8. Nb1 $10 ) 2. Nd2+ ( 2. Nc3+ Kc2 3. Nb5 Kb3 4. Nd4+ Kc3 5. Nb5+ Kb4
+$19 ) 2... Kc1 $1 3. Nb3+ Kd1 $19 0-1
+
+[Event "F12 · Diag. 3.4 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.58"]
+[Date "????.??.??"]
+[Round "12"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/K7/4N3/8/7p/7k/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "12 - Le pion-tour en sixième rangée"]
+[Diagramme "3.4"]
+[Pages "58"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.51 (1).jpeg"]
+
+{ p.58 · 12.12.51 (1) } 1. Ng4+ $1 ( 1. Nc4 Kg2 ( 1... Kg1 2. Ne5 $1 Kf1 3. Ng4
+$1 $10 ) ( 1... Kg3 2. Ne3 $10 ) 2. Ne3+ $16 ) ( 1. Nf3+ $2 Kg2 2. Nh4+ ( 2.
+Ne1+ Kg3 $19 ) 2... Kf2 $19 ) 1... Kg3 2. Ne3 Kf3 3. Nf1 Kf2 4. Nh2 $10 1/2-1/2
+
+[Event "F13 · Diag. 3.5 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.58-59"]
+[Date "????.??.??"]
+[Round "13"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "K7/8/8/5N2/8/3k3p/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "13 - Le pion-Tour en septième rangée (La barrière)"]
+[Diagramme "3.5"]
+[Pages "58-59"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.51 (1).jpeg; WhatsApp Image 2026-09-19 at 12.12.51 (2).jpeg"]
+
+{ p.58-59 · 12.12.51 (1) · 12.12.51 (2) } 1. Ng3 $1 h2 ( 1... Ke3 2. Nf1+ ) 2.
+Kb7 { Diag. 3.6 } 2... Kd4 ( 2... Kc2 3. Kc6 Kd1 4. Kd5 Ke1 5. Ke4 Kf2 6. Kf4
+$10 ) 3. Kc6 Ke5 4. Kc5 ( 4. Nh1 Ke4 5. Kc5 $10 ) 4... Kf4 5. Nh1 Kf3 6. Kd4
+Kg2 7. Ke3 $1 Kxh1 8. Kf2 $10 1/2-1/2
+
+[Event "F13 · Diag. 3.7 · trait aux Noirs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.59-60"]
+[Date "????.??.??"]
+[Round "13"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/2K5/8/8/4N3/2k5/7p/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "13 - Le pion-Tour en septième rangée (La barrière)"]
+[Diagramme "3.7"]
+[Pages "59-60"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.51 (2).jpeg; WhatsApp Image 2026-09-19 at 12.12.51 (3).jpeg"]
+
+{ p.59-60 · 12.12.51 (2) · 12.12.51 (3) } 1... Kc2 ( 1... Kd3 $6 2. Ng3 $1 $10
+Kc2 3. Kd6 Kd1 4. Ke5 Ke1 5. Kf4 $10 ) ( 1... Kd4 $6 2. Nf2 $1 { Diag. 3.8 } (
+2. Ng3 $2 Ke5 $1 3. Kc6 Kf4 4. Nh1 Kf3 $19 5. Kd5 Kg2 6. Ke4 ) 2... Kc3 3. Kd6
+Kd2 4. Ke5 Ke2 5. Nh1 Kf3 6. Kd4 Kg2 7. Ke3 Kxh1 8. Kf2 $10 ) 2. Ng3 $1 ( 2.
+Nf2 $2 Kd2 $19 ) 2... Kd1 3. Kd6 Ke1 4. Ke5 Kf2 5. Kf4 $10 1/2-1/2
+
+[Event "F14 · Diag. 3.9 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.60-61"]
+[Date "????.??.??"]
+[Round "14"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "8/8/8/8/8/p7/2K1N3/k7 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "14 - Le Cavalier fait mat"]
+[Diagramme "3.9"]
+[Pages "60-61"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.51 (3).jpeg; WhatsApp Image 2026-09-19 at 12.13.09 (3).jpeg"]
+
+{ p.60-61 · 12.12.51 (3) · 12.13.09 (3) } 1. Nc1 $1 a2 2. Nb3# 1-0
+
+[Event "F15 · Diag. 3.10 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.61"]
+[Date "????.??.??"]
+[Round "15"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "3k4/1n6/8/P7/8/8/7K/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "15 - La case idiote du Cavalier"]
+[Diagramme "3.10"]
+[Pages "61"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.09 (3).jpeg"]
+
+{ p.61 · 12.13.09 (3) } 1. a6 Kc8 2. a7 $18 1-0
+
+[Event "F16 · Diag. 4.1 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.63-64"]
+[Date "????.??.??"]
+[Round "16"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "6K1/8/3Q4/8/8/8/5kp1/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "16 - Dame contre pion en septième rangée"]
+[Diagramme "4.1"]
+[Pages "63-64"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.51 (4).jpeg; WhatsApp Image 2026-09-19 at 12.13.09 (4).jpeg"]
+
+{ p.63-64 · 12.12.51 (4) · 12.13.09 (4) } 1. Qf4+ Ke2 2. Qg3 $1 Kf1 3. Qf3+ Kg1
+4. Kg7 Kh2 5. Qf2 Kh1 6. Qh4+ Kg1 7. Kg6 Kf1 8. Qf4+ Ke2 9. Qg3 $1 Kf1 10. Qf3+
+Kg1 11. Kg5 Kh2 12. Kh4 $1 g1=Q 13. Qh3# 1-0
+
+[Event "F17 · Diag. 4.3 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.64-65"]
+[Date "????.??.??"]
+[Round "17"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/5K1P/8/8/3q4/8/8/2k5 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "17 - Dame contre pion-tour en septième rangée"]
+[Diagramme "4.3"]
+[Pages "64-65"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.09 (4).jpeg; WhatsApp Image 2026-09-19 at 12.13.09 (5).jpeg"]
+
+{ p.64-65 · 12.13.09 (4) · 12.13.09 (5) } 1. Kg8 Qd8+ 2. Kg7 Qg5+ 3. Kf7 Qh6 4.
+Kg8 Qg6+ 5. Kh8 $1 Kd2 1/2-1/2
+
+[Event "F17 · Diag. 4.4 · trait aux Noirs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.65-66"]
+[Date "????.??.??"]
+[Round "17"]
+[White "?"]
+[Black "?"]
+[Result "0-1"]
+[FEN "8/6KP/8/4k3/3q4/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "17 - Dame contre pion-tour en septième rangée"]
+[Diagramme "4.4"]
+[Pages "65-66"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.09 (5).jpeg; WhatsApp Image 2026-09-19 at 12.12.51 (5).jpeg"]
+
+{ p.65-66 · 12.13.09 (5) · 12.12.51 (5) } 1... Qd7+ 2. Kg6 Qe6+ 3. Kg7 Qe7+ (
+3... Qf6+ 4. Kg8 Ke6 $1 $19 ) 4. Kg8 ( 4. Kg6 Qf8 $19 ) 4... Kf6 $1 5. h8=Q+
+Kg6 $19 { Diag. 4.5 } 0-1
+
+[Event "F18 · Diag. 4.6 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.66"]
+[Date "????.??.??"]
+[Round "18"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/5P2/3K4/8/8/1k6/8/q7 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "18 - Dame contre pion-fou en septième rangée"]
+[Diagramme "4.6"]
+[Pages "66"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.51 (5).jpeg"]
+
+{ p.66 · 12.12.51 (5) } 1. Ke7 $1 ( 1. f8=Q $4 Qa3+ $19 ) 1... Qe5+ 2. Kd7 Qf6
+3. Ke8 Qe6+ 4. Kf8 Kc4 5. Kg7 $1 Qe7 6. Kg8 Qg5+ 7. Kh8 Qf6+ 8. Kg8 Qg6+ 9. Kh8
+$1 $10 1/2-1/2
+
+[Event "F18 · Diag. 4.7 · trait aux Noirs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.67"]
+[Date "????.??.??"]
+[Round "18"]
+[White "?"]
+[Black "?"]
+[Result "0-1"]
+[FEN "8/5PK1/8/6k1/8/8/q7/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "18 - Dame contre pion-fou en septième rangée"]
+[Diagramme "4.7"]
+[Pages "67"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.51 (6).jpeg"]
+
+{ p.67 · 12.12.51 (6) } 1... Qa7 $1 2. Kh8 ( 2. Kg8 ) 2... Kg6 3. f8=Q Qh7# 0-1
+
+[Event "F18 · Diag. 4.8 · trait aux Noirs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.67-68"]
+[Date "????.??.??"]
+[Round "18"]
+[White "?"]
+[Black "?"]
+[Result "0-1"]
+[FEN "8/4KP2/8/8/6k1/8/q7/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "18 - Dame contre pion-fou en septième rangée"]
+[Diagramme "4.8"]
+[Pages "67-68"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.51 (6).jpeg; WhatsApp Image 2026-09-19 at 12.12.52.jpeg"]
+
+{ p.67-68 · 12.12.51 (6) · 12.12.52 } 1... Qa7+ 2. Ke8 Qb8+ 3. Ke7 Qe5+ 4. Kd7
+Qf6 5. Ke8 Qe6+ 6. Kf8 Kg5 $1 7. Kg7 Qe7 $1 ( 7... Qd7 $6 8. Kh8 $5 ) 8. Kg8
+Kg6 $19 0-1
+
+[Event "F18 · Diag. 4.9 · trait aux Noirs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.68"]
+[Date "????.??.??"]
+[Round "18"]
+[White "?"]
+[Black "?"]
+[Result "0-1"]
+[FEN "8/4KP2/8/1k6/8/8/q7/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "18 - Dame contre pion-fou en septième rangée"]
+[Diagramme "4.9"]
+[Pages "68"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.52.jpeg"]
+
+{ p.68 · 12.12.52 } 1... Qa3+ $1 ( 1... Qa7+ 2. Kf8 ( 2. Kf6 Qd4+ $1 ) 2... Qg1
+) 2. Ke8 ( 2. Kf6 Qf8 $19 ) 2... Qa8+ 3. Ke7 Qe4+ $1 4. Kf8 ( 4. Kf6 Qd4+ 5.
+Ke7 Qg7 6. Ke8 Kc6 $19 ) 4... Qh7 $1 ( 4... Kc6 $2 5. Kg7 $10 ) 5. Ke8 Kc6 $1
+6. f8=Q Qd7# 0-1
+
+[Event "F19 · Diag. 4.10 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.69"]
+[Date "????.??.??"]
+[Round "19"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/8/3K4/8/4Q3/2p5/1k6 w - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "19 - Un piège qui marche trop souvent"]
+[Diagramme "4.10"]
+[Pages "69"]
+[Photos "WhatsApp Image 2026-09-19 at 12.12.52 (1).jpeg"]
+
+{ p.69 · 12.12.52 (1) } 1. Qb3+ Ka1 $1 2. Qe3 Kb1 3. Qe4 Kb2 4. Qe2
+{ Diag. 4.11 } 4... Ka1 $1 ( 4... Kb1 $4 5. Kc4 $3 c1=Q+ 6. Kb3 $18 ) ( 4...
+Kc3 $4 5. Qe5+ $1 $18 ) 5. Kc4 c1=Q+ 6. Kb3 Qb1+ $10 1/2-1/2
+
+[Event "F19 · Diag. 4.12 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.70"]
+[Date "????.??.??"]
+[Round "19"]
+[White "?"]
+[Black "?"]
+[Result "1/2-1/2"]
+[FEN "8/8/8/4K3/8/1Q6/2pk4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[Finale "19 - Un piège qui marche trop souvent"]
+[Diagramme "4.12"]
+[Pages "70"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.09 (6).jpeg"]
+
+{ p.70 · 12.13.09 (6) } 1. Qb2 Kd1 2. Qb3 Kd2 3. Qa2 $5 Kc3 $1 ( 3... Kd1 $4 4.
+Kd4 $1 c1=Q 5. Kd3 $18 ) ( 3... Kd3 $4 4. Qb2 Kd2 5. Ke4 $18 ) 4. Qa1+ Kd2 $10
+1/2-1/2
+
+[Event "F20 · Diag. 4.13 · trait aux Blancs"]
+[Site "de la Villa, Les 100 finales qu'il faut connaître, p.70-71"]
+[Date "????.??.??"]
+[Round "20"]
+[White "?"]
+[Black "?"]
+[Result "1-0"]
+[FEN "8/8/8/8/8/k2K4/2Q5/q7 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Finale "20 - Dame contre Dame"]
+[Diagramme "4.13"]
+[Pages "70-71"]
+[Photos "WhatsApp Image 2026-09-19 at 12.13.09 (6).jpeg; WhatsApp Image 2026-09-19 at 12.13.09 (7).jpeg"]
+
+{ p.70-71 · 12.13.09 (6) · 12.13.09 (7) } 1. Qc5+ $1 Ka2 ( 1... Ka4 $6 2. Qa7+
+$18 ) ( 1... Kb3 2. Qb5+ Ka3 3. Qa5+ Kb2 4. Qb4+ ) ( 1... Kb2 2. Qb4+ ) 2. Qc4+
+$1 ( 2. Qa7+ $2 Kb1 $10 ) 2... Ka3 ( 2... Kb2 3. Qb4+ ) 3. Qa6+ Kb2 4. Qb5+ Ka3
+( 4... Kc1 5. Qc4+ Kb2 6. Qb4+ ) 5. Qa5+ Kb2 6. Qb4+ Ka2 ( 6... Kc1 7. Qd2+ Kb1
+8. Qc2# ) 7. Kc2 $1 $18 1-0
