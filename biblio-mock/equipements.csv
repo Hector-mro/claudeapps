@@ -1,0 +1,24 @@
+﻿ID;Désignation;Fabricant;Réf. fabricant;N° série;Site;Localisation;Équipement parent;Date MES;Criticité;Statut;Doc. associée;Commentaire
+EQ-00012;Carte commande convoyeur L3;Arduino;A000067;;Lyon;Ligne 3;;2019-04;B;En service;;
+EQ-00013;Carte cde convoyeur L3 (spare);;MEGA 2560;;Lyon;Magasin;;;;Stock;;rechange de EQ-00012
+EQ-00014;Carte capteurs poste 3.2;ARDUINO;;;Lyon;;EQ-00012;;;;;Uno ?
+EQ-00015;Shield moteur bande;;A000079;;;Ligne 3;EQ-00012;;;En service;;
+EQ-00016;Relais vérins L3;;;;Lyon;;;;A;;;4 relais
+EQ-00017;Passerelle Ethernet supervision;Arduino;A000024;;Lyon;Ligne 3;;;;;;
+EQ-00021;Contrôleur table XY L4;;DUE;;Lyon;Ligne 4;;;;En service;DOC0457;
+EQ-00022;Automate armoire ARM-L4-02;Arduino;AFX00002;2203-11847;Lyon;ARM-L4-02;;2022-05-03;A;En service;;Opta WiFi
+EQ-00023;Automate armoire ARM-L4-03;;Opta;;Lyon;ARM-L4-03;;;;;;
+EQ-00024;Afficheur poste L4;;;;;Ligne 4;;;;HS;;
+EQ-00031;Contrôle machine presse P2;Arduino;AKX00032;;Grenoble;Atelier presse;;2021-03;A;En service;;
+EQ-00032;Contrôle machine presse P3;;Machine Control;;Grenoble;;;;;;;même config que P2
+EQ-00033;Module E/S presse P2;;;;Grenoble;;EQ-00031;;;;;
+EQ-00034;Carte télémesure;;Nano;;Grenoble;;;;;Rebut;;
+EQ-00041;Banc vision FPGA;Arduino;ABX00022;;Grenoble;Labo vision;;;C;En service;vidor_SCH_v1;
+EQ-00042;Calculateur vision embarqué;Arduino;ABX00162;;Grenoble;Labo vision;;2025-11;;Essai;;UNO Q, GPU Adreno
+EQ-00043;Calculateur vision (ancien);;Portenta H7;;Grenoble;Labo vision;;;;;;
+EQ-00044;Sonde température salle blanche;;;;Grenoble;;;;;;;modulino ?
+EQ-00051;Boîtier IoT entrepôt;;ABX00087;;;;;;;;;
+EQ-00052;Clavier/HMI quai 2;Arduino;A000057;;;Quai 2;;;;;;
+EQ-00053;Nœud capteur quai 2;;;;;Quai 2;EQ-00052;;;;;Nano Every
+EQ-00054;Relais éclairage quai;;TSX00003;;;;;;;;;
+EQ-00060;Équipement non identifié;;;;Lyon;Ligne 3;;;;;;plaque illisible

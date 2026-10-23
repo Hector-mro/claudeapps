@@ -1,0 +1,17 @@
+chemin;pages;scanne;contenu_reel;ref_fabricant
+Bibliotheque/01_Site_Lyon/Atelier_Usinage/Ligne_3/scan_20190412_0031.pdf;2;oui;Arduino UNO Rev3 - schéma;A000066
+Bibliotheque/01_Site_Lyon/Atelier_Usinage/Ligne_3/Carte cde convoyeur MEGA.pdf;3;oui;Arduino MEGA 2560 Rev3 - schéma;A000067
+Bibliotheque/01_Site_Lyon/Atelier_Usinage/Ligne_3/scan_20190412_0032.pdf;6;oui;Classeur : Motor Shield Rev3 + 4 Relays Shield + Ethernet Shield Rev2;"A000079;A000110;A000024"
+Bibliotheque/01_Site_Lyon/Atelier_Usinage/Ligne_4/DOC0457.pdf;3;oui;Arduino DUE - schéma;A000056
+Bibliotheque/01_Site_Lyon/Atelier_Usinage/Armoires/ARM-L4-02_schemas_elec.pdf;3;oui;Arduino Opta (automate) - schéma;AFX00001/2/3
+Bibliotheque/02_Site_Grenoble/Maintenance/Archives/scan_2021-03-08_lot2.pdf;20;oui;Portenta Machine Control - schéma;AKX00032
+Bibliotheque/02_Site_Grenoble/Maintenance/Archives/IMG_20200917_0004.pdf;2;oui;Arduino Nano - schéma;A000005
+Bibliotheque/02_Site_Grenoble/Labo_Vision/vidor_SCH_v1.pdf;5;oui;MKR Vidor 4000 (FPGA) - schéma;ABX00022
+Bibliotheque/02_Site_Grenoble/Labo_Vision/UNO-Q_schematics_rev.pdf;25;non;Arduino UNO Q (Qualcomm, GPU Adreno) - schéma;ABX00162
+Bibliotheque/02_Site_Grenoble/Labo_Vision/ABX00042-schematics.pdf;11;non;Portenta H7 - schéma;ABX00042
+Bibliotheque/Documentation_Constructeur/Arduino/UNO R4 WiFi/ABX00087-schematics.pdf;3;non;Arduino UNO R4 WiFi - schéma;ABX00087
+Bibliotheque/Documentation_Constructeur/Arduino/Leonardo/A000057-schematics.pdf;2;non;Arduino Leonardo - schéma;A000057
+Bibliotheque/Documentation_Constructeur/Arduino/Leonardo/A000057-full-pinout.pdf;3;non;Arduino Leonardo - brochage;A000057
+Bibliotheque/Documentation_Constructeur/Arduino/Nano Every/ABX00028-schematics.pdf;1;non;Arduino Nano Every - schéma;ABX00028
+Bibliotheque/Documentation_Constructeur/Arduino/divers/ABX00103-schematics.pdf;2;non;Modulino Thermo - schéma;ABX00103
+Bibliotheque/Documentation_Constructeur/Arduino/divers/relay shield MKR.pdf;2;non;MKR Relay Proto Shield - schéma;TSX00003
